@@ -16,6 +16,8 @@ jobs:
           cache: 'yarn'
       - run: yarn install
       - run: yarn build
+        env:
+          URL_PREFIX: tim_vae_browser
       - run: yarn export
       - run: touch ./out/.nojekyll
       - uses: peaceiris/actions-gh-pages@v3
