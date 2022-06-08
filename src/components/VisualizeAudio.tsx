@@ -7,6 +7,7 @@ import * as tf from '@tensorflow/tfjs';
 import styles from '../styles/VisualizeAudio.module.css';
 import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../sketches/PlotLatentSketch';
+import { url } from '@app/utils/urlConfig';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -82,7 +83,7 @@ export const VisualizeAudio = ({
       return;
     const setupProcessing = async () => {
       const encoder = await tf.loadGraphModel(
-        encoderJSONPath,
+        url(encoderJSONPath),
       );
       const _timbreVAE = new TimbreVAE(
         audioContext,
@@ -146,7 +147,7 @@ export const VisualizeAudio = ({
     <div className={styles.container}>
       {title && <h4 className={styles.title}>{title}</h4>}
       <audio
-        src={audioFilePath}
+        src={url(audioFilePath)}
         controls
         loop
         ref={audioRef}

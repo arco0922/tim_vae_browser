@@ -1,6 +1,7 @@
 import { P5WithProps } from '@app/@types';
 import { P5Wrapper } from '@app/components/P5Wrapper';
 import { EncodeResult } from '@app/utils/TimbreVAE';
+import { url } from '@app/utils/urlConfig';
 import p5 from 'p5';
 
 interface SketchProps {
@@ -21,7 +22,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
   const ymax = 0.004;
 
   p.preload = () => {
-    img = p.loadImage('/imgs/encoder01.png');
+    img = p.loadImage(url('/imgs/encoder01.png'));
   };
 
   p.setup = () => {
