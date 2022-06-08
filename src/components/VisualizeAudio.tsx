@@ -20,7 +20,7 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
 const HIST_LENGTH = 10;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 
-interface Props {
+export interface VisualizeAudioProps {
   audioFilePath: string;
   encoderJSONPath: string;
   title?: string;
@@ -30,7 +30,7 @@ export const VisualizeAudio = ({
   audioFilePath,
   encoderJSONPath,
   title,
-}: Props) => {
+}: VisualizeAudioProps) => {
   const [audioContext, setAudioContext] =
     React.useState<AudioContext | null>(null);
 
@@ -91,8 +91,7 @@ export const VisualizeAudio = ({
         encoder,
         setEncodeResult,
       );
-      setTimbreVAE(timbreVAE);
-      await _timbreVAE.start();
+      setTimbreVAE(_timbreVAE);
     };
     setupProcessing();
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,6 +132,27 @@ export const VisualizeAudio = ({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encodeResultHist]);
 
+  const [isAudioLoaded, setIsAudioLoaded] =
+    React.useState(false);
+  const audioLoadHandler = React.useCallback(() => {
+    if (isAudioLoaded) return;
+    setIsAudioLoaded(true);
+  }, [isAudioLoaded]);
+
+  const [isStartedProcessing, setIsStartedProcessing] =
+    React.useState(false);
+
+  React.useEffect(() => {
+    if (
+      timbreVAE === null ||
+      !isAudioLoaded ||
+      isStartedProcessing
+    )
+      return;
+    timbreVAE.start();
+    setIsStartedProcessing(true);
+  }, [timbreVAE, isAudioLoaded, isStartedProcessing]);
+
   const resumeContext = React.useCallback(() => {
     if (audioContext === null) return;
     audioContext.resume();
@@ -151,6 +171,7 @@ export const VisualizeAudio = ({
         controls
         loop
         ref={audioRef}
+        onLoadedMetadata={audioLoadHandler}
         onPlay={resumeContext}
         onPause={stopContext}
       />

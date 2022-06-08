@@ -1,6 +1,15 @@
-import { VisualizeAudio } from '@app/components/VisualizeAudio';
+import { VisualizeAudioProps } from '@app/components/VisualizeAudio';
 import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import styles from '../styles/Top.module.css';
+
+const VisualizeAudio = dynamic<VisualizeAudioProps>(
+  () =>
+    import('../components/VisualizeAudio').then(
+      (module) => module.VisualizeAudio,
+    ) as any,
+  { ssr: false },
+);
 
 const Top: NextPage = () => {
   return (
