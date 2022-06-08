@@ -1,4 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
+import { url } from './urlConfig';
 
 const FRAME_LENGTH = 1024;
 const THRESHOLD = 0.01;
@@ -36,7 +37,7 @@ export class TimbreVAE {
         this.stream,
       );
     await this.audioContext.audioWorklet.addModule(
-      '/worklet-scripts/resample.worklet.js',
+      url('/worklet-scripts/resample.worklet.js'),
     );
     this.resampleProcesser = new AudioWorkletNode(
       this.audioContext,
