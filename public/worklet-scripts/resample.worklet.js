@@ -15,8 +15,26 @@ class ResampleProcessor extends AudioWorkletProcessor {
    * @param {Float32Array[][]} inputs
    * @returns {boolean}
    */
-  process(inputs) {
-    this.updateBuffer(inputs[0][0]);
+  process(inputs, outputs) {
+    const input = inputs[0];
+    const output = outputs[0];
+
+    const numberOfChannels = output.length;
+
+    // Traverse channels
+    for (
+      let channel = 0;
+      channel < numberOfChannels;
+      channel++
+    ) {
+      // `Float32Array` ?
+      if (input[channel] !== undefined) {
+        // Bypass
+        output[channel].set(input[channel]);
+      }
+    }
+
+    this.updateBuffer(input[0]);
     this.port.postMessage(this._buffer);
 
     return true;
@@ -28,6 +46,7 @@ class ResampleProcessor extends AudioWorkletProcessor {
    * @returns {Float32Array}
    */
   updateBuffer(channelData) {
+    if (channelData === undefined) return;
     const isNeedInterpolate =
       sampleRate % this._sampleRate !== 0;
     const ratio = sampleRate / this._sampleRate;
