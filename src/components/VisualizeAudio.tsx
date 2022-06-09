@@ -41,7 +41,7 @@ export const VisualizeAudio = ({
 
   React.useEffect(() => {
     if (audioContext !== null) return;
-    AudioContext =
+    window.AudioContext =
       window.AudioContext || window.webkitAudioContext;
 
     const _audioContext = new AudioContext();
