@@ -34,33 +34,83 @@ export const VisualizeAudio = ({
   const [audioContext, setAudioContext] =
     React.useState<AudioContext | null>(null);
 
-  const audioRef = React.useRef<HTMLAudioElement>(null);
-
-  const [audioStream, setAudioStream] =
-    React.useState<MediaStream | null>(null);
-
+  /**
+   * Setup Audio Context
+   */
   React.useEffect(() => {
     if (audioContext !== null) return;
     window.AudioContext =
       window.AudioContext || window.webkitAudioContext;
+    const _audioCtx = new AudioContext();
+    setAudioContext(_audioCtx);
 
-    const _audioContext = new AudioContext();
-    _audioContext.suspend();
-    setAudioContext(_audioContext);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+
+  const [audioSource, setAudioSource] =
+    React.useState<MediaElementAudioSourceNode | null>(
+      null,
+    );
+
+  /**
+   * Setup Audio Source
+   */
+  React.useEffect(() => {
+    if (
+      audioContext === null ||
+      audioRef.current === null ||
+      audioSource !== null
+    )
+      return;
+    const audio = audioRef.current;
+    const _source =
+      audioContext.createMediaElementSource(audio);
+    setAudioSource(_source);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioContext]);
 
+  const [resampleProcessor, setResampleProcessor] =
+    React.useState<AudioWorkletNode | null>(null);
+
+  /**
+   * Setup Resample Worklet
+   */
   React.useEffect(() => {
-    if (audioContext === null || audioRef.current === null)
+    if (audioContext === null || resampleProcessor !== null)
+      return;
+    const setupResampleWorklet = async () => {
+      await audioContext.audioWorklet.addModule(
+        url('/worklet-scripts/resample.worklet.js'),
+      );
+      const _resampleProcessor = new AudioWorkletNode(
+        audioContext,
+        'resample.worklet',
+      );
+      setResampleProcessor(_resampleProcessor);
+    };
+    setupResampleWorklet();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioContext]);
+
+  /**
+   * Setup AudioGraph
+   */
+  React.useEffect(() => {
+    if (
+      audioContext === null ||
+      audioSource === null ||
+      resampleProcessor === null
+    )
       return;
 
-    const audio = audioRef.current;
-    const stream = audio.captureStream
-      ? audio.captureStream()
-      : audio.mozCaptureStream
-      ? audio.mozCaptureStream()
-      : null;
-    setAudioStream(stream);
-  }, [audioContext]);
+    audioSource
+      .connect(resampleProcessor)
+      .connect(audioContext.destination);
+  }, [audioContext, audioSource, resampleProcessor]);
 
   const [timbreVAE, setTimbreVAE] =
     React.useState<TimbreVAE | null>(null);
@@ -68,44 +118,58 @@ export const VisualizeAudio = ({
   const [encodeResult, setEncodeResult] =
     React.useState<EncodeResult | null>(null);
 
+  /**
+   * Setup Timbre VAE
+   */
+  React.useEffect(() => {
+    const setupVAE = async () => {
+      const encoder = await tf.loadGraphModel(
+        url(encoderJSONPath),
+      );
+      const _timbreVAE = new TimbreVAE(
+        encoder,
+        setEncodeResult,
+      );
+      setTimbreVAE(_timbreVAE);
+    };
+    setupVAE();
+  }, [encoderJSONPath]);
+
+  /**
+   * Setup Connection between TimbreVAE and AudioGraph
+   */
+  React.useEffect(() => {
+    if (resampleProcessor === null || timbreVAE === null)
+      return;
+    resampleProcessor.port.onmessage = async (e: {
+      data: Float32Array;
+    }) => {
+      timbreVAE.encodeAudio(e.data);
+    };
+  }, [resampleProcessor, timbreVAE]);
+
   const [encodeResultHist, setEncodeResultHist] =
     React.useState<EncodeResult[]>([]);
 
   const [coordEMA, setCoordEMA] =
     React.useState<EncodeResult | null>(null);
 
-  React.useEffect(() => {
-    if (
-      audioContext === null ||
-      audioStream === null ||
-      timbreVAE !== null
-    )
-      return;
-    const setupProcessing = async () => {
-      const encoder = await tf.loadGraphModel(
-        url(encoderJSONPath),
-      );
-      const _timbreVAE = new TimbreVAE(
-        audioContext,
-        audioStream,
-        encoder,
-        setEncodeResult,
-      );
-      setTimbreVAE(_timbreVAE);
-    };
-    setupProcessing();
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timbreVAE, audioContext, audioStream]);
-
+  /**
+   * Update Encode Result History
+   */
   React.useEffect(() => {
     if (encodeResult === null) return;
     const tmp = [...encodeResultHist, encodeResult];
     const newHist =
       tmp.length <= HIST_LENGTH ? tmp : tmp.slice(1);
     setEncodeResultHist(newHist);
-    //eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encodeResult]);
 
+  /**
+   * Update EMA
+   */
   React.useEffect(() => {
     const histLen = encodeResultHist.length;
     if (histLen === 0) return;
@@ -129,37 +193,28 @@ export const VisualizeAudio = ({
       );
       setCoordEMA({ coord: newEMACoord });
     }
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encodeResultHist]);
 
-  const [isAudioLoaded, setIsAudioLoaded] =
-    React.useState(false);
-  const audioLoadHandler = React.useCallback(() => {
-    if (isAudioLoaded) return;
-    setIsAudioLoaded(true);
-  }, [isAudioLoaded]);
-
-  const [isStartedProcessing, setIsStartedProcessing] =
-    React.useState(false);
-
-  React.useEffect(() => {
+  /**
+   * AudioContext must be resumed manually by user
+   */
+  const resumeContext = React.useCallback(() => {
     if (
-      timbreVAE === null ||
-      !isAudioLoaded ||
-      isStartedProcessing
+      audioContext === null ||
+      audioContext.state === 'running'
     )
       return;
-    timbreVAE.start();
-    setIsStartedProcessing(true);
-  }, [timbreVAE, isAudioLoaded, isStartedProcessing]);
-
-  const resumeContext = React.useCallback(() => {
-    if (audioContext === null) return;
     audioContext.resume();
   }, [audioContext]);
 
-  const stopContext = React.useCallback(() => {
-    if (audioContext === null) return;
+  const suspendContext = React.useCallback(() => {
+    if (
+      audioContext === null ||
+      audioContext.state === 'suspended'
+    )
+      return;
     audioContext.suspend();
   }, [audioContext]);
 
@@ -171,9 +226,8 @@ export const VisualizeAudio = ({
         controls
         loop
         ref={audioRef}
-        onLoadedMetadata={audioLoadHandler}
         onPlay={resumeContext}
-        onPause={stopContext}
+        onPause={suspendContext}
       />
       <p>first: {coordEMA?.coord[0]}</p>
       <p>second: {coordEMA?.coord[1]}</p>
