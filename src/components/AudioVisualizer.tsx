@@ -20,17 +20,17 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
 const HIST_LENGTH = 10;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 
-export interface VisualizeAudioProps {
+export interface AudioVisualizerProps {
   audioFilePath: string;
   encoderJSONPath: string;
   title?: string;
 }
 
-export const VisualizeAudio = ({
+export const AudioVisualizer = ({
   audioFilePath,
   encoderJSONPath,
   title,
-}: VisualizeAudioProps) => {
+}: AudioVisualizerProps) => {
   const [audioContext, setAudioContext] =
     React.useState<AudioContext | null>(null);
 
