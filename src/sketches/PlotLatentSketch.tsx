@@ -1,5 +1,6 @@
 import { P5WithProps } from '@app/@types';
 import { P5Wrapper } from '@app/components/P5Wrapper';
+import { LatentImgInfo } from '@app/constants/basic';
 import { EncodeResult } from '@app/utils/TimbreVAE';
 import { url } from '@app/utils/urlConfig';
 import p5 from 'p5';
@@ -8,6 +9,7 @@ interface SketchProps {
   canvasWidth: number;
   canvasHeight: number;
   encodeResult: EncodeResult | null;
+  latentImgInfo: LatentImgInfo;
 }
 
 export type PlotLatentSketchProps = SketchProps & {
@@ -16,13 +18,10 @@ export type PlotLatentSketchProps = SketchProps & {
 
 const sketch = (p: P5WithProps<SketchProps>): void => {
   let img: p5.Image;
-  const xmin = -0.002;
-  const xmax = 0.0025;
-  const ymin = -0.004;
-  const ymax = 0.004;
+  let prevImgSrc = p.props.latentImgInfo.imgSrc;
 
   p.preload = () => {
-    img = p.loadImage(url('/imgs/encoder01.png'));
+    img = p.loadImage(url(prevImgSrc));
   };
 
   p.setup = () => {
@@ -34,6 +33,14 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
 
   p.draw = () => {
     p.background(200);
+    const { imgSrc, xmin, xmax, ymin, ymax } =
+      p.props.latentImgInfo;
+
+    if (imgSrc !== prevImgSrc) {
+      img = p.loadImage(url(imgSrc));
+      prevImgSrc = imgSrc;
+    }
+
     p.image(img, 0, 0, p.width, p.height);
 
     if (p.props.encodeResult === null) return;
@@ -53,6 +60,7 @@ export const PlotLatentSketch = ({
   canvasWidth,
   canvasHeight,
   encodeResult,
+  latentImgInfo,
   className,
 }: PlotLatentSketchProps) => {
   return (
@@ -62,6 +70,7 @@ export const PlotLatentSketch = ({
         canvasWidth,
         canvasHeight,
         encodeResult,
+        latentImgInfo,
       }}
       className={className}
     />

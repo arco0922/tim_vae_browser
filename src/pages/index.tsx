@@ -1,4 +1,5 @@
 import { AudioVisualizerProps } from '@app/components/AudioVisualizer';
+import { Encoder01_LATENT_INFO } from '@app/constants/basic';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import styles from '../styles/Top.module.css';
@@ -19,16 +20,19 @@ const Top: NextPage = () => {
         <AudioVisualizer
           audioFilePath="/audios/beginner.wav"
           encoderJSONPath="/models/encoder01/model.json"
+          latentImgInfo={Encoder01_LATENT_INFO}
           title="beginner"
         />
         <AudioVisualizer
           audioFilePath="/audios/intermediate.wav"
           encoderJSONPath="/models/encoder01/model.json"
+          latentImgInfo={Encoder01_LATENT_INFO}
           title="intermediate"
         />
         <AudioVisualizer
           audioFilePath="/audios/expert.wav"
           encoderJSONPath="/models/encoder01/model.json"
+          latentImgInfo={Encoder01_LATENT_INFO}
           title="expert"
         />
       </div>

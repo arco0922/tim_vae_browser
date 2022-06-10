@@ -8,6 +8,7 @@ import styles from '../styles/VisualizeAudio.module.css';
 import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
+import { LatentImgInfo } from '@app/constants/basic';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -23,12 +24,14 @@ const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 export interface AudioVisualizerProps {
   audioFilePath: string;
   encoderJSONPath: string;
+  latentImgInfo: LatentImgInfo;
   title?: string;
 }
 
 export const AudioVisualizer = ({
   audioFilePath,
   encoderJSONPath,
+  latentImgInfo,
   title,
 }: AudioVisualizerProps) => {
   const [audioContext, setAudioContext] =
@@ -235,6 +238,7 @@ export const AudioVisualizer = ({
         canvasWidth={500}
         canvasHeight={500}
         encodeResult={coordEMA}
+        latentImgInfo={latentImgInfo}
         className={styles.sketch__container}
       />
     </div>
