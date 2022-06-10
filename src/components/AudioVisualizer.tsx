@@ -229,6 +229,7 @@ export const AudioVisualizer = ({
         controls
         loop
         ref={audioRef}
+        onClick={resumeContext}
         onPlay={resumeContext}
         onPause={suspendContext}
       />

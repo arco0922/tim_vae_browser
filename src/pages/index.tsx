@@ -16,6 +16,10 @@ const Top: NextPage = () => {
   return (
     <div className={styles.container}>
       <h1>Timbre-VAE on browser</h1>
+      <h3 className={styles.caution}>
+        Only Chrome, Firefox, and Edge are supported. Other
+        browsers are not recommended.
+      </h3>
       <div className={styles.main__content}>
         <AudioVisualizer
           audioFilePath="/audios/beginner.wav"
