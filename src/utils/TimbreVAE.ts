@@ -1,5 +1,4 @@
 import * as tf from '@tensorflow/tfjs';
-import { url } from './urlConfig';
 
 const FRAME_LENGTH = 1024;
 const THRESHOLD = 0.01;
@@ -9,54 +8,24 @@ export interface EncodeResult {
 }
 
 export class TimbreVAE {
-  audioContext: AudioContext;
-  stream: MediaStream;
-  resampleProcesser: AudioWorkletNode | null;
   encoder: tf.GraphModel;
-  running = false;
+  isEncoding = false;
   result: EncodeResult | null = null;
   callback: ((res: EncodeResult) => void) | undefined =
     undefined;
 
   constructor(
-    audioContext: AudioContext,
-    stream: MediaStream,
     encoder: tf.GraphModel,
     callback?: (res: EncodeResult) => void,
   ) {
-    this.audioContext = audioContext;
-    this.stream = stream;
     this.encoder = encoder;
-    this.resampleProcesser = null;
     if (callback) this.callback = callback;
   }
 
-  async start() {
-    const source =
-      this.audioContext.createMediaStreamSource(
-        this.stream,
-      );
-    await this.audioContext.audioWorklet.addModule(
-      url('/worklet-scripts/resample.worklet.js'),
-    );
-    this.resampleProcesser = new AudioWorkletNode(
-      this.audioContext,
-      'resample.worklet',
-    );
-    source
-      .connect(this.resampleProcesser)
-      .connect(this.audioContext.destination);
-
-    this.resampleProcesser.port.onmessage = async (e: {
-      data: Float32Array;
-    }) => {
-      if (this.running) return;
-      this.encodeAudio(e.data);
-    };
-  }
-
   async encodeAudio(buffer: Float32Array) {
-    this.running = true;
+    if (this.isEncoding) return;
+
+    this.isEncoding = true;
     await tf.nextFrame();
 
     const buffer_arr = Array.from(buffer);
@@ -65,7 +34,7 @@ export class TimbreVAE {
       -Math.min(...buffer_arr),
     );
     if (maxAmp < THRESHOLD) {
-      this.running = false;
+      this.isEncoding = false;
       return;
     }
 
@@ -112,7 +81,7 @@ export class TimbreVAE {
       if (this.callback) this.callback({ coord });
     });
 
-    this.running = false;
+    this.isEncoding = false;
     await tf.nextFrame();
   }
 }
