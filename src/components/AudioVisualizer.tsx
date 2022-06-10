@@ -18,7 +18,7 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   { ssr: false },
 );
 
-const HIST_LENGTH = 10;
+const HIST_LENGTH = 20;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 
 export interface AudioVisualizerProps {

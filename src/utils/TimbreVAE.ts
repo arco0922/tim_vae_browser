@@ -9,7 +9,7 @@ export interface EncodeResult {
 
 export class TimbreVAE {
   encoder: tf.GraphModel;
-  running = false;
+  isEncoding = false;
   result: EncodeResult | null = null;
   callback: ((res: EncodeResult) => void) | undefined =
     undefined;
@@ -23,9 +23,9 @@ export class TimbreVAE {
   }
 
   async encodeAudio(buffer: Float32Array) {
-    if (this.running) return;
+    if (this.isEncoding) return;
 
-    this.running = true;
+    this.isEncoding = true;
     await tf.nextFrame();
 
     const buffer_arr = Array.from(buffer);
@@ -34,7 +34,7 @@ export class TimbreVAE {
       -Math.min(...buffer_arr),
     );
     if (maxAmp < THRESHOLD) {
-      this.running = false;
+      this.isEncoding = false;
       return;
     }
 
@@ -81,7 +81,7 @@ export class TimbreVAE {
       if (this.callback) this.callback({ coord });
     });
 
-    this.running = false;
+    this.isEncoding = false;
     await tf.nextFrame();
   }
 }
