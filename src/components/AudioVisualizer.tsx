@@ -91,6 +91,7 @@ export const AudioVisualizer = ({
       const _resampleProcessor = new AudioWorkletNode(
         audioContext,
         'resample.worklet',
+        { parameterData: { bufferSize: 1024 } },
       );
       setResampleProcessor(_resampleProcessor);
     };
@@ -183,7 +184,7 @@ export const AudioVisualizer = ({
       for (let i = 0; i < lastResult.coord.length; i++) {
         let s = 0;
         for (let j = 0; j < histLen; j++) {
-          s += encodeResultHist[j].coord[i];
+          s = s + encodeResultHist[j].coord[i];
         }
         avgCoord.push(s / histLen);
       }

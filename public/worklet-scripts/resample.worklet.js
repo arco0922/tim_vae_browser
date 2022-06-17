@@ -3,9 +3,17 @@
  */
 
 class ResampleProcessor extends AudioWorkletProcessor {
-  bufferSize = 1024;
-  _buffer = new Float32Array(this.bufferSize);
+  _buffer = null;
   _sampleRate = 44100;
+
+  static get parameterDescriptors() {
+    return [
+      {
+        name: 'bufferSize',
+        defaultValue: 1024,
+      },
+    ];
+  }
 
   constructor() {
     super();
@@ -15,7 +23,7 @@ class ResampleProcessor extends AudioWorkletProcessor {
    * @param {Float32Array[][]} inputs
    * @returns {boolean}
    */
-  process(inputs, outputs) {
+  process(inputs, outputs, parameters) {
     const input = inputs[0];
     const output = outputs[0];
 
@@ -34,7 +42,7 @@ class ResampleProcessor extends AudioWorkletProcessor {
       }
     }
 
-    this.updateBuffer(input[0]);
+    this.updateBuffer(input[0], parameters);
     this.port.postMessage(this._buffer);
 
     return true;
@@ -45,7 +53,7 @@ class ResampleProcessor extends AudioWorkletProcessor {
    * @param {Float32Array} channelData
    * @returns {Float32Array}
    */
-  updateBuffer(channelData) {
+  updateBuffer(channelData, parameters) {
     if (channelData === undefined) return;
     const isNeedInterpolate =
       sampleRate % this._sampleRate !== 0;
@@ -67,14 +75,18 @@ class ResampleProcessor extends AudioWorkletProcessor {
       }
     }
 
-    const updatedBuffer = new Float32Array(this.bufferSize);
-    for (let i = 0; i < this.bufferSize; i += 1) {
+    const bufferSize = parameters['bufferSize'][0];
+
+    if (this._buffer === null)
+      this._buffer = new Float32Array(bufferSize);
+
+    const updatedBuffer = new Float32Array(bufferSize);
+    for (let i = 0; i < bufferSize; i += 1) {
       const old_idx = i + frameLength;
-      if (old_idx < this.bufferSize) {
+      if (old_idx < bufferSize) {
         updatedBuffer[i] = this._buffer[old_idx];
       } else {
-        updatedBuffer[i] =
-          resampled[old_idx - this.bufferSize];
+        updatedBuffer[i] = resampled[old_idx - bufferSize];
       }
     }
 
