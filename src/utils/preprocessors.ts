@@ -5,7 +5,7 @@ import {
 import * as tf from '@tensorflow/tfjs';
 
 export const createEncoder01Preprocessor =
-  (frameLength: number) =>
+  (frameLength: number, inputShape: number[]) =>
   (buffer: Float32Array): tf.Tensor => {
     const normalizedBuffer = normalizeBuffer(buffer);
     const ampSpec = amplitudeSpectrogram(normalizedBuffer, {
@@ -21,6 +21,6 @@ export const createEncoder01Preprocessor =
       1,
       frameLength / 2,
     );
-    const input = tf.reshape(slicedAmpSpec, [1, 32, 16, 1]);
+    const input = tf.reshape(slicedAmpSpec, inputShape);
     return input;
   };

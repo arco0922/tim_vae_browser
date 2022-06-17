@@ -21,7 +21,10 @@ export const Encoder01VisualizerConfig: VisualizerConfig = {
   encoderJSONPath: '/models/encoder01/model.json',
   samplingRate: 44100,
   frameLength: 1024,
-  encoderPreprocessor: createEncoder01Preprocessor(1024),
+  encoderPreprocessor: createEncoder01Preprocessor(
+    1024,
+    [1, 32, 16, 1],
+  ),
   latentImgInfo: {
     imgSrc: '/imgs/encoder01.png',
     xmin: -0.002,
