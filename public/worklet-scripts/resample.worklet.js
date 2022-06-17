@@ -1,16 +1,15 @@
-/**
- * Send Newest 1024 Samples (resampled to 44100)
- */
-
 class ResampleProcessor extends AudioWorkletProcessor {
   _buffer = null;
-  _sampleRate = 44100;
 
   static get parameterDescriptors() {
     return [
       {
         name: 'bufferSize',
         defaultValue: 1024,
+      },
+      {
+        name: 'resampleRate',
+        defaultValue: 44100,
       },
     ];
   }
@@ -55,12 +54,15 @@ class ResampleProcessor extends AudioWorkletProcessor {
    */
   updateBuffer(channelData, parameters) {
     if (channelData === undefined) return;
+
+    const resampleRate = parameters['resampleRate'][0];
     const isNeedInterpolate =
-      sampleRate % this._sampleRate !== 0;
-    const ratio = sampleRate / this._sampleRate;
+      sampleRate % resampleRate !== 0;
+    const ratio = sampleRate / resampleRate;
     const frameLength = Math.floor(
       channelData.length / ratio,
     );
+
     const resampled = new Float32Array(frameLength);
     for (let i = 0; i < frameLength; i += 1) {
       if (!isNeedInterpolate) {
