@@ -8,7 +8,7 @@ import styles from '../styles/VisualizeAudio.module.css';
 import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
-import { LatentImgInfo } from '@app/constants/basic';
+import { VisualizerConfig } from '@app/constants/visualizerConfig';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -23,15 +23,13 @@ const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 
 export interface AudioVisualizerProps {
   audioFilePath: string;
-  encoderJSONPath: string;
-  latentImgInfo: LatentImgInfo;
+  visualizerConfig: VisualizerConfig;
   title?: string;
 }
 
 export const AudioVisualizer = ({
   audioFilePath,
-  encoderJSONPath,
-  latentImgInfo,
+  visualizerConfig,
   title,
 }: AudioVisualizerProps) => {
   const [audioContext, setAudioContext] =
@@ -91,14 +89,19 @@ export const AudioVisualizer = ({
       const _resampleProcessor = new AudioWorkletNode(
         audioContext,
         'resample.worklet',
-        { parameterData: { bufferSize: 1024 } },
+        {
+          parameterData: {
+            bufferSize: visualizerConfig.frameLength,
+            resampleRate: visualizerConfig.samplingRate,
+          },
+        },
       );
       setResampleProcessor(_resampleProcessor);
     };
     setupResampleWorklet();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [audioContext]);
+  }, [audioContext, visualizerConfig]);
 
   /**
    * Setup AudioGraph
@@ -128,16 +131,17 @@ export const AudioVisualizer = ({
   React.useEffect(() => {
     const setupVAE = async () => {
       const encoder = await tf.loadGraphModel(
-        url(encoderJSONPath),
+        url(visualizerConfig.encoderJSONPath),
       );
       const _timbreVAE = new TimbreVAE(
         encoder,
+        visualizerConfig.encoderPreprocessor,
         setEncodeResult,
       );
       setTimbreVAE(_timbreVAE);
     };
     setupVAE();
-  }, [encoderJSONPath]);
+  }, [visualizerConfig]);
 
   /**
    * Setup Connection between TimbreVAE and AudioGraph
@@ -240,7 +244,7 @@ export const AudioVisualizer = ({
         canvasWidth={500}
         canvasHeight={500}
         encodeResult={coordEMA}
-        latentImgInfo={latentImgInfo}
+        latentImgInfo={visualizerConfig.latentImgInfo}
         className={styles.sketch__container}
       />
     </div>
