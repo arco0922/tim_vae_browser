@@ -1,6 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
 
-const FRAME_LENGTH = 1024;
 const THRESHOLD = 0.01;
 
 export interface EncodeResult {
@@ -10,15 +9,18 @@ export interface EncodeResult {
 export class TimbreVAE {
   encoder: tf.GraphModel;
   isEncoding = false;
+  preprocessor: (buffer: Float32Array) => tf.Tensor;
   result: EncodeResult | null = null;
   callback: ((res: EncodeResult) => void) | undefined =
     undefined;
 
   constructor(
     encoder: tf.GraphModel,
+    preprocessor: (buffer: Float32Array) => tf.Tensor,
     callback?: (res: EncodeResult) => void,
   ) {
     this.encoder = encoder;
+    this.preprocessor = preprocessor;
     if (callback) this.callback = callback;
   }
 
@@ -39,39 +41,7 @@ export class TimbreVAE {
     }
 
     tf.tidy(() => {
-      const frame = tf.tensor1d(buffer);
-      const frameMean = tf.mean(frame);
-      const frameMin = tf.min(frame);
-      const frameMax = tf.max(frame);
-      const frameAmp = tf.add(
-        tf.div(tf.sub(frameMax, frameMin), tf.scalar(2.0)),
-        tf.scalar(0.00001),
-      );
-      const frameNormalized = tf.div(
-        tf.sub(frame, frameMean),
-        frameAmp,
-      ) as tf.Tensor1D;
-      const freq = tf.signal.stft(
-        frameNormalized,
-        FRAME_LENGTH,
-        1,
-      );
-      const freq1d = tf.reshape(freq, [
-        1 + FRAME_LENGTH / 2,
-      ]);
-      const powerSpec = tf.div(
-        tf.abs(freq1d),
-        tf.scalar(FRAME_LENGTH),
-      );
-      const slicedPowerSpec = tf.slice(
-        powerSpec,
-        1,
-        FRAME_LENGTH / 2,
-      );
-      const input = tf.reshape(
-        slicedPowerSpec,
-        [1, 32, 16, 1],
-      );
+      const input = this.preprocessor(buffer);
       const encoded = this.encoder.predict([
         input,
       ]) as tf.Tensor[];
