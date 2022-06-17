@@ -25,7 +25,7 @@ export class TimbreVAE {
   }
 
   async encodeAudio(buffer: Float32Array) {
-    if (this.isEncoding) return;
+    if (this.isEncoding || buffer === null) return;
 
     this.isEncoding = true;
     await tf.nextFrame();
