@@ -134,6 +134,7 @@ export const AudioVisualizer = ({
         url(visualizerConfig.encoderJSONPath),
       );
       const _timbreVAE = new TimbreVAE(
+        visualizerConfig.mode,
         encoder,
         visualizerConfig.encoderPreprocessor,
         setEncodeResult,

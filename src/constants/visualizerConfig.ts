@@ -1,4 +1,7 @@
-import { createEncoder01Preprocessor } from './../utils/preprocessors';
+import {
+  createEncoder01Preprocessor,
+  createEncoder01LongPreprocessor,
+} from './../utils/preprocessors';
 import * as tf from '@tensorflow/tfjs';
 
 export interface LatentImgInfo {
@@ -10,6 +13,7 @@ export interface LatentImgInfo {
 }
 
 export interface VisualizerConfig {
+  mode: 'SHORT' | 'LONG';
   encoderJSONPath: string;
   samplingRate: number;
   frameLength: number;
@@ -18,6 +22,7 @@ export interface VisualizerConfig {
 }
 
 export const Encoder01VisualizerConfig: VisualizerConfig = {
+  mode: 'SHORT',
   encoderJSONPath: '/models/encoder01/model.json',
   samplingRate: 44100,
   frameLength: 1024,
@@ -33,3 +38,24 @@ export const Encoder01VisualizerConfig: VisualizerConfig = {
     ymax: 0.004,
   },
 };
+
+export const Encoder01LongVisualizerConfig: VisualizerConfig =
+  {
+    mode: 'LONG',
+    encoderJSONPath: '/models/encoder01_long/model.json',
+    samplingRate: 44100,
+    frameLength: 65535,
+    encoderPreprocessor: createEncoder01LongPreprocessor(
+      44100,
+      2048,
+      1024,
+      [1, 128, 64, 1],
+    ),
+    latentImgInfo: {
+      imgSrc: '/imgs/encoder01_long.png',
+      xmin: -3,
+      xmax: 4,
+      ymin: -4.5,
+      ymax: 2.5,
+    },
+  };

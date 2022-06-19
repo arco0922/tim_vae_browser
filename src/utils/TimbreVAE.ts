@@ -7,6 +7,7 @@ export interface EncodeResult {
 }
 
 export class TimbreVAE {
+  mode: 'SHORT' | 'LONG';
   encoder: tf.GraphModel;
   isEncoding = false;
   preprocessor: (buffer: Float32Array) => tf.Tensor;
@@ -15,10 +16,12 @@ export class TimbreVAE {
     undefined;
 
   constructor(
+    mode: 'SHORT' | 'LONG',
     encoder: tf.GraphModel,
     preprocessor: (buffer: Float32Array) => tf.Tensor,
     callback?: (res: EncodeResult) => void,
   ) {
+    this.mode = mode;
     this.encoder = encoder;
     this.preprocessor = preprocessor;
     if (callback) this.callback = callback;
@@ -45,7 +48,8 @@ export class TimbreVAE {
       const encoded = this.encoder.predict([
         input,
       ]) as tf.Tensor[];
-      const zMean = tf.reshape(encoded[1], [2]);
+      const idx = this.mode === 'LONG' ? 0 : 1;
+      const zMean = tf.reshape(encoded[idx], [2]);
       const coord = Array.from(zMean.dataSync());
       this.result = { coord };
       if (this.callback) this.callback({ coord });
