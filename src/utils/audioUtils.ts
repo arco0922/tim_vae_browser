@@ -378,12 +378,52 @@ const mag = (y: Float32Array) => {
   return out;
 };
 
-const hzToMel = (hz: number): number => {
-  return 1125.0 * Math.log(1 + hz / 700.0);
+const hzToMel = (
+  hz: number,
+  htk: boolean = false,
+): number => {
+  if (htk) {
+    return 2595.0 * Math.log10(1 + hz / 700.0);
+  }
+
+  const f_min = 0.0;
+  const f_sp = 200.0 / 3;
+
+  let mel = (hz - f_min) / f_sp;
+
+  const min_log_hz = 1000.0;
+  const min_log_mel = (min_log_hz - f_min) / f_sp;
+  const logstep = Math.log(6.4) / 27.0;
+
+  if (hz >= min_log_hz) {
+    mel = min_log_mel + Math.log(hz / min_log_hz) / logstep;
+  }
+
+  return mel;
 };
 
-const melToHz = (mel: number): number => {
-  return 700.0 * (Math.exp(mel / 1125.0) - 1);
+const melToHz = (
+  mel: number,
+  htk: boolean = false,
+): number => {
+  if (htk) {
+    return 700.0 * (Math.exp(mel / 1125.0) - 1);
+  }
+
+  const f_min = 0.0;
+  const f_sp = 200.0 / 3;
+  let freq = f_min + f_sp * mel;
+
+  const min_log_hz = 1000.0;
+  const min_log_mel = (min_log_hz - f_min) / f_sp;
+  const logstep = Math.log(6.4) / 27.0;
+
+  if (mel >= min_log_mel) {
+    freq =
+      min_log_hz * Math.exp(logstep * (mel - min_log_mel));
+  }
+
+  return freq;
 };
 
 const calculateFftFreqs = (
