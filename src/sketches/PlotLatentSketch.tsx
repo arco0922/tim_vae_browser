@@ -1,6 +1,6 @@
 import { P5WithProps } from '@app/@types';
 import { P5Wrapper } from '@app/components/P5Wrapper';
-import { LatentImgInfo } from '@app/constants/basic';
+import { LatentImgInfo } from '@app/constants/visualizerConfig';
 import { EncodeResult } from '@app/utils/TimbreVAE';
 import { url } from '@app/utils/urlConfig';
 import p5 from 'p5';

@@ -8,7 +8,10 @@ import styles from '../styles/VisualizeAudio.module.css';
 import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
-import { LatentImgInfo } from '@app/constants/basic';
+import {
+  VisualizerConfig,
+  WorkletMessage,
+} from '@app/constants/visualizerConfig';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -21,19 +24,19 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
 const HIST_LENGTH = 20;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 
-export interface AudioVisualizerProps {
+export interface AudioVisualizerProps<
+  P extends WorkletMessage,
+> {
   audioFilePath: string;
-  encoderJSONPath: string;
-  latentImgInfo: LatentImgInfo;
+  visualizerConfig: VisualizerConfig<P>;
   title?: string;
 }
 
-export const AudioVisualizer = ({
+export const AudioVisualizer = <P extends WorkletMessage>({
   audioFilePath,
-  encoderJSONPath,
-  latentImgInfo,
+  visualizerConfig,
   title,
-}: AudioVisualizerProps) => {
+}: AudioVisualizerProps<P>) => {
   const [audioContext, setAudioContext] =
     React.useState<AudioContext | null>(null);
 
@@ -86,18 +89,28 @@ export const AudioVisualizer = ({
       return;
     const setupResampleWorklet = async () => {
       await audioContext.audioWorklet.addModule(
-        url('/worklet-scripts/resample.worklet.js'),
+        visualizerConfig.mode === 'LONG_FAST'
+          ? url('/worklet-scripts/resample_mel.worklet.js')
+          : url('/worklet-scripts/resample.worklet.js'),
       );
       const _resampleProcessor = new AudioWorkletNode(
         audioContext,
-        'resample.worklet',
+        visualizerConfig.mode === 'LONG_FAST'
+          ? 'resample-mel.worklet'
+          : 'resample.worklet',
+        {
+          parameterData: {
+            bufferSize: visualizerConfig.frameLength,
+            resampleRate: visualizerConfig.samplingRate,
+          },
+        },
       );
       setResampleProcessor(_resampleProcessor);
     };
     setupResampleWorklet();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [audioContext]);
+  }, [audioContext, visualizerConfig]);
 
   /**
    * Setup AudioGraph
@@ -116,7 +129,7 @@ export const AudioVisualizer = ({
   }, [audioContext, audioSource, resampleProcessor]);
 
   const [timbreVAE, setTimbreVAE] =
-    React.useState<TimbreVAE | null>(null);
+    React.useState<TimbreVAE<P> | null>(null);
 
   const [encodeResult, setEncodeResult] =
     React.useState<EncodeResult | null>(null);
@@ -127,16 +140,18 @@ export const AudioVisualizer = ({
   React.useEffect(() => {
     const setupVAE = async () => {
       const encoder = await tf.loadGraphModel(
-        url(encoderJSONPath),
+        url(visualizerConfig.encoderJSONPath),
       );
       const _timbreVAE = new TimbreVAE(
+        visualizerConfig.isFlipped,
         encoder,
+        visualizerConfig.encoderPreprocessor,
         setEncodeResult,
       );
       setTimbreVAE(_timbreVAE);
     };
     setupVAE();
-  }, [encoderJSONPath]);
+  }, [visualizerConfig]);
 
   /**
    * Setup Connection between TimbreVAE and AudioGraph
@@ -145,7 +160,7 @@ export const AudioVisualizer = ({
     if (resampleProcessor === null || timbreVAE === null)
       return;
     resampleProcessor.port.onmessage = async (e: {
-      data: Float32Array;
+      data: P | null;
     }) => {
       timbreVAE.encodeAudio(e.data);
     };
@@ -183,7 +198,7 @@ export const AudioVisualizer = ({
       for (let i = 0; i < lastResult.coord.length; i++) {
         let s = 0;
         for (let j = 0; j < histLen; j++) {
-          s += encodeResultHist[j].coord[i];
+          s = s + encodeResultHist[j].coord[i];
         }
         avgCoord.push(s / histLen);
       }
@@ -239,7 +254,7 @@ export const AudioVisualizer = ({
         canvasWidth={500}
         canvasHeight={500}
         encodeResult={coordEMA}
-        latentImgInfo={latentImgInfo}
+        latentImgInfo={visualizerConfig.latentImgInfo}
         className={styles.sketch__container}
       />
     </div>
