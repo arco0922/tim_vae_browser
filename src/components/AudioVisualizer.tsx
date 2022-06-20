@@ -8,7 +8,10 @@ import styles from '../styles/VisualizeAudio.module.css';
 import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
-import { VisualizerConfig } from '@app/constants/visualizerConfig';
+import {
+  VisualizerConfig,
+  WorkletMessage,
+} from '@app/constants/visualizerConfig';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -21,17 +24,19 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
 const HIST_LENGTH = 20;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
 
-export interface AudioVisualizerProps {
+export interface AudioVisualizerProps<
+  P extends WorkletMessage,
+> {
   audioFilePath: string;
-  visualizerConfig: VisualizerConfig;
+  visualizerConfig: VisualizerConfig<P>;
   title?: string;
 }
 
-export const AudioVisualizer = ({
+export const AudioVisualizer = <P extends WorkletMessage>({
   audioFilePath,
   visualizerConfig,
   title,
-}: AudioVisualizerProps) => {
+}: AudioVisualizerProps<P>) => {
   const [audioContext, setAudioContext] =
     React.useState<AudioContext | null>(null);
 
@@ -84,11 +89,15 @@ export const AudioVisualizer = ({
       return;
     const setupResampleWorklet = async () => {
       await audioContext.audioWorklet.addModule(
-        url('/worklet-scripts/resample.worklet.js'),
+        visualizerConfig.mode === 'LONG_FAST'
+          ? url('/worklet-scripts/resample_mel.worklet.js')
+          : url('/worklet-scripts/resample.worklet.js'),
       );
       const _resampleProcessor = new AudioWorkletNode(
         audioContext,
-        'resample.worklet',
+        visualizerConfig.mode === 'LONG_FAST'
+          ? 'resample-mel.worklet'
+          : 'resample.worklet',
         {
           parameterData: {
             bufferSize: visualizerConfig.frameLength,
@@ -120,7 +129,7 @@ export const AudioVisualizer = ({
   }, [audioContext, audioSource, resampleProcessor]);
 
   const [timbreVAE, setTimbreVAE] =
-    React.useState<TimbreVAE | null>(null);
+    React.useState<TimbreVAE<P> | null>(null);
 
   const [encodeResult, setEncodeResult] =
     React.useState<EncodeResult | null>(null);
@@ -134,7 +143,7 @@ export const AudioVisualizer = ({
         url(visualizerConfig.encoderJSONPath),
       );
       const _timbreVAE = new TimbreVAE(
-        visualizerConfig.mode,
+        visualizerConfig.isFlipped,
         encoder,
         visualizerConfig.encoderPreprocessor,
         setEncodeResult,
@@ -151,7 +160,7 @@ export const AudioVisualizer = ({
     if (resampleProcessor === null || timbreVAE === null)
       return;
     resampleProcessor.port.onmessage = async (e: {
-      data: Float32Array;
+      data: P | null;
     }) => {
       timbreVAE.encodeAudio(e.data);
     };

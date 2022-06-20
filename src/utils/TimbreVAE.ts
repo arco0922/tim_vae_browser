@@ -1,3 +1,8 @@
+import {
+  EncoderMode,
+  EncoderPreProcessor,
+  WorkletMessage,
+} from './../constants/visualizerConfig';
 import * as tf from '@tensorflow/tfjs';
 
 const THRESHOLD = 0.01;
@@ -6,49 +11,39 @@ export interface EncodeResult {
   coord: number[];
 }
 
-export class TimbreVAE {
-  mode: 'SHORT' | 'LONG';
+export class TimbreVAE<P extends WorkletMessage> {
+  isFlipped: boolean;
   encoder: tf.GraphModel;
   isEncoding = false;
-  preprocessor: (buffer: Float32Array) => tf.Tensor;
+  preprocessor: EncoderPreProcessor<P>;
   result: EncodeResult | null = null;
   callback: ((res: EncodeResult) => void) | undefined =
     undefined;
 
   constructor(
-    mode: 'SHORT' | 'LONG',
+    isFlipped: boolean,
     encoder: tf.GraphModel,
-    preprocessor: (buffer: Float32Array) => tf.Tensor,
+    preprocessor: EncoderPreProcessor<P>,
     callback?: (res: EncodeResult) => void,
   ) {
-    this.mode = mode;
+    this.isFlipped = isFlipped;
     this.encoder = encoder;
     this.preprocessor = preprocessor;
     if (callback) this.callback = callback;
   }
 
-  async encodeAudio(buffer: Float32Array) {
-    if (this.isEncoding || buffer === null) return;
+  async encodeAudio(data: P | null) {
+    if (this.isEncoding || data === null) return;
 
     this.isEncoding = true;
     await tf.nextFrame();
 
-    const buffer_arr = Array.from(buffer);
-    const maxAmp = Math.max(
-      Math.max(...buffer_arr),
-      -Math.min(...buffer_arr),
-    );
-    if (maxAmp < THRESHOLD) {
-      this.isEncoding = false;
-      return;
-    }
-
     tf.tidy(() => {
-      const input = this.preprocessor(buffer);
+      const input = this.preprocessor(data);
       const encoded = this.encoder.predict([
         input,
       ]) as tf.Tensor[];
-      const idx = this.mode === 'LONG' ? 0 : 1;
+      const idx = this.isFlipped ? 1 : 0;
       const zMean = tf.reshape(encoded[idx], [2]);
       const coord = Array.from(zMean.dataSync());
       this.result = { coord };

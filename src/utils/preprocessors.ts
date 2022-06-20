@@ -62,3 +62,26 @@ export const createEncoder01LongPreprocessor =
     );
     return input;
   };
+
+export const createEncoder02LongPreprocessor =
+  (inputShape: number[]) =>
+  (buffer: Float32Array[]): tf.Tensor => {
+    const melSpecArr = buffer.map((spec) =>
+      Array.from(spec),
+    );
+    const melSpecTensor = tf.tensor2d(melSpecArr);
+    const minVal = tf.min(melSpecTensor);
+    const maxVal = tf.max(melSpecTensor);
+    const normalizedMelSpec = tf.div(
+      tf.sub(melSpecTensor, minVal),
+      tf.sub(maxVal, minVal),
+    );
+    const normalizedMelSpecTransposed = tf.transpose(
+      normalizedMelSpec,
+    );
+    const input = tf.reshape(
+      normalizedMelSpecTransposed,
+      inputShape,
+    );
+    return input;
+  };
