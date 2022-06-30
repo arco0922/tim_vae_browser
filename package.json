@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^3.18.0",
+    "delaunator": "^5.0.0",
     "fft.js": "^4.0.4",
+    "mathjs": "^10.6.2",
+    "ml-matrix": "^6.10.2",
     "next": "12.1.6",
     "p5": "^1.4.1",
     "react": "18.1.0",
