@@ -334,7 +334,7 @@ export class DelaunayEstimator {
   _calcBarycentricCoordOfNearestPointInFacet(
     coord: NumVector,
     iFacet: FacetId,
-  ) {
+  ): NumVector {
     const numPointsInIFacet =
       this.hullFacetPointIds[iFacet].length;
 
@@ -384,20 +384,21 @@ export class DelaunayEstimator {
       b,
     ) as any as NumVector;
 
-    const c = new Array<number>(numPointsInIFacet).fill(0);
+    const c = new Array<number>(numPointsInIFacet).fill(
+      0,
+    ) as NumVector;
     c[numPointsInIFacet - 1] = 1.0;
     for (let i = 0; i < numPointsInIFacet - 1; i++) {
-      c[i] = _c[i];
-      c[numPointsInIFacet - 1] -= _c[i];
+      c[i] = Math.min(Math.max(_c[i], 0), 1);
+      c[numPointsInIFacet - 1] -= c[i];
     }
-
     return c;
   }
 
   _calcOrdinaryCoordFromBarycentricCoordInFacet(
     barycentricCoord: NumVector,
     iFacet: FacetId,
-  ) {
+  ): NumVector {
     const facetPoints = this.hullFacetPointIds[iFacet].map(
       (pId) => this.points[pId],
     );
@@ -429,7 +430,7 @@ export class DelaunayEstimator {
   _linearInterpolateVector(
     ratio: number[],
     vectors: NumVector[],
-  ) {
+  ): NumVector {
     const num = ratio.length;
     if (num === 0) return [] as NumVector;
 
@@ -451,7 +452,7 @@ export class DelaunayEstimator {
   _linearInterpolateMatrix(
     ratio: number[],
     matrixes: NumMatrix[],
-  ) {
+  ): NumMatrix {
     const num = ratio.length;
     if (num === 0) return [] as NumMatrix;
 
