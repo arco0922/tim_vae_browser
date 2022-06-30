@@ -65,8 +65,8 @@ const Delaunay: NextPage = () => {
         <p>Ground Truth : z = ( x * x + y * y ) / 100</p>
         <p>
           By clicking <b>Add Point</b> button, one sample
-          point inside ( -5 &lt; x &lt; 5, -5 &lt; y &lt; 5
-          ) is added randomly.
+          point is randomly added from the range -5 &lt; x
+          &lt; 5, -5 &lt; y &lt; 5.
         </p>
       </div>
       <div className={styles.figure__container}>
