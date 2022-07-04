@@ -4,7 +4,7 @@ import {
 } from '@app/utils/TimbreVAE';
 import React from 'react';
 import * as tf from '@tensorflow/tfjs';
-import styles from './AudioVisualizer.module.css';
+import styles from './AudioVisualizer.module.scss';
 import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';

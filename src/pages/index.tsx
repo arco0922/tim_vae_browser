@@ -7,7 +7,7 @@ import {
 } from '@app/constants/visualizerConfig';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import styles from './TopPage.module.css';
+import styles from './TopPage.module.scss';
 
 const AudioVisualizer = dynamic<any>(
   () =>
