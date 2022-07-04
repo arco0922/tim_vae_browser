@@ -4,9 +4,9 @@ import {
 } from '@app/utils/TimbreVAE';
 import React from 'react';
 import * as tf from '@tensorflow/tfjs';
-import styles from '../styles/VisualizeAudio.module.css';
+import styles from './AudioVisualizer.module.css';
 import dynamic from 'next/dynamic';
-import { PlotLatentSketchProps } from '../sketches/PlotLatentSketch';
+import { PlotLatentSketchProps } from '../../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
 import {
   VisualizerConfig,
@@ -15,7 +15,7 @@ import {
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
-    import('../sketches/PlotLatentSketch').then(
+    import('../../sketches/PlotLatentSketch').then(
       (module) => module.PlotLatentSketch,
     ) as any,
   { ssr: false },
