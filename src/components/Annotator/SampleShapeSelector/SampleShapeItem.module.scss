@@ -1,0 +1,23 @@
+.container {
+  width: 150px;
+  height: 150px;
+  position: relative;
+  z-index: 10;
+  &:hover {
+    transform: scale(1.2);
+    z-index: 100;
+    cursor: pointer;
+  }
+}
+
+.index__label {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 300;
+}
+
+.shape__image {
+  width: 100%;
+  height: 100%;
+}

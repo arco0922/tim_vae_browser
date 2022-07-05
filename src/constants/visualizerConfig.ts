@@ -42,7 +42,7 @@ export const Encoder01VisualizerConfig: VisualizerConfig<Float32Array> =
       [1, 32, 16, 1],
     ),
     latentImgInfo: {
-      imgSrc: '/imgs/encoder01.png',
+      imgSrc: '/imgs/latentImgs/encoder01.png',
       xmin: -0.002,
       xmax: 0.0025,
       ymin: -0.004,
@@ -64,7 +64,7 @@ export const Encoder01LongVisualizerConfig: VisualizerConfig<Float32Array> =
       [1, 128, 64, 1],
     ),
     latentImgInfo: {
-      imgSrc: '/imgs/encoder01_long.png',
+      imgSrc: '/imgs/latentImgs/encoder01_long.png',
       xmin: -3,
       xmax: 4,
       ymin: -4.5,
@@ -84,7 +84,7 @@ export const Encoder02LongVisualizerConfig: VisualizerConfig<
     1, 128, 64, 1,
   ]),
   latentImgInfo: {
-    imgSrc: '/imgs/encoder02_long.png',
+    imgSrc: '/imgs/latentImgs/encoder02_long.png',
     xmin: -3,
     xmax: 4,
     ymin: -4.5,
@@ -104,7 +104,7 @@ export const Encoder03LongVisualizerConfig: VisualizerConfig<
     1, 128, 64, 1,
   ]),
   latentImgInfo: {
-    imgSrc: '/imgs/encoder03_long.png',
+    imgSrc: '/imgs/latentImgs/encoder03_long.png',
     xmin: -5,
     xmax: 9,
     ymin: -10,

@@ -2,7 +2,7 @@ import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import styles from '@app/styles/DelaunayDemo.module.css';
+import styles from './delaunay.module.scss';
 
 const Plot = dynamic(() => import('react-plotly.js'), {
   ssr: false,
