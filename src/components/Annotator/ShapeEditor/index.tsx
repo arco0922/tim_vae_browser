@@ -4,7 +4,7 @@ import { sliderInfo } from '@app/constants/sliderInfo';
 import React from 'react';
 import { DrawFromParamSketchProps } from '@app/sketches/DrawFromParamSketch';
 import { ShapeParams } from '@app/@types';
-import styles from './ShapeCreator.module.scss';
+import styles from './ShapeEditor.module.scss';
 import dynamic from 'next/dynamic';
 
 const DrawFromParamSketch =
@@ -23,7 +23,7 @@ interface Props {
 
 const sketchWidth = 150;
 
-export const ShapeCreator = ({
+export const ShapeEditor = ({
   defaultShapeParams,
   confirmCallback,
 }: Props) => {
