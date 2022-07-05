@@ -4,6 +4,34 @@ type SampleShapes = {
   [shapeId in SampleShapeId]: ShapeParams;
 };
 
+export const sampleShapeIds: SampleShapeId[] = [
+  'ss00',
+  'ss01',
+  'ss02',
+  'ss03',
+  'ss04',
+  'ss05',
+  'ss06',
+  'ss07',
+  'ss08',
+  'ss09',
+  'ss10',
+  'ss11',
+  'ss12',
+  'ss13',
+  'ss14',
+  'ss15',
+  'ss16',
+  'ss17',
+  'ss18',
+  'ss19',
+  'ss20',
+  'ss21',
+  'ss22',
+  'ss23',
+  'ss24',
+];
+
 export const sampleShapes: SampleShapes = {
   ss00: {
     cornNum: 20,
