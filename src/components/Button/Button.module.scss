@@ -1,0 +1,16 @@
+.button__basic {
+  color: #fff;
+  background-color: #0084ff;
+  display: flex;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #0056a5;
+  }
+}
