@@ -18,7 +18,8 @@ const DrawFromParamSketch =
 
 interface Props {
   defaultShapeParams: ShapeParams;
-  confirmCallback: (shapeParams: ShapeParams) => void;
+  confirmCallback?: (shapeParams: ShapeParams) => void;
+  cancelCallback?: () => void;
 }
 
 const sketchWidth = 150;
@@ -26,6 +27,7 @@ const sketchWidth = 150;
 export const ShapeEditor = ({
   defaultShapeParams,
   confirmCallback,
+  cancelCallback,
 }: Props) => {
   const cornNumInfo = sliderInfo.cornNum;
   const [cornNum, setCornNum] = React.useState<number>(
@@ -74,88 +76,112 @@ export const ShapeEditor = ({
         />
       </div>
       <div className={styles.edit__section}>
-        <div className={styles.slider__wrapper}>
-          <span className={styles.slider__label}>
-            {cornNumInfo.label}
-          </span>
-          <SliderWithState
-            value={cornNum}
-            setValue={setCornNum}
-            min={cornNumInfo.params.min}
-            max={cornNumInfo.params.max}
-            step={cornNumInfo.params.step}
-            className={styles.slider}
-          />
+        <div className={styles.slider__section}>
+          <div className={styles.slider__wrapper}>
+            <span className={styles.slider__label}>
+              {cornNumInfo.label}
+            </span>
+            <SliderWithState
+              value={cornNum}
+              setValue={setCornNum}
+              min={cornNumInfo.params.min}
+              max={cornNumInfo.params.max}
+              step={cornNumInfo.params.step}
+              className={styles.slider}
+            />
+          </div>
+          <div className={styles.slider__wrapper}>
+            <span className={styles.slider__label}>
+              {cornAmpInfo.label}
+            </span>
+            <SliderWithState
+              value={cornAmp}
+              setValue={setCornAmp}
+              min={cornAmpInfo.params.min}
+              max={cornAmpInfo.params.max}
+              step={cornAmpInfo.params.step}
+              className={styles.slider}
+            />
+          </div>
+          <div className={styles.slider__wrapper}>
+            <span className={styles.slider__label}>
+              {randomnessInfo.label}
+            </span>
+            <SliderWithState
+              value={randomness}
+              setValue={setRandomness}
+              min={randomnessInfo.params.min}
+              max={randomnessInfo.params.max}
+              step={randomnessInfo.params.step}
+              className={styles.slider}
+            />
+          </div>
+          <div className={styles.slider__wrapper}>
+            <span className={styles.slider__label}>
+              {randomSeedInfo.label}
+            </span>
+            <SliderWithState
+              value={randomSeed}
+              setValue={setRandomSeed}
+              min={randomSeedInfo.params.min}
+              max={randomSeedInfo.params.max}
+              step={randomSeedInfo.params.step}
+              className={styles.slider}
+            />
+          </div>
+          <div className={styles.slider__wrapper}>
+            <span className={styles.slider__label}>
+              {innerCurveInfo.label}
+            </span>
+            <SliderWithState
+              value={innerCurve}
+              setValue={setInnerCurve}
+              min={innerCurveInfo.params.min}
+              max={innerCurveInfo.params.max}
+              step={innerCurveInfo.params.step}
+              className={styles.slider}
+            />
+          </div>
+          <div className={styles.slider__wrapper}>
+            <span className={styles.slider__label}>
+              {outerCurveInfo.label}
+            </span>
+            <SliderWithState
+              value={outerCurve}
+              setValue={setOuterCurve}
+              min={outerCurveInfo.params.min}
+              max={outerCurveInfo.params.max}
+              step={outerCurveInfo.params.step}
+              className={styles.slider}
+            />
+          </div>
         </div>
-        <div className={styles.slider__wrapper}>
-          <span className={styles.slider__label}>
-            {cornAmpInfo.label}
-          </span>
-          <SliderWithState
-            value={cornAmp}
-            setValue={setCornAmp}
-            min={cornAmpInfo.params.min}
-            max={cornAmpInfo.params.max}
-            step={cornAmpInfo.params.step}
-            className={styles.slider}
-          />
+
+        <div className={styles.button__section}>
+          {confirmCallback !== undefined && (
+            <Button
+              text={'決定'}
+              className={styles.confirm__button}
+              onClick={() =>
+                confirmCallback({
+                  cornNum,
+                  cornAmp,
+                  randomness,
+                  randomSeed,
+                  innerCurve,
+                  outerCurve,
+                })
+              }
+            />
+          )}
+          {cancelCallback && (
+            <Button
+              text={'キャンセル'}
+              className={styles.cancel__button}
+              onClick={cancelCallback}
+            />
+          )}
         </div>
-        <div className={styles.slider__wrapper}>
-          <span className={styles.slider__label}>
-            {randomnessInfo.label}
-          </span>
-          <SliderWithState
-            value={randomness}
-            setValue={setRandomness}
-            min={randomnessInfo.params.min}
-            max={randomnessInfo.params.max}
-            step={randomnessInfo.params.step}
-            className={styles.slider}
-          />
-        </div>
-        <div className={styles.slider__wrapper}>
-          <span className={styles.slider__label}>
-            {randomSeedInfo.label}
-          </span>
-          <SliderWithState
-            value={randomSeed}
-            setValue={setRandomSeed}
-            min={randomSeedInfo.params.min}
-            max={randomSeedInfo.params.max}
-            step={randomSeedInfo.params.step}
-            className={styles.slider}
-          />
-        </div>
-        <div className={styles.slider__wrapper}>
-          <span className={styles.slider__label}>
-            {innerCurveInfo.label}
-          </span>
-          <SliderWithState
-            value={innerCurve}
-            setValue={setInnerCurve}
-            min={innerCurveInfo.params.min}
-            max={innerCurveInfo.params.max}
-            step={innerCurveInfo.params.step}
-            className={styles.slider}
-          />
-        </div>
-        <div className={styles.slider__wrapper}>
-          <span className={styles.slider__label}>
-            {outerCurveInfo.label}
-          </span>
-          <SliderWithState
-            value={outerCurve}
-            setValue={setOuterCurve}
-            min={outerCurveInfo.params.min}
-            max={outerCurveInfo.params.max}
-            step={outerCurveInfo.params.step}
-            className={styles.slider}
-          />
-        </div>
-        <Button
-          text={'決定'}
-          className={styles.confirm__button}
-        />
       </div>
     </div>
   );
