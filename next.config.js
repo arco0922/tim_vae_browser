@@ -9,6 +9,9 @@ const nextConfig = {
   basePath: urlPrefix,
   trailingSlash: true,
   publicRuntimeConfig: { urlPrefix },
+  images: {
+    loader: 'custom',
+  },
 };
 
 module.exports = nextConfig;
