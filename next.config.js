@@ -1,3 +1,5 @@
+const routes = require('./routes');
+
 const urlPrefix = process.env.URL_PREFIX
   ? '/' + process.env.URL_PREFIX
   : '';
@@ -11,6 +13,9 @@ const nextConfig = {
   publicRuntimeConfig: { urlPrefix },
   images: {
     loader: 'custom',
+  },
+  exportPathMap: async function () {
+    return routes;
   },
 };
 
