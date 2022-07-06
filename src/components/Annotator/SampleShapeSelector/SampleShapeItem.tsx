@@ -1,5 +1,6 @@
 import { SampleShapeId } from '@app/@types';
-import Image from 'next/image';
+import { Image } from '@app/components/Image';
+import { url } from '@app/utils/urlConfig';
 import styles from './SampleShapeItem.module.scss';
 
 interface Props {
@@ -21,7 +22,7 @@ export const SampleShapeItem = ({
       <p className={styles.index__label}>{index}</p>
       <Image
         className={styles.shape__image}
-        src={`/imgs/sampleShapes/${sampleShapeId}.jpg`}
+        src={url(`/imgs/sampleShapes/${sampleShapeId}.jpg`)}
         alt={`${index} shape`}
         width={150}
         height={150}
