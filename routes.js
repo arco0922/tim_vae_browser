@@ -38,6 +38,9 @@ const routes = {
   '/': { page: '/' },
   '/delaunay': { page: '/delaunay' },
   '/settingshape': { page: '/settingshape' },
+  '/settingshape/nextroute': {
+    page: '/settingshape/nextroute',
+  },
 };
 
 repSoundIds.forEach((rsId) => {

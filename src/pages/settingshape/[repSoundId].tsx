@@ -5,8 +5,13 @@ import dynamic from 'next/dynamic';
 import { AnnotatorProps } from '../../components/Annotator';
 import { useRouter } from 'next/router';
 import { repSoundIds } from '@app/constants/repSounds';
-import { Annotations, RepSoundId } from '@app/@types';
+import {
+  Annotations,
+  CorrectEstimationHistory,
+  RepSoundId,
+} from '@app/@types';
 import useLocalStorage from 'use-local-storage';
+import { localStorageKeys } from '@app/constants/localStorageKeys';
 
 const Annotator = dynamic<AnnotatorProps>(
   () =>
@@ -25,7 +30,28 @@ const SettingId: NextPage = () => {
   const { repSoundId } = router.query;
 
   const [annotations, setAnnotations] =
-    useLocalStorage<Annotations>('annotations', {});
+    useLocalStorage<Annotations>(
+      localStorageKeys.ANNOTATIONS,
+      {},
+    );
+
+  const [
+    correctEstimationHistory,
+    setCorrectEstimationHistory,
+  ] = useLocalStorage<CorrectEstimationHistory>(
+    localStorageKeys.CORRECT_ESTIMATION_HISTORY,
+    [],
+  );
+
+  const goNextCallback = React.useCallback(() => {
+    router.push('/settingshape/nextroute');
+  }, [router]);
+
+  const resetCallback = React.useCallback(() => {
+    setAnnotations({});
+    setCorrectEstimationHistory([]);
+    router.push('/settingshape');
+  }, [router, setAnnotations, setCorrectEstimationHistory]);
 
   if (
     repSoundId === undefined ||
@@ -41,6 +67,12 @@ const SettingId: NextPage = () => {
         repSoundId={repSoundId as RepSoundId}
         annotations={annotations}
         setAnnotations={setAnnotations}
+        correctEstimationHistory={correctEstimationHistory}
+        setCorrectEstimationHistory={
+          setCorrectEstimationHistory
+        }
+        goNextCallback={goNextCallback}
+        resetCallback={resetCallback}
       />
     </div>
   );
