@@ -36,6 +36,7 @@ const repSoundIds = [
 
 const routes = {
   '/': { page: '/' },
+  '/vae': { page: '/vae' },
   '/delaunay': { page: '/delaunay' },
   '/settingshape': { page: '/settingshape' },
   '/settingshape/nextroute': {
