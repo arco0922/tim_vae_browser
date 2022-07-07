@@ -8,7 +8,7 @@ import {
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import { repSoundCoords } from '@app/constants/repSounds';
 import { sampleShapes } from '@app/constants/sampleShapes';
-import { DrawFromSamplingPointsSketch } from '@app/sketches/DrawSamplingPointsSketch';
+import { DrawSamplingPointsSketch } from '@app/sketches/DrawSamplingPointsSketch';
 import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
 import {
   calcFreqFromParams,
@@ -205,7 +205,7 @@ export const Annotator = ({
       {annotatingState === 'DONE' &&
         samplingPoints !== null && (
           <>
-            <DrawFromSamplingPointsSketch
+            <DrawSamplingPointsSketch
               canvasWidth={sketchWidth}
               canvasHeight={sketchWidth}
               samplingPoints={samplingPoints}

@@ -5,6 +5,7 @@ import {
 } from './../utils/preprocessors';
 import * as tf from '@tensorflow/tfjs';
 
+export type VisualizeMode = 'LATENT' | 'SHAPE';
 export type EncoderMode = 'SHORT' | 'LONG' | 'LONG_FAST';
 export type WorkletMessage = Float32Array | Float32Array[];
 export type EncoderPreProcessor<P extends WorkletMessage> =
@@ -21,7 +22,7 @@ export interface LatentImgInfo {
 export interface VisualizerConfig<
   P extends WorkletMessage,
 > {
-  mode: EncoderMode;
+  encoderMode: EncoderMode;
   isFlipped: boolean;
   encoderJSONPath: string;
   samplingRate: number;
@@ -32,7 +33,7 @@ export interface VisualizerConfig<
 
 export const Encoder01VisualizerConfig: VisualizerConfig<Float32Array> =
   {
-    mode: 'SHORT',
+    encoderMode: 'SHORT',
     isFlipped: true,
     encoderJSONPath: '/models/encoder01/model.json',
     samplingRate: 44100,
@@ -52,7 +53,7 @@ export const Encoder01VisualizerConfig: VisualizerConfig<Float32Array> =
 
 export const Encoder01LongVisualizerConfig: VisualizerConfig<Float32Array> =
   {
-    mode: 'LONG',
+    encoderMode: 'LONG',
     isFlipped: false,
     encoderJSONPath: '/models/encoder01_long/model.json',
     samplingRate: 44100,
@@ -75,7 +76,7 @@ export const Encoder01LongVisualizerConfig: VisualizerConfig<Float32Array> =
 export const Encoder02LongVisualizerConfig: VisualizerConfig<
   Float32Array[]
 > = {
-  mode: 'LONG_FAST',
+  encoderMode: 'LONG_FAST',
   isFlipped: true,
   encoderJSONPath: '/models/encoder02_long/model.json',
   samplingRate: 44100,
@@ -95,7 +96,7 @@ export const Encoder02LongVisualizerConfig: VisualizerConfig<
 export const Encoder03LongVisualizerConfig: VisualizerConfig<
   Float32Array[]
 > = {
-  mode: 'LONG_FAST',
+  encoderMode: 'LONG_FAST',
   isFlipped: false,
   encoderJSONPath: '/models/encoder03_long/model.json',
   samplingRate: 44100,
