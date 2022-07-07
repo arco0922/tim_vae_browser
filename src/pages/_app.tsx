@@ -1,6 +1,7 @@
 import './global.scss';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
@@ -14,4 +15,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default MyApp;
+export default dynamic(() => Promise.resolve(MyApp), {
+  ssr: false,
+});

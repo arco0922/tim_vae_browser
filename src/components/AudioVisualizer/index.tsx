@@ -54,7 +54,7 @@ export interface AudioVisualizerProps<
   audioFilePath: string;
   visualizerConfig: VisualizerConfig<P>;
   visualizeMode: VisualizeMode;
-  annotations: Annotations;
+  annotations?: Annotations;
   title?: string;
 }
 
@@ -285,7 +285,11 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   }, [visualizeMode]);
 
   React.useEffect(() => {
-    if (delaunayEstimator === null) return;
+    if (
+      delaunayEstimator === null ||
+      annotations === undefined
+    )
+      return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
       annotations,
