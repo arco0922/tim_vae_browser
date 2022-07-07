@@ -12,26 +12,26 @@ import useLocalStorage from 'use-local-storage';
 
 const SettingNext: NextPage = () => {
   const router = useRouter();
-  const [annotations, setAnnotations] =
-    useLocalStorage<Annotations>(
-      localStorageKeys.ANNOTATIONS,
-      {},
-    );
-
-  const [
-    correctEstimationHistory,
-    setCorrectEstimationHistory,
-  ] = useLocalStorage<CorrectEstimationHistory>(
-    localStorageKeys.CORRECT_ESTIMATION_HISTORY,
-    [],
+  const [annotations] = useLocalStorage<Annotations>(
+    localStorageKeys.ANNOTATIONS,
+    {},
   );
+
+  const [correctEstimationHistory] =
+    useLocalStorage<CorrectEstimationHistory>(
+      localStorageKeys.CORRECT_ESTIMATION_HISTORY,
+      [],
+    );
 
   const hasFinishedAnnotation = judgeHasEndAnnotation(
     correctEstimationHistory,
   );
 
   React.useEffect(() => {
-    if (hasFinishedAnnotation) router.push(`/settingshape`);
+    if (hasFinishedAnnotation) {
+      router.push(`/settingshape`);
+      return;
+    }
     for (let i = 0; i < repSoundIds.length; i++) {
       if (annotations[repSoundIds[i]] === undefined) {
         router.push(`/settingshape/${repSoundIds[i]}`);
