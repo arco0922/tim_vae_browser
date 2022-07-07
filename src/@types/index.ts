@@ -89,3 +89,8 @@ export type Point2D = {
 export type Annotations = {
   [repSoundId in RepSoundId]?: NumVector;
 };
+
+export type CorrectEstimationHistory = [
+  rsid: RepSoundId,
+  flg: boolean,
+][];

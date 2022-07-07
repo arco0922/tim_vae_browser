@@ -8,6 +8,14 @@ type PointId = number;
 type SimplexId = number;
 type FacetId = number;
 
+interface SuggestionVectorInfo {
+  vector: NumVector;
+  minCoefficient: number;
+  maxCoefficient: number;
+}
+
+export type SuggestionVectorsInfo = SuggestionVectorInfo[];
+
 interface FoundSimplexInfo {
   iSimplex: SimplexId;
   barycentricCoordInSimplex: NumVector;
@@ -90,6 +98,54 @@ export class DelaunayEstimator {
       dr,
     );
     return res;
+  }
+
+  suggestVectors(coord: NumVector): SuggestionVectorsInfo {
+    const { iSimplex, barycentricCoordInSimplex } =
+      this._findSimplex(coord);
+    if (iSimplex >= 0) {
+      const baseSimplexVector =
+        this.simplexVectors[iSimplex][this.inputDim];
+      const suggestionVectorsInfo =
+        [] as SuggestionVectorsInfo;
+      for (let i = 0; i < this.inputDim; i++) {
+        const diffSimplexVector = math.subtract(
+          this.simplexVectors[iSimplex][i],
+          baseSimplexVector,
+        );
+        const minLimit = -barycentricCoordInSimplex[i];
+        const maxLimit = 1 - barycentricCoordInSimplex[i];
+        suggestionVectorsInfo.push({
+          vector: diffSimplexVector,
+          minCoefficient: minLimit,
+          maxCoefficient: maxLimit,
+        });
+      }
+      return suggestionVectorsInfo;
+    }
+
+    const { iFacet, barycentricCoordOfNearestPoint } =
+      this._findNearestFacet(coord);
+    const jacobianAtFacet = this._linearInterpolateMatrix(
+      barycentricCoordOfNearestPoint,
+      this.hullFacetJacobians[iFacet],
+    );
+    const suggestionVectorsInfo =
+      [] as SuggestionVectorsInfo;
+    for (let i = 0; i < this.inputDim; i++) {
+      const dr = new Array<number>(this.inputDim).fill(0);
+      dr[i] = 1.0;
+      const diffVector = math.multiply(
+        jacobianAtFacet,
+        dr,
+      ) as any as NumVector;
+      suggestionVectorsInfo.push({
+        vector: diffVector,
+        minCoefficient: -2,
+        maxCoefficient: 2,
+      });
+    }
+    return suggestionVectorsInfo;
   }
 
   _updateDelaunay() {

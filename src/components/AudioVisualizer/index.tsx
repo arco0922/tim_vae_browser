@@ -20,7 +20,6 @@ import {
   RepSoundId,
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
-import useLocalStorage from 'use-local-storage';
 import { repSoundCoords } from '@app/constants/repSounds';
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
 import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
@@ -55,6 +54,7 @@ export interface AudioVisualizerProps<
   audioFilePath: string;
   visualizerConfig: VisualizerConfig<P>;
   visualizeMode: VisualizeMode;
+  annotations: Annotations;
   title?: string;
 }
 
@@ -62,6 +62,7 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   audioFilePath,
   visualizerConfig,
   visualizeMode,
+  annotations,
   title,
 }: AudioVisualizerProps<P>) => {
   const [audioContext, setAudioContext] =
@@ -263,9 +264,6 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     audioContext.suspend();
   }, [audioContext]);
 
-  const [annotations, setAnnotations] =
-    useLocalStorage<Annotations>('annotations', {});
-
   const [delaunayEstimator, setDelaunayEstimator] =
     React.useState<DelaunayEstimator | null>(null);
 
@@ -308,8 +306,6 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       annotationCount === 0
     )
       return;
-
-    console.log(coordEMA.coord);
 
     const _estimatedF = delaunayEstimator.estimate(
       coordEMA.coord,
