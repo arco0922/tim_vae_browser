@@ -5,7 +5,7 @@ import React from 'react';
 interface SketchProps {
   canvasWidth: number;
   canvasHeight: number;
-  samplingPoints: NumVector[];
+  samplingPoints: NumVector[] | null;
 }
 
 export type DrawSamplingPointsSketchProps = SketchProps & {
@@ -14,7 +14,7 @@ export type DrawSamplingPointsSketchProps = SketchProps & {
 
 interface DrawSamplingPointsProps {
   radius: number;
-  samplingPoints: NumVector[];
+  samplingPoints: NumVector[] | null;
 }
 
 const sketch = (p: P5WithProps<SketchProps>): void => {
@@ -29,6 +29,8 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
     radius,
     samplingPoints,
   }: DrawSamplingPointsProps): void => {
+    if (samplingPoints === null) return;
+
     // サンプル点を描画する(直線で結ぶ)
     p.stroke(0);
     p.strokeWeight(1);
@@ -57,7 +59,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
   };
 };
 
-export const DrawFromSamplingPointsSketch = ({
+export const DrawSamplingPointsSketch = ({
   canvasWidth,
   canvasHeight,
   samplingPoints,

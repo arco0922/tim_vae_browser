@@ -9,7 +9,9 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import styles from './TopPage.module.scss';
 
-const AudioVisualizer = dynamic<any>(
+const LongFastAudioVisualizer = dynamic<
+  AudioVisualizerProps<Float32Array[]>
+>(
   () =>
     import('../components/AudioVisualizer').then(
       (module) => module.AudioVisualizer,
@@ -22,23 +24,26 @@ const Top: NextPage = () => {
     <div className={styles.container}>
       <h1>Timbre-VAE on browser</h1>
       <h3 className={styles.caution}>
-        Only Chrome and Edge are supported. Other browsers
-        are not recommended.
+        Only Chrome is supported. Other browsers are not
+        recommended.
       </h3>
       <div className={styles.main__content}>
-        <AudioVisualizer
+        <LongFastAudioVisualizer
           audioFilePath="/audios/beginner.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
+          visualizeMode="SHAPE"
           title="beginner"
         />
-        <AudioVisualizer
+        <LongFastAudioVisualizer
           audioFilePath="/audios/intermediate.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
+          visualizeMode="SHAPE"
           title="intermediate"
         />
-        <AudioVisualizer
+        <LongFastAudioVisualizer
           audioFilePath="/audios/expert.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
+          visualizeMode="SHAPE"
           title="expert"
         />
       </div>

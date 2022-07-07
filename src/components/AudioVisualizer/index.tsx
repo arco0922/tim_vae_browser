@@ -9,9 +9,21 @@ import dynamic from 'next/dynamic';
 import { PlotLatentSketchProps } from '../../sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
 import {
+  VisualizeMode,
   VisualizerConfig,
   WorkletMessage,
 } from '@app/constants/visualizerConfig';
+import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
+import {
+  Annotations,
+  NumVector,
+  RepSoundId,
+} from '@app/@types';
+import { delaunayConfig } from '@app/constants/delaunayConfig';
+import useLocalStorage from 'use-local-storage';
+import { repSoundCoords } from '@app/constants/repSounds';
+import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
+import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -21,20 +33,35 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   { ssr: false },
 );
 
+const DrawSamplingPointsSketch =
+  dynamic<DrawSamplingPointsSketchProps>(
+    () =>
+      import(
+        '../../sketches/DrawSamplingPointsSketch'
+      ).then(
+        (module) => module.DrawSamplingPointsSketch,
+      ) as any,
+    { ssr: false },
+  );
+
 const HIST_LENGTH = 20;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
+
+const sketchWidth = 500;
 
 export interface AudioVisualizerProps<
   P extends WorkletMessage,
 > {
   audioFilePath: string;
   visualizerConfig: VisualizerConfig<P>;
+  visualizeMode: VisualizeMode;
   title?: string;
 }
 
 export const AudioVisualizer = <P extends WorkletMessage>({
   audioFilePath,
   visualizerConfig,
+  visualizeMode,
   title,
 }: AudioVisualizerProps<P>) => {
   const [audioContext, setAudioContext] =
@@ -89,13 +116,13 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       return;
     const setupResampleWorklet = async () => {
       await audioContext.audioWorklet.addModule(
-        visualizerConfig.mode === 'LONG_FAST'
+        visualizerConfig.encoderMode === 'LONG_FAST'
           ? url('/worklet-scripts/resample_mel.worklet.js')
           : url('/worklet-scripts/resample.worklet.js'),
       );
       const _resampleProcessor = new AudioWorkletNode(
         audioContext,
-        visualizerConfig.mode === 'LONG_FAST'
+        visualizerConfig.encoderMode === 'LONG_FAST'
           ? 'resample-mel.worklet'
           : 'resample.worklet',
         {
@@ -236,6 +263,63 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     audioContext.suspend();
   }, [audioContext]);
 
+  const [annotations, setAnnotations] =
+    useLocalStorage<Annotations>('annotations', {});
+
+  const [delaunayEstimator, setDelaunayEstimator] =
+    React.useState<DelaunayEstimator | null>(null);
+
+  const [annotationCount, setAnnotationCount] =
+    React.useState(0);
+
+  const [
+    estimatedSamplingPoints,
+    setEstimatedSamplingPoints,
+  ] = React.useState<NumVector[] | null>(null);
+
+  React.useEffect(() => {
+    if (visualizeMode === 'LATENT') return;
+    const _delaunayEstimator = new DelaunayEstimator(
+      delaunayConfig.inputDim,
+      delaunayConfig.outputDim,
+    );
+    setDelaunayEstimator(_delaunayEstimator);
+  }, [visualizeMode]);
+
+  React.useEffect(() => {
+    if (delaunayEstimator === null) return;
+    let _annotationCount = 0;
+    for (const [_rsId, vector] of Object.entries(
+      annotations,
+    )) {
+      const _repSoundId = _rsId as RepSoundId;
+      const coord = repSoundCoords[_repSoundId];
+      delaunayEstimator.addPoint(coord, vector);
+      _annotationCount += 1;
+    }
+    setAnnotationCount(_annotationCount);
+  }, [annotations, delaunayEstimator]);
+
+  /** Update Estimation of delaunay estimator */
+  React.useEffect(() => {
+    if (
+      delaunayEstimator === null ||
+      coordEMA === null ||
+      annotationCount === 0
+    )
+      return;
+
+    console.log(coordEMA.coord);
+
+    const _estimatedF = delaunayEstimator.estimate(
+      coordEMA.coord,
+    );
+    const _estimatedSamplingPoints =
+      calcSamplingPointsFromFreq(_estimatedF);
+
+    setEstimatedSamplingPoints(_estimatedSamplingPoints);
+  }, [coordEMA, delaunayEstimator, annotationCount]);
+
   return (
     <div className={styles.container}>
       {title && <h4 className={styles.title}>{title}</h4>}
@@ -248,15 +332,28 @@ export const AudioVisualizer = <P extends WorkletMessage>({
         onPlay={resumeContext}
         onPause={suspendContext}
       />
-      <p>first: {coordEMA?.coord[0]}</p>
-      <p>second: {coordEMA?.coord[1]}</p>
-      <PlotLatentSketch
-        canvasWidth={500}
-        canvasHeight={500}
-        encodeResult={coordEMA}
-        latentImgInfo={visualizerConfig.latentImgInfo}
-        className={styles.sketch__container}
-      />
+      {visualizeMode === 'LATENT' && (
+        <>
+          <p>first: {coordEMA?.coord[0]}</p>
+          <p>second: {coordEMA?.coord[1]}</p>
+          <PlotLatentSketch
+            canvasWidth={sketchWidth}
+            canvasHeight={sketchWidth}
+            encodeResult={coordEMA}
+            latentImgInfo={visualizerConfig.latentImgInfo}
+            className={styles.sketch__container}
+          />
+        </>
+      )}
+      {visualizeMode === 'SHAPE' && (
+        <>
+          <DrawSamplingPointsSketch
+            canvasWidth={sketchWidth}
+            canvasHeight={sketchWidth}
+            samplingPoints={estimatedSamplingPoints}
+          />
+        </>
+      )}
     </div>
   );
 };
