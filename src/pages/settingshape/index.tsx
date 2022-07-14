@@ -36,9 +36,8 @@ const SettingTop: NextPage = () => {
   }, [router]);
 
   const resetCallback = React.useCallback(() => {
-    setAnnotations({});
-    setCorrectEstimationHistory([]);
-  }, [setAnnotations, setCorrectEstimationHistory]);
+    window.localStorage.clear();
+  }, []);
 
   const gotoDemoCallback = React.useCallback(() => {
     router.push('/');
