@@ -23,6 +23,7 @@ import { delaunayConfig } from '@app/constants/delaunayConfig';
 import { repSoundCoords } from '@app/constants/repSounds';
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
 import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
+import { RandomShapeGenerator } from '@app/utils/RandomShapeGenerator';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -276,7 +277,7 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   ] = React.useState<NumVector[] | null>(null);
 
   React.useEffect(() => {
-    if (visualizeMode === 'LATENT') return;
+    if (visualizeMode !== 'SHAPE') return;
     const _delaunayEstimator = new DelaunayEstimator(
       delaunayConfig.inputDim,
       delaunayConfig.outputDim,
@@ -305,6 +306,7 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   /** Update Estimation of delaunay estimator */
   React.useEffect(() => {
     if (
+      visualizeMode !== 'SHAPE' ||
       delaunayEstimator === null ||
       coordEMA === null ||
       annotationCount === 0
@@ -318,7 +320,53 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       calcSamplingPointsFromFreq(_estimatedF);
 
     setEstimatedSamplingPoints(_estimatedSamplingPoints);
-  }, [coordEMA, delaunayEstimator, annotationCount]);
+  }, [
+    visualizeMode,
+    coordEMA,
+    delaunayEstimator,
+    annotationCount,
+  ]);
+
+  const [randomShapeGenerator, setRandomShapeGenerator] =
+    React.useState<RandomShapeGenerator | null>(null);
+
+  const metaDataLoadHandler = React.useCallback(() => {
+    if (
+      visualizeMode !== 'RANDOM' ||
+      audioRef.current === null
+    )
+      return;
+
+    const audio = audioRef.current;
+    const _randomShapeGenerator = new RandomShapeGenerator(
+      1.0,
+      2.0,
+      audio.duration,
+    );
+    setRandomShapeGenerator(_randomShapeGenerator);
+  }, [visualizeMode]);
+
+  /** Update Estimation of RandomShapeGenerator */
+  React.useEffect(() => {
+    if (
+      visualizeMode !== 'RANDOM' ||
+      randomShapeGenerator === null ||
+      coordEMA === null ||
+      audioRef.current === null
+    )
+      return;
+
+    const _estimatedF = randomShapeGenerator.estimate(
+      audioRef.current.currentTime,
+    );
+
+    if (_estimatedF === null) return;
+
+    const _estimatedSamplingPoints =
+      calcSamplingPointsFromFreq(_estimatedF);
+
+    setEstimatedSamplingPoints(_estimatedSamplingPoints);
+  }, [visualizeMode, coordEMA, randomShapeGenerator]);
 
   return (
     <div className={styles.container}>
@@ -328,9 +376,11 @@ export const AudioVisualizer = <P extends WorkletMessage>({
         controls
         loop
         ref={audioRef}
+        preload="metadata"
         onClick={resumeContext}
         onPlay={resumeContext}
         onPause={suspendContext}
+        onLoadedMetadata={metaDataLoadHandler}
       />
       {visualizeMode === 'LATENT' && (
         <>
@@ -345,7 +395,8 @@ export const AudioVisualizer = <P extends WorkletMessage>({
           />
         </>
       )}
-      {visualizeMode === 'SHAPE' && (
+      {(visualizeMode === 'SHAPE' ||
+        visualizeMode === 'RANDOM') && (
         <>
           <DrawSamplingPointsSketch
             canvasWidth={sketchWidth}

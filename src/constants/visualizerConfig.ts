@@ -5,7 +5,7 @@ import {
 } from './../utils/preprocessors';
 import * as tf from '@tensorflow/tfjs';
 
-export type VisualizeMode = 'LATENT' | 'SHAPE';
+export type VisualizeMode = 'LATENT' | 'SHAPE' | 'RANDOM';
 export type EncoderMode = 'SHORT' | 'LONG' | 'LONG_FAST';
 export type WorkletMessage = Float32Array | Float32Array[];
 export type EncoderPreProcessor<P extends WorkletMessage> =
