@@ -152,9 +152,8 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     )
       return;
 
-    audioSource
-      .connect(resampleProcessor)
-      .connect(audioContext.destination);
+    audioSource.connect(resampleProcessor);
+    audioSource.connect(audioContext.destination);
   }, [audioContext, audioSource, resampleProcessor]);
 
   const [timbreVAE, setTimbreVAE] =
