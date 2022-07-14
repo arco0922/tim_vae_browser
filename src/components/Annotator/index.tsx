@@ -225,6 +225,7 @@ export const Annotator = ({
       <audio
         src={url(`/audios/repSounds/${repSoundId}.wav`)}
         controls
+        loop
       />
       {annotatingState === 'YET' && (
         <>

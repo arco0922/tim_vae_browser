@@ -32,19 +32,19 @@ const VAE: NextPage = () => {
         <LongFastAudioVisualizer
           audioFilePath="/audios/beginner.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
-          visualizeMode="LATENT"
+          visualizeMode={'LATENT'}
           title="beginner"
         />
         <LongFastAudioVisualizer
           audioFilePath="/audios/intermediate.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
-          visualizeMode="LATENT"
+          visualizeMode={'LATENT'}
           title="intermediate"
         />
         <LongFastAudioVisualizer
           audioFilePath="/audios/expert.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
-          visualizeMode="LATENT"
+          visualizeMode={'LATENT'}
           title="expert"
         />
       </div>
