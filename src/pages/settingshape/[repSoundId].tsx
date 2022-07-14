@@ -48,10 +48,9 @@ const SettingId: NextPage = () => {
   }, [router]);
 
   const resetCallback = React.useCallback(() => {
-    setAnnotations({});
-    setCorrectEstimationHistory([]);
+    window.localStorage.clear();
     router.push('/settingshape');
-  }, [router, setAnnotations, setCorrectEstimationHistory]);
+  }, [router]);
 
   if (
     repSoundId === undefined ||

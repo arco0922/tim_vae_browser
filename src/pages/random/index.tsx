@@ -8,7 +8,7 @@ import {
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import styles from './vae.module.scss';
+import styles from './random.module.scss';
 
 const LongFastAudioVisualizer = dynamic<
   AudioVisualizerProps<Float32Array[]>
@@ -20,36 +20,24 @@ const LongFastAudioVisualizer = dynamic<
   { ssr: false },
 );
 
-const VAE: NextPage = () => {
+const Random: NextPage = () => {
   return (
     <div className={styles.container}>
-      <h1>VAE demo</h1>
+      <h1>Random Shape demo</h1>
       <h3 className={styles.caution}>
         Only Chrome is supported. Other browsers are not
         recommended.
       </h3>
       <div className={styles.main__content}>
         <LongFastAudioVisualizer
-          audioFilePath="/audios/beginner.wav"
-          visualizerConfig={Encoder02LongVisualizerConfig}
-          visualizeMode={'LATENT'}
-          title="beginner"
-        />
-        <LongFastAudioVisualizer
-          audioFilePath="/audios/intermediate.wav"
-          visualizerConfig={Encoder02LongVisualizerConfig}
-          visualizeMode={'LATENT'}
-          title="intermediate"
-        />
-        <LongFastAudioVisualizer
           audioFilePath="/audios/expert.wav"
           visualizerConfig={Encoder02LongVisualizerConfig}
-          visualizeMode={'LATENT'}
-          title="expert"
+          visualizeMode={'RANDOM'}
+          title="sample"
         />
       </div>
     </div>
   );
 };
 
-export default VAE;
+export default Random;
