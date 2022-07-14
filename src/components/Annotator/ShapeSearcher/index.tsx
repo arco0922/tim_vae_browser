@@ -138,7 +138,9 @@ export const ShapeSearcher = ({
           )}
           {notFoundCallback && (
             <Button
-              text={'しっくりくる図形を作れない'}
+              text={
+                'このパラメータではしっくりくる図形を作れない'
+              }
               className={styles.cancel__button}
               onClick={notFoundCallback}
             />
