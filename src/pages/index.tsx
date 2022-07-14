@@ -51,8 +51,6 @@ const Top: NextPage = () => {
     router.push('/settingshape');
   }, [router]);
 
-  if (typeof window === 'undefined') return null;
-
   return (
     <div className={styles.container}>
       <h1>TimMorph</h1>

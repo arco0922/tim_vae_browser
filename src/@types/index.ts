@@ -42,6 +42,8 @@ export type RepSoundId =
   | 'rs2_28'
   | 'rs2_29';
 
+export type ExpSoundId = 'es01' | 'es02' | 'es03';
+
 export type SampleShapeId =
   | 'ss00'
   | 'ss01'

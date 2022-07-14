@@ -34,6 +34,8 @@ const repSoundIds = [
   'rs2_29',
 ];
 
+const expSoundIds = ['es01', 'es02', 'es03'];
+
 const routes = {
   '/': { page: '/' },
   '/vae': { page: '/vae' },
@@ -43,11 +45,34 @@ const routes = {
   '/settingshape/nextroute': {
     page: '/settingshape/nextroute',
   },
+  '/experiment': { page: '/experiment' },
+  '/experiment/check': { page: '/experiment/check' },
+  '/experiment/settingshape': {
+    page: '/experiment/settingshape',
+  },
+  '/experiment/settingshape/nextroute': {
+    page: '/experiment/settingshape/nextroute',
+  },
+  '/experiment/testshape': {
+    page: '/experiment/testshape',
+  },
+  '/experiment/testshape/nextroute': {
+    page: '/experiment/testshape/nextroute',
+  },
 };
 
 repSoundIds.forEach((rsId) => {
   routes[`/settingshape/${rsId}`] = {
     page: '/settingshape/[repSoundId]',
+  };
+  routes[`/experiment/settingshape/${rsId}`] = {
+    page: '/experiment/settingshape/[repSoundId]',
+  };
+});
+
+expSoundIds.forEach((esId) => {
+  routes[`/experiment/testshape/${esId}`] = {
+    page: '/experiment/testshape/[expSoundId]',
   };
 });
 

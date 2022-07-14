@@ -57,6 +57,7 @@ export interface AudioVisualizerProps<
   visualizeMode: VisualizeMode;
   annotations?: Annotations;
   title?: string;
+  className?: string;
 }
 
 export const AudioVisualizer = <P extends WorkletMessage>({
@@ -65,6 +66,7 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   visualizeMode,
   annotations,
   title,
+  className,
 }: AudioVisualizerProps<P>) => {
   const [audioContext, setAudioContext] =
     React.useState<AudioContext | null>(null);
@@ -368,7 +370,7 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   }, [visualizeMode, coordEMA, randomShapeGenerator]);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className}`}>
       {title && <h4 className={styles.title}>{title}</h4>}
       <audio
         src={url(audioFilePath)}
@@ -381,10 +383,27 @@ export const AudioVisualizer = <P extends WorkletMessage>({
         onPause={suspendContext}
         onLoadedMetadata={metaDataLoadHandler}
       />
+      {visualizeMode === 'CHECK' && (
+        <>
+          <p>
+            ステータス：
+            {audioRef.current === null ||
+            audioRef.current.paused
+              ? '音を再生してください'
+              : coordEMA === null
+              ? 'テスト中'
+              : coordEMA.coord[0] === NaN
+              ? '失敗'
+              : '成功'}
+          </p>
+        </>
+      )}
       {visualizeMode === 'LATENT' && (
         <>
-          <p>first: {coordEMA?.coord[0]}</p>
-          <p>second: {coordEMA?.coord[1]}</p>
+          <div className={styles.coord__text}>
+            <p>first: {coordEMA?.coord[0]}</p>
+            <p>second: {coordEMA?.coord[1]}</p>
+          </div>
           <PlotLatentSketch
             canvasWidth={sketchWidth}
             canvasHeight={sketchWidth}
