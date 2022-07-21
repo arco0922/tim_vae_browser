@@ -60,7 +60,7 @@ export const TestShapeId: NextPage = () => {
       typeof order === 'object' ||
       Number(order) === NaN ||
       Number(order) <= 0 ||
-      Number(order) > expSoundIds.length
+      Number(order) > expOrder.length
     ) {
       return;
     }
@@ -78,7 +78,7 @@ export const TestShapeId: NextPage = () => {
       typeof order === 'object' ||
       Number(order) === NaN ||
       Number(order) <= 0 ||
-      Number(order) > expSoundIds.length
+      Number(order) > expOrder.length
     ) {
       router.push('/experiment/testshape');
       return;
@@ -96,7 +96,7 @@ export const TestShapeId: NextPage = () => {
     typeof order === 'object' ||
     Number(order) === NaN ||
     Number(order) <= 0 ||
-    Number(order) > expSoundIds.length
+    Number(order) > expOrder.length
   ) {
     return null;
   }
