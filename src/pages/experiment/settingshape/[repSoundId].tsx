@@ -12,6 +12,7 @@ import {
 } from '@app/@types';
 import useLocalStorage from 'use-local-storage';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
+import { deleteExpStorages } from '@app/utils/localStorageUtils';
 
 const Annotator = dynamic<AnnotatorProps>(
   () =>
@@ -48,7 +49,7 @@ const SettingId: NextPage = () => {
   }, [router]);
 
   const resetCallback = React.useCallback(() => {
-    window.localStorage.clear();
+    deleteExpStorages();
     router.push('/experiment/settingshape');
   }, [router]);
 

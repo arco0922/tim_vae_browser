@@ -13,4 +13,9 @@
     cursor: pointer;
     background-color: #0056a5;
   }
+
+  &:disabled {
+    background-color: #9b9b9b;
+    cursor: default;
+  }
 }

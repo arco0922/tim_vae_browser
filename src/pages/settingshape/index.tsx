@@ -5,6 +5,7 @@ import {
 import { Button } from '@app/components/Button';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
+import { deleteDemoStorages } from '@app/utils/localStorageUtils';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -33,7 +34,7 @@ const SettingTop: NextPage = () => {
   }, [router]);
 
   const resetCallback = React.useCallback(() => {
-    window.localStorage.clear();
+    deleteDemoStorages();
   }, []);
 
   const gotoDemoCallback = React.useCallback(() => {

@@ -1,6 +1,7 @@
 import { AudioVisualizerProps } from '@app/components/AudioVisualizer';
 import { Button } from '@app/components/Button';
 import { Encoder02LongVisualizerConfig } from '@app/constants/visualizerConfig';
+import { deleteExpStorages } from '@app/utils/localStorageUtils';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -25,6 +26,7 @@ const LongFastAudioVisualizer = dynamic<
 const CheckPage: NextPage = () => {
   const router = useRouter();
   const startHandler = React.useCallback(() => {
+    deleteExpStorages();
     router.push('/experiment/settingshape');
   }, [router]);
 

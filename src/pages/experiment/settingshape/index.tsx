@@ -5,6 +5,7 @@ import {
 import { Button } from '@app/components/Button';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
+import { deleteExpStorages } from '@app/utils/localStorageUtils';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -33,7 +34,7 @@ const SettingTop: NextPage = () => {
   }, [router]);
 
   const resetCallback = React.useCallback(() => {
-    window.localStorage.clear();
+    deleteExpStorages();
     router.push('/experiment');
   }, [router]);
 
@@ -43,7 +44,7 @@ const SettingTop: NextPage = () => {
 
   return (
     <div>
-      <h1>音色と図形の対応関係の調査</h1>
+      <h1>ステップ1</h1>
       {annotationCount === 0 && (
         <>
           <p>
