@@ -230,7 +230,12 @@ export const ExpAnnotator = ({
 
   return (
     <>
-      <h2>ステップ1-{annotationCount + 1}</h2>
+      <h2>
+        ステップ1-
+        {annotatingState === 'DONE'
+          ? annotationCount
+          : annotationCount + 1}
+      </h2>
       <audio
         src={url(`/audios/repSounds/${repSoundId}.wav`)}
         controls
