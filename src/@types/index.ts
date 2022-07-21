@@ -42,7 +42,37 @@ export type RepSoundId =
   | 'rs2_28'
   | 'rs2_29';
 
-export type ExpSoundId = 'es01' | 'es02' | 'es03';
+export type ExpSoundId =
+  | 'es_1'
+  | 'es_2'
+  | 'es_3'
+  | 'es_4'
+  | 'es_5'
+  | 'es_6'
+  | 'es_7'
+  | 'es_8'
+  | 'es_9'
+  | 'es_10'
+  | 'es_11'
+  | 'es_12'
+  | 'es_13'
+  | 'es_14'
+  | 'es_15'
+  | 'es_16'
+  | 'es_17'
+  | 'es_18'
+  | 'es_19'
+  | 'es_20'
+  | 'es_21'
+  | 'es_22'
+  | 'es_23'
+  | 'es_24'
+  | 'es_25'
+  | 'es_26'
+  | 'es_27'
+  | 'es_28'
+  | 'es_29'
+  | 'es_30';
 
 export type SampleShapeId =
   | 'ss00'
@@ -96,3 +126,22 @@ export type CorrectEstimationHistory = [
   rsid: RepSoundId,
   flg: boolean,
 ][];
+
+export type TestMode = 'SUGGEST' | 'RANDOM';
+
+export type Congruency = 1 | 2 | 3 | 4 | 5 | 6;
+
+export type ExpResults = {
+  [expSoundId in ExpSoundId]?: {
+    [testMode in TestMode]?: Congruency;
+  };
+};
+
+export type ExpOrder = {
+  expSoundId: ExpSoundId;
+  testMode: TestMode;
+}[];
+
+export type TimeStamp = {
+  [path: string]: number;
+};

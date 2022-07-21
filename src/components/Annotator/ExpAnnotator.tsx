@@ -97,7 +97,7 @@ export const ExpAnnotator = ({
     setAnnotations(_annotations);
     setAnnotatingState('YET');
     if (audioRef.current === null) return;
-    setIsPlay(!audioRef.current.paused);
+    setIsPlayedOnce(!audioRef.current.paused);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -224,21 +224,21 @@ export const ExpAnnotator = ({
     setAnnotatingState('SELECT');
   }, []);
 
-  const [isPlay, setIsPlay] =
+  const [isPlayedOnce, setIsPlayedOnce] =
     React.useState<boolean>(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
   return (
     <>
-      <p>音番号 : {repSoundIds.indexOf(repSoundId) + 1}</p>
+      <h2>ステップ1-{annotationCount + 1}</h2>
       <audio
         src={url(`/audios/repSounds/${repSoundId}.wav`)}
         controls
         loop
-        onPlay={() => setIsPlay(true)}
+        onPlay={() => setIsPlayedOnce(true)}
         ref={audioRef}
       />
-      {annotatingState !== 'DONE' && !isPlay ? (
+      {annotatingState !== 'DONE' && !isPlayedOnce ? (
         <p>
           音を再生してください(音は繰り返し再生されます)
         </p>

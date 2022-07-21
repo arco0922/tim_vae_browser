@@ -5,7 +5,8 @@ const countLastSuccessiveCorrectEstimation = (
 ) => {
   let count = 0;
   for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i][1]) count += 1;
+    if (!history[i][1]) return count;
+    count += 1;
   }
   return count;
 };
