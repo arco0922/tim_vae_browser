@@ -2,20 +2,21 @@ import {
   Annotations,
   Congruency,
   ExpResults,
-  ExpSoundId,
   NumVector,
-  RepSoundId,
   TestMode,
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
-import { repSoundCoords } from '@app/constants/repSounds';
+import {
+  repSoundCoords,
+  RepSoundId,
+} from '@app/constants/repSounds';
 import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
 import { url } from '@app/utils/urlConfig';
 import React from 'react';
 import { Button } from '../Button';
 import {
   expSoundCoords,
-  expSoundIds,
+  ExpSoundId,
 } from '@app/constants/expSounds';
 import { calcRandomShapeParams } from '@app/utils/sliderUtils';
 import { calcFreqFromParams } from '@app/utils/shapeUtils';

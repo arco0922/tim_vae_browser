@@ -2,16 +2,17 @@ import {
   Annotations,
   CorrectEstimationHistory,
   NumVector,
-  RepSoundId,
-  SampleShapeId,
   ShapeParams,
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
   repSoundCoords,
-  repSoundIds,
+  RepSoundId,
 } from '@app/constants/repSounds';
-import { sampleShapes } from '@app/constants/sampleShapes';
+import {
+  SampleShapeId,
+  sampleShapes,
+} from '@app/constants/sampleShapes';
 import { DrawSamplingPointsSketch } from '@app/sketches/DrawSamplingPointsSketch';
 import {
   DelaunayEstimator,

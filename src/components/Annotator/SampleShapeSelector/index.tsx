@@ -1,5 +1,7 @@
-import { SampleShapeId } from '@app/@types';
-import { sampleShapeIds } from '@app/constants/sampleShapes';
+import {
+  SampleShapeId,
+  sampleShapeIds,
+} from '@app/constants/sampleShapes';
 import { shuffle } from '@app/utils/arrayUtils';
 import React from 'react';
 import { SampleShapeItem } from './SampleShapeItem';
@@ -14,7 +16,7 @@ export const SampleShapeSelector = ({
 }: Props) => {
   const [randorandomizedSampleShapeIds, _] = React.useState<
     SampleShapeId[]
-  >(shuffle(sampleShapeIds));
+  >(shuffle([...sampleShapeIds]));
 
   return (
     <div className={styles.container}>

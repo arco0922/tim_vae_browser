@@ -1,5 +1,5 @@
-import { SampleShapeId } from '@app/@types';
 import { Image } from '@app/components/Image';
+import { SampleShapeId } from '@app/constants/sampleShapes';
 import { url } from '@app/utils/urlConfig';
 import styles from './SampleShapeItem.module.scss';
 
