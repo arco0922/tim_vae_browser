@@ -139,12 +139,12 @@ export const ShapeTester = ({
       />
       {!isPlayedOnce ? (
         <p className={styles.guide}>
-          上の音を再生してください(音は繰り返し再生されます)
+          上の音を再生してください（音は繰り返し再生されます）。
         </p>
       ) : (
         <>
           <p className={styles.guide}>
-            この図形が音に対してどの程度しっくりくると感じるかを下のスライダーを動かして回答してください。
+            この図形が音に対してどの程度対応していると感じるか、下の線分上で該当する場所をクリックしてください。
           </p>
           {testMode === 'SUGGEST' &&
             estimatedShapeVector !== null && (
@@ -164,11 +164,13 @@ export const ShapeTester = ({
                 className={styles.rator}
               />
             )}
-          <Button
-            text={'回答する'}
-            onClick={answerCallback}
-            disabled={congruency === null}
-          />
+          {congruency !== null && (
+            <Button
+              text={'次へ'}
+              onClick={answerCallback}
+              disabled={congruency === null}
+            />
+          )}
         </>
       )}
     </div>

@@ -20,14 +20,18 @@ export const VisualAnalogScaleSlider = ({
       <div className={styles.label}>
         <p>{labelLeft}</p>
       </div>
-      <SliderWithState
-        min={0}
-        max={100}
-        step={1}
-        value={value !== null ? value : 50}
-        setValue={setValue}
-        className={styles.slider}
-      />
+      <div className={styles.slider__container}>
+        <SliderWithState
+          min={0}
+          max={100}
+          step={1}
+          value={value !== null ? value : 50}
+          setValue={setValue}
+          className={`${styles.slider} ${
+            value !== null ? styles.clicked : ''
+          }`}
+        />
+      </div>
       <div className={styles.label}>
         <p>{labelRight}</p>
       </div>

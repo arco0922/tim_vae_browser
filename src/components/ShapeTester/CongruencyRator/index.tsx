@@ -37,7 +37,7 @@ export const CongruencyRator = ({
       </div>
       <VisualAnalogScaleSlider
         labelLeft={'全く対応していると感じない'}
-        labelRight={'非常に対応していると感じる'}
+        labelRight={'完全に対応していると感じる'}
         value={congruency}
         setValue={setCongruency}
       />
