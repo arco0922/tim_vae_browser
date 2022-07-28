@@ -1,10 +1,7 @@
-import { AudioVisualizerProps } from '@app/components/AudioVisualizer';
 import { Button } from '@app/components/Button';
-import { Encoder02LongVisualizerConfig } from '@app/constants/visualizerConfig';
 import { deleteExpStorages } from '@app/utils/localStorageUtils';
 import { url } from '@app/utils/urlConfig';
 import { NextPage } from 'next';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React from 'react';
 import styles from './check.module.scss';
@@ -55,7 +52,7 @@ const CheckPage: NextPage = () => {
               className={`check__item ${styles.check__item}`}
               onChange={handleCheck}
             />
-            必ずPCで実験に参加してください。
+            スマートフォンやタブレットではなく、必ずPCで実験に参加してください。
           </li>
           <li>
             <input
@@ -63,9 +60,25 @@ const CheckPage: NextPage = () => {
               className={`check__item ${styles.check__item}`}
               onChange={handleCheck}
             />
-            必ずブラウザは
+            ブラウザは
             <span className={styles.alert}>Chrome</span>
             で参加してください。Chrome以外のブラウザでこのページを開いている場合、Chromeでこのページを開きなおしてください。
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            このページを開いているウィンドウを全画面に設定してください。
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            画面の拡大度を100%に設定してください。Windowsなら「Ctrl」と「0」を同時に押すことで、Macなら「Command」と「0」を同時に押すことで画面の拡大度が100%に設定されます。
           </li>
           <li>
             <input
@@ -81,7 +94,7 @@ const CheckPage: NextPage = () => {
               className={`check__item ${styles.check__item}`}
               onChange={handleCheck}
             />
-            所要時間は約40分です。一度実験を始めたら最後まで中断することなく実験を行ってください。
+            所要時間は約30分です。一度実験を始めたら最後まで中断することなく実験を行ってください。
           </li>
           <li>
             <input
