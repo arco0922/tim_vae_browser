@@ -86,66 +86,67 @@ export const ShapeSearcher = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.sketch__section}>
-        <DrawSamplingPointsSketch
-          canvasWidth={sketchWidth}
-          canvasHeight={sketchWidth}
-          samplingPoints={samplingPoints}
-        />
+      <div className={styles.searcher__section}>
+        <div className={styles.sketch__section}>
+          <DrawSamplingPointsSketch
+            canvasWidth={sketchWidth}
+            canvasHeight={sketchWidth}
+            samplingPoints={samplingPoints}
+          />
+        </div>
+        <div className={styles.edit__section}>
+          <div className={styles.slider__section}>
+            {suggestionVectorsInfo.map(
+              (suggestionVectorInfo, idx) => {
+                return (
+                  <div
+                    className={styles.slider__wrapper}
+                    key={`slider_${idx}`}
+                  >
+                    <SliderWithState
+                      value={
+                        suggestionVectorCoefficients[idx]
+                      }
+                      setValue={(val) =>
+                        updateCoefficient(idx, val)
+                      }
+                      min={
+                        suggestionVectorInfo.minCoefficient
+                      }
+                      max={
+                        suggestionVectorInfo.maxCoefficient
+                      }
+                      step={
+                        (suggestionVectorInfo.maxCoefficient -
+                          suggestionVectorInfo.minCoefficient) /
+                        100
+                      }
+                      className={styles.slider}
+                    />
+                  </div>
+                );
+              },
+            )}
+          </div>
+        </div>
       </div>
-      <div className={styles.edit__section}>
-        <div className={styles.slider__section}>
-          {suggestionVectorsInfo.map(
-            (suggestionVectorInfo, idx) => {
-              return (
-                <div
-                  className={styles.slider__wrapper}
-                  key={`slider_${idx}`}
-                >
-                  <SliderWithState
-                    value={
-                      suggestionVectorCoefficients[idx]
-                    }
-                    setValue={(val) =>
-                      updateCoefficient(idx, val)
-                    }
-                    min={
-                      suggestionVectorInfo.minCoefficient
-                    }
-                    max={
-                      suggestionVectorInfo.maxCoefficient
-                    }
-                    step={
-                      (suggestionVectorInfo.maxCoefficient -
-                        suggestionVectorInfo.minCoefficient) /
-                      100
-                    }
-                    className={styles.slider}
-                  />
-                </div>
-              );
-            },
-          )}
-        </div>
-
-        <div className={styles.button__section}>
-          {foundCallback !== undefined && (
-            <Button
-              text={'この図形で決定'}
-              className={styles.confirm__button}
-              onClick={() => foundCallback(shapeVector)}
-            />
-          )}
-          {notFoundCallback && (
-            <Button
-              text={
-                'このパラメータではしっくりくる図形を作れない'
-              }
-              className={styles.cancel__button}
-              onClick={notFoundCallback}
-            />
-          )}
-        </div>
+      <div className={styles.button__section}>
+        {foundCallback !== undefined && (
+          <Button
+            text={'この図形で決定'}
+            className={styles.confirm__button}
+            onClick={() => foundCallback(shapeVector)}
+          />
+        )}
+        {notFoundCallback && (
+          <Button
+            text={
+              'このパラメータでは対応すると感じる図形を作れない'
+            }
+            className={styles.cancel__button}
+            onClick={notFoundCallback}
+          />
+        )}
       </div>
     </div>
   );

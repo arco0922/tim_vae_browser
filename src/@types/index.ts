@@ -30,9 +30,14 @@ export type Annotations = {
   [repSoundId in RepSoundId]?: NumVector;
 };
 
+export type CorrectEstimationFlg =
+  | 'CORRECT'
+  | 'SEARCH'
+  | 'SELECT';
+
 export type CorrectEstimationHistory = [
   rsid: RepSoundId,
-  flg: boolean,
+  flg: CorrectEstimationFlg,
 ][];
 
 export type TestMode = 'SUGGEST' | 'RANDOM';

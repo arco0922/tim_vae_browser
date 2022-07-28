@@ -115,8 +115,11 @@ export const ShapeTester = ({
     React.useState<Congruency>(null);
 
   const answerCallback = React.useCallback(() => {
-    if (congruency === null) return;
+    if (congruency === null || audioRef.current === null)
+      return;
     addResult(congruency);
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
     setIsPlayedOnce(false);
     setEstimatedShapeVector(null);
     setRandomShapeVector(null);

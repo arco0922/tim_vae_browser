@@ -1,4 +1,10 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.searcher__section {
   width: 400px;
   display: flex;
 }
@@ -7,6 +13,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
 }
 
 .slider__section {
@@ -33,17 +40,23 @@
 
 .button__section {
   width: 100%;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .confirm__button {
-  width: 100px;
+  display: block;
+  width: 200px;
+  height: 50px;
 }
 
 .cancel__button {
-  margin-left: 10px;
+  margin-left: 20px;
+  display: block;
+  width: 200px;
+  height: 50px;
   background-color: #ff4848;
   &:hover {
     background-color: #b73434;
