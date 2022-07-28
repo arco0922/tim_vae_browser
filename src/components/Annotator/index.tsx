@@ -1,5 +1,6 @@
 import {
   Annotations,
+  CorrectEstimationFlg,
   CorrectEstimationHistory,
   NumVector,
   ShapeParams,
@@ -76,7 +77,7 @@ export const Annotator = ({
   );
 
   const appendCorrectEstimationHistory = React.useCallback(
-    (flg: boolean) => {
+    (flg: CorrectEstimationFlg) => {
       const _correctEstimationHistory = [
         ...correctEstimationHistory,
       ].filter((hist) => hist[0] !== repSoundId);
@@ -194,7 +195,7 @@ export const Annotator = ({
   const isCorrectCallback = React.useCallback(() => {
     if (estimatedShapeVector === null) return;
     addAnnotation(estimatedShapeVector);
-    appendCorrectEstimationHistory(true);
+    appendCorrectEstimationHistory('CORRECT');
     setAnnotatingState('DONE');
   }, [
     estimatedShapeVector,
@@ -204,24 +205,22 @@ export const Annotator = ({
 
   const isNotCorrectCallback = React.useCallback(() => {
     if (estimatedShapeVector === null) return;
-    appendCorrectEstimationHistory(false);
     setAnnotatingState('SEARCH');
-  }, [
-    estimatedShapeVector,
-    appendCorrectEstimationHistory,
-  ]);
+  }, [estimatedShapeVector]);
 
   const foundCallback = React.useCallback(
     (shapeVector: NumVector) => {
       addAnnotation(shapeVector);
+      appendCorrectEstimationHistory('SEARCH');
       setAnnotatingState('DONE');
     },
-    [addAnnotation],
+    [addAnnotation, appendCorrectEstimationHistory],
   );
 
   const notFoundCallback = React.useCallback(() => {
+    appendCorrectEstimationHistory('SELECT');
     setAnnotatingState('SELECT');
-  }, []);
+  }, [appendCorrectEstimationHistory]);
 
   return (
     <>
