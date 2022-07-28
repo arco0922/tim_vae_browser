@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
+import styles from './testshape[order].module.scss';
 
 const ShapeTester = dynamic<ShapeTesterProps>(
   () =>
@@ -84,7 +85,6 @@ export const TestShapeId: NextPage = () => {
       return;
     }
     const orderIdx = Number(order);
-    console.log(countTested(expResults));
     if (countTested(expResults) !== orderIdx - 1) {
       router.push('/experiment/testshape');
     }
@@ -104,8 +104,8 @@ export const TestShapeId: NextPage = () => {
   const orderIdx = Number(order);
 
   return (
-    <div>
-      <h2>ステップ2-{orderIdx}</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>ステップ2-{orderIdx}</h2>
       <ShapeTester
         expSoundId={expOrder[orderIdx - 1].expSoundId}
         testMode={expOrder[orderIdx - 1].testMode}

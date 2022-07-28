@@ -1,18 +1,21 @@
 import { NextPage } from 'next';
 import React from 'react';
-import styles from './settingshape.module.scss';
+import styles from './settingshape[repSoundId].module.scss';
 import dynamic from 'next/dynamic';
 import { AnnotatorProps } from '@app/components/Annotator';
 import { useRouter } from 'next/router';
-import { repSoundIds } from '@app/constants/repSounds';
+import {
+  RepSoundId,
+  repSoundIds,
+} from '@app/constants/repSounds';
 import {
   Annotations,
   CorrectEstimationHistory,
-  RepSoundId,
 } from '@app/@types';
 import useLocalStorage from 'use-local-storage';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { deleteExpStorages } from '@app/utils/localStorageUtils';
+import { ExpErrorComponent } from '@app/components/ExpErrorComponent';
 
 const Annotator = dynamic<AnnotatorProps>(
   () =>
@@ -58,7 +61,7 @@ const SettingId: NextPage = () => {
     typeof repSoundId === 'object' ||
     !_repSoundIds.includes(repSoundId)
   ) {
-    return <div>No representative sound was Found</div>;
+    return <ExpErrorComponent />;
   }
 
   return (

@@ -9,6 +9,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
+import styles from './settinshape.module.scss';
 
 const SettingNext: NextPage = () => {
   const router = useRouter();
@@ -42,7 +43,11 @@ const SettingNext: NextPage = () => {
     }
   }, [annotations, router, hasFinishedAnnotation]);
 
-  return <></>;
+  return (
+    <div className={styles.container}>
+      <p>loading...</p>
+    </div>
+  );
 };
 
 export default SettingNext;

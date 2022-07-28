@@ -1,14 +1,19 @@
 import {
   Annotations,
+  CorrectEstimationFlg,
   CorrectEstimationHistory,
   NumVector,
-  RepSoundId,
-  SampleShapeId,
   ShapeParams,
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
-import { repSoundCoords } from '@app/constants/repSounds';
-import { sampleShapes } from '@app/constants/sampleShapes';
+import {
+  repSoundCoords,
+  RepSoundId,
+} from '@app/constants/repSounds';
+import {
+  SampleShapeId,
+  sampleShapes,
+} from '@app/constants/sampleShapes';
 import { DrawSamplingPointsSketch } from '@app/sketches/DrawSamplingPointsSketch';
 import {
   DelaunayEstimator,
@@ -72,7 +77,7 @@ export const Annotator = ({
   );
 
   const appendCorrectEstimationHistory = React.useCallback(
-    (flg: boolean) => {
+    (flg: CorrectEstimationFlg) => {
       const _correctEstimationHistory = [
         ...correctEstimationHistory,
       ].filter((hist) => hist[0] !== repSoundId);
@@ -190,7 +195,7 @@ export const Annotator = ({
   const isCorrectCallback = React.useCallback(() => {
     if (estimatedShapeVector === null) return;
     addAnnotation(estimatedShapeVector);
-    appendCorrectEstimationHistory(true);
+    appendCorrectEstimationHistory('CORRECT');
     setAnnotatingState('DONE');
   }, [
     estimatedShapeVector,
@@ -200,24 +205,22 @@ export const Annotator = ({
 
   const isNotCorrectCallback = React.useCallback(() => {
     if (estimatedShapeVector === null) return;
-    appendCorrectEstimationHistory(false);
     setAnnotatingState('SEARCH');
-  }, [
-    estimatedShapeVector,
-    appendCorrectEstimationHistory,
-  ]);
+  }, [estimatedShapeVector]);
 
   const foundCallback = React.useCallback(
     (shapeVector: NumVector) => {
       addAnnotation(shapeVector);
+      appendCorrectEstimationHistory('SEARCH');
       setAnnotatingState('DONE');
     },
-    [addAnnotation],
+    [addAnnotation, appendCorrectEstimationHistory],
   );
 
   const notFoundCallback = React.useCallback(() => {
+    appendCorrectEstimationHistory('SELECT');
     setAnnotatingState('SELECT');
-  }, []);
+  }, [appendCorrectEstimationHistory]);
 
   return (
     <>

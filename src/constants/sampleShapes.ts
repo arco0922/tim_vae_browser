@@ -1,10 +1,10 @@
-import { SampleShapeId, ShapeParams } from '@app/@types';
+import { ShapeParams } from '@app/@types';
 
 type SampleShapes = {
   [shapeId in SampleShapeId]: ShapeParams;
 };
 
-export const sampleShapeIds: SampleShapeId[] = [
+export const sampleShapeIds = [
   'ss00',
   'ss01',
   'ss02',
@@ -30,7 +30,9 @@ export const sampleShapeIds: SampleShapeId[] = [
   'ss22',
   'ss23',
   'ss24',
-];
+] as const;
+
+export type SampleShapeId = typeof sampleShapeIds[number];
 
 export const sampleShapes: SampleShapes = {
   ss00: {

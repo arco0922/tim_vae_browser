@@ -1,6 +1,6 @@
-import { ExpSoundId, NumVector } from '@app/@types';
+import { NumVector } from '@app/@types';
 
-export const expSoundIds: ExpSoundId[] = [
+export const expSoundIds = [
   'es_1',
   'es_2',
   'es_3',
@@ -31,13 +31,15 @@ export const expSoundIds: ExpSoundId[] = [
   'es_28',
   'es_29',
   'es_30',
-];
+] as const;
+
+export type ExpSoundId = typeof expSoundIds[number];
 
 type ExpSoundCoords = {
   [expSoundId in ExpSoundId]: NumVector;
 };
 
-export const expSoundCoords = {
+export const expSoundCoords: ExpSoundCoords = {
   es_1: [-0.12991683, 0.51399964],
   es_2: [1.2173853, -1.2688152],
   es_3: [-0.6682352, 0.56844366],

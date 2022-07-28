@@ -1,14 +1,16 @@
 import { NextPage } from 'next';
 import React from 'react';
-import styles from './settingshape.module.scss';
+import styles from './settingshape[repSoundId].module.scss';
 import dynamic from 'next/dynamic';
 import { AnnotatorProps } from '../../components/Annotator';
 import { useRouter } from 'next/router';
-import { repSoundIds } from '@app/constants/repSounds';
+import {
+  RepSoundId,
+  repSoundIds,
+} from '@app/constants/repSounds';
 import {
   Annotations,
   CorrectEstimationHistory,
-  RepSoundId,
 } from '@app/@types';
 import useLocalStorage from 'use-local-storage';
 import { localStorageKeys } from '@app/constants/localStorageKeys';

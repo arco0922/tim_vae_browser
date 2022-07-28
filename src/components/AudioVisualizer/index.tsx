@@ -14,13 +14,12 @@ import {
   WorkletMessage,
 } from '@app/constants/visualizerConfig';
 import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
-import {
-  Annotations,
-  NumVector,
-  RepSoundId,
-} from '@app/@types';
+import { Annotations, NumVector } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
-import { repSoundCoords } from '@app/constants/repSounds';
+import {
+  repSoundCoords,
+  RepSoundId,
+} from '@app/constants/repSounds';
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
 import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
 import { RandomShapeGenerator } from '@app/utils/RandomShapeGenerator';

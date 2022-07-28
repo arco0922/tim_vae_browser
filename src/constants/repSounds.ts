@@ -1,6 +1,6 @@
-import { RepSoundId, NumVector } from '@app/@types';
+import { NumVector } from '@app/@types';
 
-export const repSoundIds: RepSoundId[] = [
+export const repSoundIds = [
   'rs1_00',
   'rs1_01',
   'rs1_02',
@@ -34,7 +34,9 @@ export const repSoundIds: RepSoundId[] = [
   'rs2_27',
   'rs2_28',
   'rs2_29',
-];
+] as const;
+
+export type RepSoundId = typeof repSoundIds[number];
 
 type RepSoundCoords = {
   [repSoundId in RepSoundId]: NumVector;

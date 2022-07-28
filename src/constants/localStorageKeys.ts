@@ -5,4 +5,5 @@ export enum localStorageKeys {
   EXP_CORRECT_ESTIMATION_HISTORY = 'timmorph__exp__correctEstimationHistory',
   EXP_RESULTS = 'timmorph__exp__results',
   EXP_ORDER = 'timmorph__exp__order',
+  EXP_TIMESTAMPS = 'timmorph__exp__timestamps',
 }

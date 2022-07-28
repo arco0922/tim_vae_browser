@@ -3,13 +3,14 @@ import {
   CorrectEstimationHistory,
 } from '@app/@types';
 import { Button } from '@app/components/Button';
+import { ExpErrorComponent } from '@app/components/ExpErrorComponent';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
-import { deleteExpStorages } from '@app/utils/localStorageUtils';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
+import styles from './settinshape.module.scss';
 
 const SettingTop: NextPage = () => {
   const router = useRouter();
@@ -33,52 +34,41 @@ const SettingTop: NextPage = () => {
     router.push('/experiment/settingshape/nextroute');
   }, [router]);
 
-  const resetCallback = React.useCallback(() => {
-    deleteExpStorages();
-    router.push('/experiment');
-  }, [router]);
-
   const gotoTestShapeCallback = React.useCallback(() => {
     router.push('/experiment/testshape');
   }, [router]);
 
+  if (annotationCount > 0 && !hasEndAnnotation) {
+    return <ExpErrorComponent />;
+  }
+
   return (
-    <div>
-      <h1>ステップ1</h1>
+    <div className={styles.container}>
+      <h2 className={styles.title}>
+        ステップ1{hasEndAnnotation && ` 終了`}
+      </h2>
       {annotationCount === 0 && (
         <>
-          <p>
-            まず初めに、あなたの音色と図形の対応関係を調査します。
-          </p>
-          <p>
-            これから、いくつかの音に対して、あなたが対応すると感じる図形を回答して頂くタスクを行っていただきます。
-          </p>
-          <p>
-            下の「図形の回答を開始」ボタンを押してください。
-          </p>
+          <div className={styles.guide}>
+            <p>
+              まず初めに、あなたの音色と図形の対応関係の推定を行います。
+            </p>
+            <p>下の「次へ」ボタンを押してください。</p>
+          </div>
           <Button
-            text={'図形の回答を開始'}
+            text={'次へ'}
             onClick={startAnnotationCallback}
-          />
-        </>
-      )}
-      {annotationCount > 0 && !hasEndAnnotation && (
-        <>
-          <p>
-            実験を途中で中断してしまったようです。大変恐縮ですが、再度始めから実験をやり直してください。
-          </p>
-          <Button
-            text={'始めから実験をやり直す'}
-            onClick={resetCallback}
           />
         </>
       )}
       {hasEndAnnotation && (
         <>
-          <p>
-            あなたの図形と音色の関係の推定が完了しました。
-          </p>
-          <p>下の「次へ進む」ボタンを押してください。</p>
+          <div className={styles.guide}>
+            <p>
+              あなたの図形と音色の関係の推定が完了しました。
+            </p>
+            <p>下の「次へ進む」ボタンを押してください。</p>
+          </div>
           <Button
             text={'次へ進む'}
             onClick={gotoTestShapeCallback}

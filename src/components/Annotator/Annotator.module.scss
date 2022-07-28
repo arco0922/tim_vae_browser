@@ -1,5 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.audio {
+  margin-bottom: 20px;
+}
+
+.guide {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.button__section {
+  width: 500px;
+  margin-top: 20px;
+}
+
+.button {
+  margin-bottom: 13px;
+  width: 100%;
+  text-align: center;
+}
+
 .cancel__button {
-  margin-top: 5px;
   background-color: #ff4848;
   &:hover {
     background-color: #b73434;

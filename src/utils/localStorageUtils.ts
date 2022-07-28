@@ -14,4 +14,5 @@ export const deleteExpStorages = () => {
   );
   localStorage.removeItem(localStorageKeys.EXP_ORDER);
   localStorage.removeItem(localStorageKeys.EXP_RESULTS);
+  localStorage.removeItem(localStorageKeys.EXP_TIMESTAMPS);
 };

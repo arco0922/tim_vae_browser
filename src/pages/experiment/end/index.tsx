@@ -3,6 +3,7 @@ import {
   CorrectEstimationHistory,
   ExpOrder,
   ExpResults,
+  Timestamp,
 } from '@app/@types';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
@@ -11,9 +12,10 @@ import { NextPage } from 'next';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
 import axios from 'axios';
-import { Button } from '@app/components/Button';
 import { useRouter } from 'next/router';
 import { deleteExpStorages } from '@app/utils/localStorageUtils';
+import styles from './end.module.scss';
+import { ExpErrorComponent } from '@app/components/ExpErrorComponent';
 
 const EndPage: NextPage = () => {
   const router = useRouter();
@@ -35,6 +37,10 @@ const EndPage: NextPage = () => {
     localStorageKeys.EXP_RESULTS,
     {},
   );
+  const [expTimestamp] = useLocalStorage<Timestamp[]>(
+    localStorageKeys.EXP_TIMESTAMPS,
+    [],
+  );
 
   const [hasError, setHasError] = React.useState(false);
   const [userId, setUserId] = React.useState('');
@@ -43,7 +49,8 @@ const EndPage: NextPage = () => {
     if (
       expOrder.length === 0 ||
       !judgeHasEndAnnotation(correctEstimationHistory) ||
-      countTested(expResults) !== expOrder.length
+      countTested(expResults) !== expOrder.length ||
+      expTimestamp.length === 0
     ) {
       setHasError(true);
       return;
@@ -53,15 +60,21 @@ const EndPage: NextPage = () => {
       correctEstimationHistory,
       expOrder,
       expResults,
+      expTimestamp,
     };
     const postResults = async () => {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/results`,
-        finalResults,
-      );
-      const _userId = res.data.userId as string;
-      setUserId(_userId);
-      deleteExpStorages();
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/results`,
+          finalResults,
+        );
+        const _userId = res.data.userId as string;
+        setUserId(_userId);
+        deleteExpStorages();
+      } catch (err) {
+        console.error(err);
+        setHasError(true);
+      }
     };
     postResults();
   }, [
@@ -69,31 +82,27 @@ const EndPage: NextPage = () => {
     correctEstimationHistory,
     expResults,
     annotations,
+    expTimestamp,
   ]);
 
-  const resetCallback = React.useCallback(() => {
-    deleteExpStorages();
-    router.push('/experiment');
-  }, [router]);
+  if (hasError) {
+    return <ExpErrorComponent />;
+  }
 
   return (
-    <div>
-      {hasError ? (
-        <>
-          <p>
-            実験を途中で中断してしまったようです。大変恐縮ですが、再度始めから実験をやり直してください。
-          </p>
-          <Button
-            text={'始めから実験をやり直す'}
-            onClick={resetCallback}
-          />
-        </>
-      ) : (
-        <>
-          <p>実験へのご協力ありがとうございました。</p>
-          <p>あなたのIDは {userId} です。</p>
-        </>
-      )}
+    <div className={styles.container}>
+      <h2 className={styles.title}>実験終了</h2>
+      <div className={styles.guide}>
+        <p>
+          以上で実験は終了です。この度は、実験へのご協力ありがとうございました。
+        </p>
+        <p>
+          あなたのIDは <b>{userId}</b> です。
+          <br />
+          こちらのIDをコピーしてLancersのページにてご回答ください。
+        </p>
+        <p>もうこのページを閉じて頂いて問題ありません。</p>
+      </div>
     </div>
   );
 };

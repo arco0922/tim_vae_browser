@@ -28,20 +28,18 @@ export const CorrectEstimationJudger = ({
           )}
         />
       </div>
-      <div className={styles.edit__section}>
-        <div className={styles.button__section}>
-          <Button
-            text={'しっくりくる'}
-            className={styles.confirm__button}
-            onClick={isCorrectCallback}
-          />
+      <div className={styles.button__section}>
+        <Button
+          text={'この図形で問題ない'}
+          className={styles.confirm__button}
+          onClick={isCorrectCallback}
+        />
 
-          <Button
-            text={'しっくりこない'}
-            className={styles.cancel__button}
-            onClick={isNotCorrectCallback}
-          />
-        </div>
+        <Button
+          text={'図形を修正する'}
+          className={styles.cancel__button}
+          onClick={isNotCorrectCallback}
+        />
       </div>
     </div>
   );

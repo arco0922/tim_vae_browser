@@ -6,6 +6,22 @@ import styles from './experiment.module.scss';
 
 const ExpTop: NextPage = () => {
   const router = useRouter();
+  const [hasCheckedAll, setHasCheckedAll] =
+    React.useState(false);
+
+  const handleCheck = React.useCallback(() => {
+    const checkList =
+      document.querySelectorAll('.check__item');
+    const checkedList = document.querySelectorAll(
+      '.check__item:checked',
+    );
+    if (checkList.length === checkedList.length) {
+      setHasCheckedAll(true);
+    } else {
+      setHasCheckedAll(false);
+    }
+  }, []);
+
   const goNextHandler = React.useCallback(() => {
     router.push('/experiment/check');
   }, [router]);
@@ -36,27 +52,86 @@ const ExpTop: NextPage = () => {
       <div className={styles.section}>
         <h2 className={styles.title}>同意確認</h2>
         <p>以下の項目について、説明を受け理解しました。</p>
-        <ul>
-          <li>この研究の概要について</li>
-          <li>研究協力の任意性と撤回の自由について</li>
-          <li>個人情報の保護について</li>
-          <li>研究結果の発表について</li>
+        <ul className={styles.check__list}>
           <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            この研究の概要について
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            研究協力の任意性と撤回の自由について
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            個人情報の保護について
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            研究結果の発表について
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
             研究参加者にもたらされる利益及び不利益について
           </li>
-          <li>情報の取り扱い方針について</li>
-          <li>費用負担について</li>
-          <li>その他について</li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            情報の取り扱い方針について
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            費用負担について
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              className={`check__item ${styles.check__item}`}
+              onChange={handleCheck}
+            />
+            その他について
+          </li>
         </ul>
         <p>
+          <input
+            type="checkbox"
+            className={`check__item ${styles.check__item}`}
+            onChange={handleCheck}
+          />
           上記研究への参加にあたり、説明文書の記載事項について説明を受け、
-          <br />
           これを十分に理解できましたので本研究の研究参加者となることに同意いたします。
         </p>
       </div>
       <Button
         text={'次のページへ'}
         onClick={goNextHandler}
+        disabled={!hasCheckedAll}
       />
     </div>
   );

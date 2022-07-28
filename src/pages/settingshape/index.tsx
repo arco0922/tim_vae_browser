@@ -10,6 +10,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
+import styles from './settingshape.module.scss';
 
 const SettingTop: NextPage = () => {
   const router = useRouter();
@@ -42,8 +43,8 @@ const SettingTop: NextPage = () => {
   }, [router]);
 
   return (
-    <div>
-      <h1>Setting Shapes</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Setting Shapes</h1>
       {annotationCount === 0 && (
         <>
           <p>It seems you have not set any shapes.</p>

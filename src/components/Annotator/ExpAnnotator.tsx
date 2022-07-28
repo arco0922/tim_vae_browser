@@ -1,17 +1,19 @@
 import {
   Annotations,
+  CorrectEstimationFlg,
   CorrectEstimationHistory,
   NumVector,
-  RepSoundId,
-  SampleShapeId,
   ShapeParams,
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
   repSoundCoords,
-  repSoundIds,
+  RepSoundId,
 } from '@app/constants/repSounds';
-import { sampleShapes } from '@app/constants/sampleShapes';
+import {
+  SampleShapeId,
+  sampleShapes,
+} from '@app/constants/sampleShapes';
 import { DrawSamplingPointsSketch } from '@app/sketches/DrawSamplingPointsSketch';
 import {
   DelaunayEstimator,
@@ -75,7 +77,7 @@ export const ExpAnnotator = ({
   );
 
   const appendCorrectEstimationHistory = React.useCallback(
-    (flg: boolean) => {
+    (flg: CorrectEstimationFlg) => {
       const _correctEstimationHistory = [
         ...correctEstimationHistory,
       ].filter((hist) => hist[0] !== repSoundId);
@@ -195,7 +197,7 @@ export const ExpAnnotator = ({
   const isCorrectCallback = React.useCallback(() => {
     if (estimatedShapeVector === null) return;
     addAnnotation(estimatedShapeVector);
-    appendCorrectEstimationHistory(true);
+    appendCorrectEstimationHistory('CORRECT');
     setAnnotatingState('DONE');
   }, [
     estimatedShapeVector,
@@ -205,32 +207,30 @@ export const ExpAnnotator = ({
 
   const isNotCorrectCallback = React.useCallback(() => {
     if (estimatedShapeVector === null) return;
-    appendCorrectEstimationHistory(false);
     setAnnotatingState('SEARCH');
-  }, [
-    estimatedShapeVector,
-    appendCorrectEstimationHistory,
-  ]);
+  }, [estimatedShapeVector]);
 
   const foundCallback = React.useCallback(
     (shapeVector: NumVector) => {
       addAnnotation(shapeVector);
+      appendCorrectEstimationHistory('SEARCH');
       setAnnotatingState('DONE');
     },
-    [addAnnotation],
+    [addAnnotation, appendCorrectEstimationHistory],
   );
 
   const notFoundCallback = React.useCallback(() => {
+    appendCorrectEstimationHistory('SELECT');
     setAnnotatingState('SELECT');
-  }, []);
+  }, [appendCorrectEstimationHistory]);
 
   const [isPlayedOnce, setIsPlayedOnce] =
     React.useState<boolean>(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
   return (
-    <>
-      <h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>
         ステップ1-
         {annotatingState === 'DONE'
           ? annotationCount
@@ -242,34 +242,36 @@ export const ExpAnnotator = ({
         loop
         onPlay={() => setIsPlayedOnce(true)}
         ref={audioRef}
+        className={styles.audio}
       />
       {annotatingState !== 'DONE' && !isPlayedOnce ? (
         <p>
-          音を再生してください(音は繰り返し再生されます)
+          上の音を再生してください（音は繰り返し再生されます）。
         </p>
       ) : (
         <>
           {annotatingState === 'YET' && (
-            <>
+            <div className={styles.button__section}>
               <Button
                 text={'この音に対する図形の回答を開始'}
                 onClick={startCallback}
+                className={styles.button}
               />
               {annotationCount > 0 && (
                 <Button
                   text={
-                    '全ての音に対する図形の回答をリセットし、図形の回答を初めから行う'
+                    '全ての音に対する図形の回答をリセットし、図形の回答を始めから行う'
                   }
                   onClick={resetCallback}
-                  className={styles.cancel__button}
+                  className={`${styles.cancel__button} ${styles.button}`}
                 />
               )}
-            </>
+            </div>
           )}
           {annotatingState === 'SELECT' && (
             <>
-              <p>
-                下の図形の中から、最も音に対応していると感じる図形を一つ選んでください。
+              <p className={styles.guide}>
+                下の図形の中から、音に最も対応していると感じる図形を一つ選んでください。
               </p>
               <SampleShapeSelector
                 selectCallback={selectCallback}
@@ -279,8 +281,10 @@ export const ExpAnnotator = ({
           {annotatingState === 'EDIT' &&
             selectedShapeId !== null && (
               <>
-                <p>
-                  パラメータを微調節し、最も音に対応していると感じるように図形を変形させてください
+                <p className={styles.guide}>
+                  パラメータを微調節し、自分にとって最も音に対応すると感じるように図形を変形させてください。
+                  <br />
+                  既に対応していると感じる場合はそのままでも構いません。
                 </p>
                 <ShapeEditor
                   defaultShapeParams={
@@ -294,8 +298,10 @@ export const ExpAnnotator = ({
           {annotatingState === 'JUDGE' &&
             estimatedShapeVector !== null && (
               <>
-                <p>
-                  この図形は音に対してしっくりくると感じますか？
+                <p className={styles.guide}>
+                  これまでのあなたの回答から、この音に対しては以下の図形が対応していると感じるのではないかと推定されました。
+                  <br />
+                  この図形では対応していないと感じる場合、以下の「図形を修正する」を選択してください。
                 </p>
                 <CorrectEstimationJudger
                   estimatedShapeVector={
@@ -312,8 +318,12 @@ export const ExpAnnotator = ({
             estimatedShapeVector !== null &&
             suggestionVectorsInfo !== null && (
               <>
-                <p>
-                  パラメータを調節して、図形が音にしっくりくると感じるようにしてください
+                <p className={styles.guide}>
+                  パラメータを調節して、図形が音に対応すると感じるように変形させてください。
+                  <br />
+                  このパラメータでは対応すると感じる図形を作れない場合は、
+                  <br />
+                  「このパラメータでは対応すると感じる図形を作れない」を選択して下さい。
                 </p>
                 <ShapeSearcher
                   defaultShapeVector={estimatedShapeVector}
@@ -330,31 +340,39 @@ export const ExpAnnotator = ({
       {annotatingState === 'DONE' &&
         samplingPoints !== null && (
           <>
+            <p className={styles.guide}>
+              あなたがこの音に対応すると回答した図形は以下の通りです。
+              <br />
+              このままで問題ない場合は下の「次へ」ボタンを押してください。
+            </p>
             <DrawSamplingPointsSketch
               canvasWidth={sketchWidth}
               canvasHeight={sketchWidth}
               samplingPoints={samplingPoints}
             />
-            <Button
-              text={'次へ'}
-              onClick={goNextCallback}
-            />
-            <Button
-              text={'この音に対する図形の回答をやり直す'}
-              onClick={deleteAnnotationCallback}
-              className={styles.cancel__button}
-            />
-            {annotationCount > 0 && (
+            <div className={styles.button__section}>
               <Button
-                text={
-                  '全ての音に対する図形の回答をリセットし、図形の回答を初めから行う'
-                }
-                onClick={resetCallback}
-                className={styles.cancel__button}
+                text={'次へ'}
+                onClick={goNextCallback}
+                className={styles.button}
               />
-            )}
+              <Button
+                text={'この音に対する図形の回答をやり直す'}
+                onClick={deleteAnnotationCallback}
+                className={`${styles.cancel__button} ${styles.button}`}
+              />
+              {annotationCount > 0 && (
+                <Button
+                  text={
+                    '全ての音に対する図形の回答をリセットし、図形の回答を始めから行う'
+                  }
+                  onClick={resetCallback}
+                  className={`${styles.cancel__button} ${styles.button}`}
+                />
+              )}
+            </div>
           </>
         )}
-    </>
+    </div>
   );
 };
