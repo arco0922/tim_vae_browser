@@ -21,6 +21,7 @@ import {
 import { calcRandomShapeParams } from '@app/utils/sliderUtils';
 import { calcFreqFromParams } from '@app/utils/shapeUtils';
 import { CongruencyRator } from './CongruencyRator';
+import styles from './ShapeTester.module.scss';
 
 const sketchWidth = 150;
 
@@ -111,14 +112,7 @@ export const ShapeTester = ({
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
   const [congruency, setCongruency] =
-    React.useState<Congruency | null>(null);
-
-  const selectCallback = React.useCallback(
-    (rating: Congruency) => {
-      setCongruency(rating);
-    },
-    [],
-  );
+    React.useState<Congruency>(null);
 
   const answerCallback = React.useCallback(() => {
     if (congruency === null) return;
@@ -131,35 +125,40 @@ export const ShapeTester = ({
   }, [congruency, addResult, goNextCallback]);
 
   return (
-    <>
+    <div className={styles.container}>
       <audio
         src={url(`/audios/expSounds/${expSoundId}.wav`)}
         controls
         loop
         onPlay={() => setIsPlayedOnce(true)}
         ref={audioRef}
+        className={styles.audio}
       />
       {!isPlayedOnce ? (
-        <p>
-          音を再生してください(音は繰り返し再生されます)
+        <p className={styles.guide}>
+          上の音を再生してください(音は繰り返し再生されます)
         </p>
       ) : (
         <>
-          <p>
-            この図形が音に対してどの程度しっくりくるかを1~6の6段階から1つ選んで回答してください。
+          <p className={styles.guide}>
+            この図形が音に対してどの程度しっくりくると感じるかを下のスライダーを動かして回答してください。
           </p>
           {testMode === 'SUGGEST' &&
             estimatedShapeVector !== null && (
               <CongruencyRator
                 shapeVector={estimatedShapeVector}
-                selectCallback={selectCallback}
+                congruency={congruency}
+                setCongruency={setCongruency}
+                className={styles.rator}
               />
             )}
           {testMode === 'RANDOM' &&
             randomShapeVector !== null && (
               <CongruencyRator
                 shapeVector={randomShapeVector}
-                selectCallback={selectCallback}
+                congruency={congruency}
+                setCongruency={setCongruency}
+                className={styles.rator}
               />
             )}
           <Button
@@ -169,6 +168,6 @@ export const ShapeTester = ({
           />
         </>
       )}
-    </>
+    </div>
   );
 };

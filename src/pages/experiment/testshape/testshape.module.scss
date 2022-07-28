@@ -1,17 +1,15 @@
 .container {
+  margin: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.audio {
+.title {
   margin-bottom: 20px;
 }
 
 .guide {
   margin-bottom: 20px;
-}
-
-.rator {
-  margin-bottom: 20px;
+  text-align: center;
 }

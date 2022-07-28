@@ -10,6 +10,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
+import styles from './testshape.module.scss';
 
 const TestTop: NextPage = () => {
   const router = useRouter();
@@ -55,12 +56,13 @@ const TestTop: NextPage = () => {
   }
 
   return (
-    <div>
-      <h1>ステップ2</h1>
-      <p>
+    <div className={styles.container}>
+      <h2 className={styles.title}>ステップ2</h2>
+      <div className={styles.guide}>
         引き続き、あなたの音色と図形の対応関係を確認します。
-      </p>
-      <p>下の「次へ進む」ボタンを押してください。</p>
+        <br />
+        下の「次へ進む」ボタンを押してください。
+      </div>
       <Button
         text={'次へ進む'}
         onClick={gotoTestCallback}
