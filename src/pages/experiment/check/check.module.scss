@@ -34,3 +34,26 @@
   margin: 0px;
   margin-bottom: 15px;
 }
+
+.check__list {
+  list-style: none;
+
+  li {
+    margin-left: 1.4em;
+    text-indent: -1.4em;
+  }
+}
+
+.check__item {
+  margin-right: 5px;
+}
+
+.check__audio {
+  margin-bottom: 10px;
+}
+
+.start__button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+}
