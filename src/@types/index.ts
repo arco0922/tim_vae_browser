@@ -50,6 +50,4 @@ export type ExpOrder = {
   testMode: TestMode;
 }[];
 
-export type TimeStamp = {
-  [path: string]: number;
-};
+export type Timestamp = [path: string, time: number];
