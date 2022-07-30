@@ -12,14 +12,11 @@ import { NextPage } from 'next';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { deleteExpStorages } from '@app/utils/localStorageUtils';
 import styles from './end.module.scss';
 import { ExpErrorComponent } from '@app/components/ExpErrorComponent';
 
 const EndPage: NextPage = () => {
-  const router = useRouter();
-
   const [annotations] = useLocalStorage<Annotations>(
     localStorageKeys.EXP_ANNOTATIONS,
     {},
@@ -42,6 +39,7 @@ const EndPage: NextPage = () => {
     [],
   );
 
+  const [isSending, setIsSending] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
   const [userId, setUserId] = React.useState('');
 
@@ -64,12 +62,14 @@ const EndPage: NextPage = () => {
     };
     const postResults = async () => {
       try {
+        setIsSending(true);
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/results`,
           finalResults,
         );
         const _userId = res.data.userId as string;
         setUserId(_userId);
+        setIsSending(false);
         deleteExpStorages();
       } catch (err) {
         console.error(err);
@@ -92,16 +92,29 @@ const EndPage: NextPage = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>実験終了</h2>
+
       <div className={styles.guide}>
-        <p>
-          以上で実験は終了です。この度は、実験へのご協力ありがとうございました。
-        </p>
-        <p>
-          あなたのIDは <b>{userId}</b> です。
-          <br />
-          こちらのIDをコピーしてLancersのページにてご回答ください。
-        </p>
-        <p>もうこのページを閉じて頂いて問題ありません。</p>
+        {isSending ? (
+          <>
+            <p>
+              実験結果をサーバーに送信しています。しばらくお待ちください。
+            </p>
+          </>
+        ) : (
+          <>
+            <p>
+              以上で実験は終了です。この度は、実験へのご協力ありがとうございました。
+            </p>
+            <p>
+              あなたのIDは <b>{userId}</b> です。
+              <br />
+              こちらのIDをコピーしてLancersのページにてご回答ください。
+            </p>
+            <p>
+              もうこのページを閉じて頂いて問題ありません。
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
