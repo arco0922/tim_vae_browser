@@ -75,13 +75,45 @@ export const StepOneAnnotator = ({
   const [hasPlayedOnceSet, setHasPlayedOnceSet] =
     React.useState<Set<StepOneRepSoundId>>(new Set());
 
+  const playSound = (rsId: StepOneRepSoundId) => {
+    const audioElem = document.querySelector(
+      `#audio__${rsId}`,
+    );
+    if (audioElem === null) return;
+    const audio = audioElem as HTMLAudioElement;
+    if (!audio.paused) return;
+    audio.play();
+  };
+
+  const pauseSound = (rsId: StepOneRepSoundId) => {
+    const audioElem = document.querySelector(
+      `#audio__${rsId}`,
+    );
+    if (audioElem === null) return;
+    const audio = audioElem as HTMLAudioElement;
+    if (audio.paused) return;
+    audio.pause();
+    audio.currentTime = 0;
+  };
+
+  const pauseOtherSounds = React.useCallback(
+    (rsId: StepOneRepSoundId) => {
+      stepOneRepSoundIds.forEach((_rsId) => {
+        if (_rsId === rsId) return;
+        pauseSound(_rsId);
+      });
+    },
+    [],
+  );
+
   const playCallback = React.useCallback(
     (rsId: StepOneRepSoundId) => {
       setHasPlayedOnceSet(
         (prevSet) => new Set(prevSet.add(rsId)),
       );
+      pauseOtherSounds(rsId);
     },
-    [],
+    [pauseOtherSounds],
   );
 
   const [selectingId, setSelectingId] =
@@ -92,9 +124,11 @@ export const StepOneAnnotator = ({
 
   const startAnnotateCallback = React.useCallback(
     (rsId: StepOneRepSoundId) => {
+      pauseOtherSounds(rsId);
+      playSound(rsId);
       setSelectingId(rsId);
     },
-    [],
+    [pauseOtherSounds],
   );
 
   const [selectedShapeIds, setSelectedShapeIds] =
@@ -119,9 +153,13 @@ export const StepOneAnnotator = ({
     [selectedShapeIds],
   );
 
-  const selectCancelCallback = React.useCallback(() => {
-    setSelectingId(null);
-  }, []);
+  const selectCancelCallback = React.useCallback(
+    (rsId: StepOneRepSoundId) => {
+      pauseSound(rsId);
+      setSelectingId(null);
+    },
+    [],
+  );
 
   const editConfirmCallback = React.useCallback(
     (rsId: StepOneRepSoundId, shapeParams: ShapeParams) => {
@@ -142,9 +180,9 @@ export const StepOneAnnotator = ({
 
   const annotateAgainCallback = React.useCallback(
     (rsId: StepOneRepSoundId) => {
-      setSelectingId(rsId);
+      startAnnotateCallback(rsId);
     },
-    [],
+    [startAnnotateCallback],
   );
 
   return (
@@ -180,6 +218,7 @@ export const StepOneAnnotator = ({
                 loop
                 onPlay={() => playCallback(rsId)}
                 className={styles.audio}
+                id={`audio__${rsId}`}
               />
               {selectingId !== rsId &&
                 editingId !== rsId &&
@@ -206,7 +245,9 @@ export const StepOneAnnotator = ({
                   </p>
                   <Button
                     text={'図形の選択をキャンセル'}
-                    onClick={selectCancelCallback}
+                    onClick={() =>
+                      selectCancelCallback(rsId)
+                    }
                     className={`${styles.cancel__button} ${styles.button}`}
                   />
                 </>
