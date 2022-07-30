@@ -61,11 +61,12 @@ const TestTop: NextPage = () => {
       <div className={styles.guide}>
         続いて、あなたの音色と図形の対応関係に関してより詳細な調査を行います。
         <br />
-        下の「次へ進む」ボタンを押してください。
+        下の「次へ」ボタンを押してください。
       </div>
       <Button
-        text={'次へ進む'}
+        text={'次へ'}
         onClick={gotoTestCallback}
+        className={styles.next__button}
       />
     </div>
   );

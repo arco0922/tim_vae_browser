@@ -72,8 +72,7 @@ export const ExpAnnotator = ({
       };
       setAnnotations(newAnnotations);
     },
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-    [setAnnotations],
+    [annotations, setAnnotations, repSoundId],
   );
 
   const appendCorrectEstimationHistory = React.useCallback(

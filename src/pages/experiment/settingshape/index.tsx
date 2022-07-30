@@ -58,6 +58,7 @@ const SettingTop: NextPage = () => {
           <Button
             text={'次へ'}
             onClick={startAnnotationCallback}
+            className={styles.next__button}
           />
         </>
       )}
@@ -67,11 +68,14 @@ const SettingTop: NextPage = () => {
             <p>
               あなたの図形と音色の関係の推定が完了しました。
             </p>
-            <p>下の「次へ進む」ボタンを押してください。</p>
+            <p>
+              下の「ステップ2へ」ボタンを押してください。
+            </p>
           </div>
           <Button
-            text={'次へ進む'}
+            text={'ステップ2へ'}
             onClick={gotoTestShapeCallback}
+            className={styles.next__button}
           />
         </>
       )}
