@@ -74,8 +74,8 @@ export const TestShapeId: NextPage = () => {
   }, [order, router, expOrder.length]);
 
   React.useEffect(() => {
+    if (order === undefined) return;
     if (
-      order === undefined ||
       typeof order === 'object' ||
       Number(order) === NaN ||
       Number(order) <= 0 ||
