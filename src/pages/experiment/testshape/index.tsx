@@ -3,9 +3,9 @@ import {
   ExpResults,
 } from '@app/@types';
 import { Button } from '@app/components/Button';
+import { ExpErrorComponent } from '@app/components/ExpErrorComponent';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
-import { deleteExpStorages } from '@app/utils/localStorageUtils';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -36,23 +36,8 @@ const TestTop: NextPage = () => {
     setExpResults({});
   }, [router, setExpResults]);
 
-  const resetCallback = React.useCallback(() => {
-    deleteExpStorages();
-    router.push('/experiment');
-  }, [router]);
-
   if (!hasFinishedAnnotation) {
-    return (
-      <div>
-        <p>
-          実験を途中で中断してしまったようです。大変恐縮ですが、再度始めから実験をやり直してください。
-        </p>
-        <Button
-          text={'始めから実験をやり直す'}
-          onClick={resetCallback}
-        />
-      </div>
-    );
+    return <ExpErrorComponent />;
   }
 
   return (
