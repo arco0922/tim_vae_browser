@@ -176,7 +176,7 @@ export const ShapeEditor = ({
           )}
           {cancelCallback && (
             <Button
-              text={'キャンセル'}
+              text={'図形の選択に戻る'}
               className={styles.cancel__button}
               onClick={cancelCallback}
             />

@@ -7,17 +7,24 @@ interface Props {
   index: number;
   sampleShapeId: SampleShapeId;
   selectCallback: () => void;
+  disabled?: boolean;
 }
 
 export const SampleShapeItem = ({
   index,
   sampleShapeId,
   selectCallback,
+  disabled = false,
 }: Props) => {
   return (
     <div
-      onClick={selectCallback}
-      className={styles.container}
+      onClick={() => {
+        if (disabled) return;
+        selectCallback();
+      }}
+      className={`${styles.container} ${
+        !disabled ? styles.active : ''
+      }`}
     >
       <p className={styles.index__label}>{index}</p>
       <Image

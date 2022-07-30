@@ -1,5 +1,11 @@
 import { NumVector } from '@app/@types';
 
+export const stepOneRepSoundIds = [
+  'rs1_00',
+  'rs1_01',
+  'rs1_02',
+] as const;
+
 export const repSoundIds = [
   'rs1_00',
   'rs1_01',
@@ -35,6 +41,9 @@ export const repSoundIds = [
   'rs2_28',
   'rs2_29',
 ] as const;
+
+export type StepOneRepSoundId =
+  typeof stepOneRepSoundIds[number];
 
 export type RepSoundId = typeof repSoundIds[number];
 

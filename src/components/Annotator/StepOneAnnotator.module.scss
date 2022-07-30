@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.guide__section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.annotate__section {
+  display: flex;
+  justify-content: center;
+}
+
+.annotator__section {
+  width: 550px;
+  margin-right: 20px;
+}
+
+.select__section {
+  height: 750px;
+}
+
+.item__container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgb(136, 136, 136);
+  &:not(:last-child) {
+    border-bottom: none;
+  }
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.caution {
+  color: red;
+  font-weight: bold;
+}
+
+.audio {
+  margin-bottom: 10px;
+}
+
+.guide {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.button__section {
+  width: 500px;
+  margin-top: 20px;
+}
+
+.button {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.cancel__button {
+  background-color: #ff4848;
+  &:hover {
+    background-color: #b73434;
+  }
+}
+
+.navigation__section {
+  margin-top: 30px;
+}
+
+.next__button {
+  width: 100px;
+}
