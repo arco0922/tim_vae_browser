@@ -49,7 +49,7 @@ const ExpTop: NextPage = () => {
           もしくは研究説明書に記載されているメールアドレスまでご連絡下さい。
         </p>
         <p>
-          研究説明書 (pdfファイル、1.7MB)：
+          研究説明書 (pdfファイル、230kB)：
           {/* eslint-disable-next-line react/jsx-no-target-blank */}
           <a
             href={url('/doc/研究説明書_同意撤回書.pdf')}
