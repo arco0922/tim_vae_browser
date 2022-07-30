@@ -41,6 +41,8 @@ const EndPage: NextPage = () => {
 
   const [isSending, setIsSending] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
+  const [hasServerError, setHasServerError] =
+    React.useState(false);
   const [userId, setUserId] = React.useState('');
 
   React.useEffect(() => {
@@ -70,10 +72,11 @@ const EndPage: NextPage = () => {
         const _userId = res.data.userId as string;
         setUserId(_userId);
         setIsSending(false);
+        setHasServerError(false);
         deleteExpStorages();
       } catch (err) {
         console.error(err);
-        setHasError(true);
+        setHasServerError(true);
       }
     };
     postResults();
@@ -87,6 +90,18 @@ const EndPage: NextPage = () => {
 
   if (hasError) {
     return <ExpErrorComponent />;
+  }
+
+  if (hasServerError) {
+    return (
+      <div className={styles.container}>
+        <p>サーバー送信中にエラーが発生したようです。</p>
+        <p>このページを再読み込みしてください。</p>
+        <p>
+          何度か再読み込みしてもエラーが発生するようであれば、お手数ですが、Lancersに記載したメールアドレス宛てにお問い合わせをお願い致します。
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -106,9 +121,9 @@ const EndPage: NextPage = () => {
               以上で実験は終了です。この度は、実験へのご協力ありがとうございました。
             </p>
             <p>
-              あなたのIDは <b>{userId}</b> です。
+              あなたの作業終了IDは <b>{userId}</b> です。
               <br />
-              こちらのIDをコピーしてLancersのページにてご回答ください。
+              こちらの作業終了IDをコピーしてLancersのページにてご回答ください。
             </p>
             <p>
               もうこのページを閉じて頂いて問題ありません。
