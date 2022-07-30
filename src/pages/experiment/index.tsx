@@ -1,4 +1,5 @@
 import { Button } from '@app/components/Button';
+import { url } from '@app/utils/urlConfig';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -47,7 +48,17 @@ const ExpTop: NextPage = () => {
           <br />
           もしくは研究説明書に記載されているメールアドレスまでご連絡下さい。
         </p>
-        <p>研究説明書 (pdfファイル、1.7MB)：ダウンロード</p>
+        <p>
+          研究説明書 (pdfファイル、1.7MB)：
+          {/* eslint-disable-next-line react/jsx-no-target-blank */}
+          <a
+            href={url('/doc/研究説明書_同意撤回書.pdf')}
+            target="_blank"
+            className={styles.download__link}
+          >
+            ダウンロード
+          </a>
+        </p>
       </div>
       <div className={styles.section}>
         <h2 className={styles.title}>同意確認</h2>
