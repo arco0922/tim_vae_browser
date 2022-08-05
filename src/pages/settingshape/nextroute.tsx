@@ -32,6 +32,11 @@ const SettingNext: NextPage = () => {
       router.push(`/settingshape`);
       return;
     }
+    const annotationCount = Object.keys(annotations).length;
+    if (annotationCount === 0) {
+      router.push(`/settingshape/step1`);
+      return;
+    }
     for (let i = 0; i < repSoundIds.length; i++) {
       if (annotations[repSoundIds[i]] === undefined) {
         router.push(`/settingshape/${repSoundIds[i]}`);
