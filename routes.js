@@ -76,6 +76,9 @@ const routes = {
   '/settingshape/nextroute': {
     page: '/settingshape/nextroute',
   },
+  '/settingshape/step1': {
+    page: '/settingshape/step1',
+  },
   '/experiment': { page: '/experiment' },
   '/experiment/check': { page: '/experiment/check' },
   '/experiment/settingshape': {

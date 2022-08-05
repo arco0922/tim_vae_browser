@@ -47,39 +47,48 @@ const SettingTop: NextPage = () => {
       <h1 className={styles.title}>Setting Shapes</h1>
       {annotationCount === 0 && (
         <>
-          <p>It seems you have not set any shapes.</p>
+          <p className={styles.guide}>
+            It seems you have not set any shapes.
+          </p>
           <Button
             text={'図形の設定を開始'}
             onClick={startAnnotationCallback}
+            className={styles.confirm__button}
           />
         </>
       )}
       {annotationCount > 0 && !hasEndAnnotation && (
         <>
-          <p>
+          <p className={styles.guide}>
             It seems you have set some shapes, but not
             finished the whole setting step.
           </p>
           <Button
             text={'図形の設定を再開'}
             onClick={startAnnotationCallback}
+            className={styles.confirm__button}
           />
           <Button
             text={'図形の設定をリセット'}
             onClick={resetCallback}
+            className={styles.cancel__button}
           />
         </>
       )}
       {hasEndAnnotation && (
         <>
-          <p>It seems you have finished shape setting.</p>
+          <p className={styles.guide}>
+            It seems you have finished shape setting.
+          </p>
           <Button
             text={'デモを見る'}
             onClick={gotoDemoCallback}
+            className={styles.confirm__button}
           />
           <Button
             text={'図形の設定をリセット'}
             onClick={resetCallback}
+            className={styles.cancel__button}
           />
         </>
       )}

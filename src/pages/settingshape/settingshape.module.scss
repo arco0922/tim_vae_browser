@@ -1,0 +1,29 @@
+.container {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.guide {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.confirm__button {
+  margin-bottom: 13px;
+  width: 200px;
+  text-align: center;
+}
+
+.cancel__button {
+  background-color: #ff4848;
+  width: 200px;
+  &:hover {
+    background-color: #b73434;
+  }
+}
