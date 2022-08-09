@@ -751,7 +751,9 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
         this._lastSilenceIdx !== null &&
         this._lastSilenceIdx < parameters['frameNum'][0] / 2
       ) {
-        this.sendMels(parameters);
+        this.sendMels(parameters, false);
+      } else {
+        this.sendMels(parameters, true);
       }
     }
     return true;
@@ -842,8 +844,12 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
     this._melbuffer.shift();
   }
 
-  sendMels(parameters) {
-    this.port.postMessage(this._melbuffer);
+  sendMels(parameters, isSilent) {
+    if (isSilent) {
+      this.port.postMessage(null);
+    } else {
+      this.port.postMessage(this._melbuffer);
+    }
   }
 }
 
