@@ -19,3 +19,21 @@
   width: 500px;
   height: 500px;
 }
+
+.sketch__section {
+  position: relative;
+  & > .silence__text {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    color: red;
+    font-weight: bold;
+    font-size: 35px;
+    text-align: center;
+  }
+}
+
+.button__section {
+  margin: 10px;
+}

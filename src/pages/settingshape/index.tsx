@@ -36,10 +36,15 @@ const SettingTop: NextPage = () => {
 
   const resetCallback = React.useCallback(() => {
     deleteDemoStorages();
-  }, []);
+    startAnnotationCallback();
+  }, [startAnnotationCallback]);
 
   const gotoDemoCallback = React.useCallback(() => {
     router.push('/');
+  }, [router]);
+
+  const gotoMicCallback = React.useCallback(() => {
+    router.push('/microphone');
   }, [router]);
 
   return (
@@ -81,8 +86,13 @@ const SettingTop: NextPage = () => {
             It seems you have finished shape setting.
           </p>
           <Button
-            text={'デモを見る'}
+            text={'音声ファイルでのデモを見る'}
             onClick={gotoDemoCallback}
+            className={styles.confirm__button}
+          />
+          <Button
+            text={'マイクを使って体験する'}
+            onClick={gotoMicCallback}
             className={styles.confirm__button}
           />
           <Button
