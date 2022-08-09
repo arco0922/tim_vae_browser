@@ -17,13 +17,13 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
-import styles from './TopPage.module.scss';
+import styles from './microphone.module.scss';
 
 const LongFastAudioVisualizer = dynamic<
   AudioVisualizerProps<Float32Array[]>
 >(
   () =>
-    import('../components/AudioVisualizer').then(
+    import('@app/components/AudioVisualizer').then(
       (module) => module.AudioVisualizer,
     ) as any,
   { ssr: false },
@@ -47,18 +47,19 @@ const Top: NextPage = () => {
     correctEstimationHistory,
   );
 
+  const gotoDemoCallback = React.useCallback(() => {
+    router.push('/');
+  }, [router]);
+
   const gotoSettingCallback = React.useCallback(() => {
     router.push('/settingshape');
   }, [router]);
 
-  const gotoMicCallback = React.useCallback(() => {
-    router.push('/microphone');
-  }, [router]);
-
   return (
     <div className={styles.container}>
-      <h1>TimMorph</h1>
+      <h1>TimMorph - Microphone Demo</h1>
       <h3 className={styles.caution}>
+        Please allow microphone usage in this page. <br />
         Only Chrome is supported. Other browsers are not
         recommended.
       </h3>
@@ -66,9 +67,8 @@ const Top: NextPage = () => {
         <>
           <div className={styles.button__section}>
             <Button
-              text={'マイクを使って体験する'}
-              onClick={gotoMicCallback}
-              className={styles.confirm__button}
+              text={'音声ファイルでのデモを見る'}
+              onClick={gotoDemoCallback}
             />
             <Button
               text={'図形を設定を変更する'}
@@ -78,31 +78,12 @@ const Top: NextPage = () => {
 
           <div className={styles.main__content}>
             <LongFastAudioVisualizer
-              audioFilePath="/audios/beginner.wav"
+              useMicrophone={true}
               visualizerConfig={
                 Encoder02LongVisualizerConfig
               }
-              visualizeMode="SHAPE"
+              visualizeMode={'SHAPE'}
               annotations={annotations}
-              title="beginner"
-            />
-            <LongFastAudioVisualizer
-              audioFilePath="/audios/intermediate.wav"
-              visualizerConfig={
-                Encoder02LongVisualizerConfig
-              }
-              visualizeMode="SHAPE"
-              annotations={annotations}
-              title="intermediate"
-            />
-            <LongFastAudioVisualizer
-              audioFilePath="/audios/expert.wav"
-              visualizerConfig={
-                Encoder02LongVisualizerConfig
-              }
-              visualizeMode="SHAPE"
-              annotations={annotations}
-              title="expert"
             />
           </div>
         </>

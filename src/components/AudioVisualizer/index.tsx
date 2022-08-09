@@ -23,6 +23,7 @@ import {
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
 import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
 import { RandomShapeGenerator } from '@app/utils/RandomShapeGenerator';
+import { Button } from '@app/components/Button';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
@@ -51,7 +52,8 @@ const sketchWidth = 500;
 export interface AudioVisualizerProps<
   P extends WorkletMessage,
 > {
-  audioFilePath: string;
+  useMicrophone?: boolean;
+  audioFilePath?: string;
   visualizerConfig: VisualizerConfig<P>;
   visualizeMode: VisualizeMode;
   annotations?: Annotations;
@@ -60,6 +62,7 @@ export interface AudioVisualizerProps<
 }
 
 export const AudioVisualizer = <P extends WorkletMessage>({
+  useMicrophone = false,
   audioFilePath,
   visualizerConfig,
   visualizeMode,
@@ -83,12 +86,48 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** Close Audio Context */
+  React.useEffect(() => {
+    return () => {
+      if (audioContext === null) return;
+      audioContext.close();
+    };
+  }, [audioContext]);
+
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
-  const [audioSource, setAudioSource] =
-    React.useState<MediaElementAudioSourceNode | null>(
-      null,
-    );
+  const [audioSource, setAudioSource] = React.useState<
+    | MediaElementAudioSourceNode
+    | MediaStreamAudioSourceNode
+    | null
+  >(null);
+
+  /**
+   * Setup Microphone Source
+   */
+  React.useEffect(() => {
+    if (
+      audioContext === null ||
+      audioRef.current !== null ||
+      audioSource !== null ||
+      !useMicrophone ||
+      navigator.mediaDevices.getUserMedia === undefined
+    )
+      return;
+
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: false })
+      .then((stream) => {
+        const _source =
+          audioContext.createMediaStreamSource(stream);
+        setAudioSource(_source);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioContext]);
 
   /**
    * Setup Audio Source
@@ -97,7 +136,8 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     if (
       audioContext === null ||
       audioRef.current === null ||
-      audioSource !== null
+      audioSource !== null ||
+      useMicrophone
     )
       return;
     const audio = audioRef.current;
@@ -154,8 +194,15 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       return;
 
     audioSource.connect(resampleProcessor);
+
+    if (useMicrophone) return;
     audioSource.connect(audioContext.destination);
-  }, [audioContext, audioSource, resampleProcessor]);
+  }, [
+    audioContext,
+    audioSource,
+    resampleProcessor,
+    useMicrophone,
+  ]);
 
   const [timbreVAE, setTimbreVAE] =
     React.useState<TimbreVAE<P> | null>(null);
@@ -182,6 +229,8 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     setupVAE();
   }, [visualizerConfig]);
 
+  const [isSilence, setIsSilence] = React.useState(true);
+
   /**
    * Setup Connection between TimbreVAE and AudioGraph
    */
@@ -191,6 +240,11 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     resampleProcessor.port.onmessage = async (e: {
       data: P | null;
     }) => {
+      if (e.data === null) {
+        setIsSilence(true);
+        return;
+      }
+      setIsSilence(false);
       timbreVAE.encodeAudio(e.data);
     };
   }, [resampleProcessor, timbreVAE]);
@@ -244,10 +298,14 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encodeResultHist]);
 
+  const [isRunning, setIsRunning] =
+    React.useState<boolean>(false);
+
   /**
    * AudioContext must be resumed manually by user
    */
   const resumeContext = React.useCallback(() => {
+    setIsRunning(true);
     if (
       audioContext === null ||
       audioContext.state === 'running'
@@ -257,6 +315,7 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   }, [audioContext]);
 
   const suspendContext = React.useCallback(() => {
+    setIsRunning(false);
     if (
       audioContext === null ||
       audioContext.state === 'suspended'
@@ -371,17 +430,19 @@ export const AudioVisualizer = <P extends WorkletMessage>({
   return (
     <div className={`${styles.container} ${className}`}>
       {title && <h4 className={styles.title}>{title}</h4>}
-      <audio
-        src={url(audioFilePath)}
-        controls
-        loop
-        ref={audioRef}
-        preload="metadata"
-        onClick={resumeContext}
-        onPlay={resumeContext}
-        onPause={suspendContext}
-        onLoadedMetadata={metaDataLoadHandler}
-      />
+      {audioFilePath !== undefined && (
+        <audio
+          src={url(audioFilePath)}
+          controls
+          loop
+          ref={audioRef}
+          preload="metadata"
+          onClick={resumeContext}
+          onPlay={resumeContext}
+          onPause={suspendContext}
+          onLoadedMetadata={metaDataLoadHandler}
+        />
+      )}
       {visualizeMode === 'CHECK' && (
         <>
           <p>
@@ -414,13 +475,33 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       )}
       {(visualizeMode === 'SHAPE' ||
         visualizeMode === 'RANDOM') && (
-        <>
+        <div className={styles.sketch__section}>
+          {isSilence && (
+            <p className={styles.silence__text}>
+              No sound detected
+            </p>
+          )}
           <DrawSamplingPointsSketch
             canvasWidth={sketchWidth}
             canvasHeight={sketchWidth}
             samplingPoints={estimatedSamplingPoints}
           />
-        </>
+        </div>
+      )}
+      {useMicrophone && (
+        <div className={styles.button__section}>
+          {!isRunning ? (
+            <Button
+              text={'練習開始'}
+              onClick={resumeContext}
+            />
+          ) : (
+            <Button
+              text={'終了'}
+              onClick={suspendContext}
+            />
+          )}
+        </div>
       )}
     </div>
   );
