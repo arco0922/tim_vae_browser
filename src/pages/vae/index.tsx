@@ -33,7 +33,7 @@ const LongFastAudioVisualizer = dynamic<
 
 const VAE: NextPage = () => {
   const [mode, setMode] = React.useState<'SHORT' | 'LONG'>(
-    'SHORT',
+    'LONG',
   );
   return (
     <div className={styles.container}>
