@@ -10,3 +10,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.button__section {
+  display: flex;
+  margin-top: 10px;
+  & > button {
+    margin-right: 10px;
+  }
+}
