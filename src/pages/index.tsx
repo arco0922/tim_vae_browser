@@ -102,7 +102,16 @@ const Top: NextPage = () => {
               }
               visualizeMode="SHAPE"
               annotations={annotations}
-              title="expert"
+              title="expert1"
+            />
+            <LongFastAudioVisualizer
+              audioFilePath="/audios/kidokoro.wav"
+              visualizerConfig={
+                Encoder02LongVisualizerConfig
+              }
+              visualizeMode="SHAPE"
+              annotations={annotations}
+              title="expert2"
             />
           </div>
         </>
