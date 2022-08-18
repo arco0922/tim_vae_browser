@@ -23,6 +23,7 @@ import { Button } from '@app/components/Button';
 import { PracticeConfig } from '@app/constants/practiceConfig';
 import { DrawPracticeFeedbackSketchProps } from '@app/sketches/DrawPracticeFeedbackSketch';
 import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
+import { useTimer } from '@app/hooks/useTimer';
 
 const DrawSamplingPointsSketch =
   dynamic<DrawSamplingPointsSketchProps>(
@@ -55,6 +56,9 @@ export interface PracticeAudioVisualizerProps<
   practiceConfig: PracticeConfig;
   visualizerConfig: VisualizerConfig<P>;
   annotations: Annotations;
+  isTrial?: boolean;
+  downloadFileName?: string;
+  duration?: number;
   className?: string;
 }
 
@@ -64,6 +68,9 @@ export const PracticeAudioVisualizer = <
   practiceConfig,
   visualizerConfig,
   annotations,
+  isTrial = false,
+  downloadFileName,
+  duration = 0,
   className,
 }: PracticeAudioVisualizerProps<P>) => {
   const [audioContext, setAudioContext] =
@@ -85,8 +92,13 @@ export const PracticeAudioVisualizer = <
   const [audioSource, setAudioSource] =
     React.useState<MediaStreamAudioSourceNode | null>(null);
 
+  const [mediaRecorder, setMediaRecorder] =
+    React.useState<MediaRecorder | null>(null);
+
+  const recordedChunksRef = React.useRef<Blob[]>([]);
+
   /**
-   * Setup Microphone Source
+   * Setup Microphone Source and MediaRecorder
    */
   React.useEffect(() => {
     if (
@@ -102,6 +114,13 @@ export const PracticeAudioVisualizer = <
         const _source =
           audioContext.createMediaStreamSource(stream);
         setAudioSource(_source);
+
+        if (isTrial) {
+          const _mediaRecorder = new MediaRecorder(stream, {
+            mimeType: 'audio/webm',
+          });
+          setMediaRecorder(_mediaRecorder);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -109,6 +128,48 @@ export const PracticeAudioVisualizer = <
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioContext]);
+
+  React.useEffect(() => {
+    if (mediaRecorder === null) return;
+    mediaRecorder.ondataavailable = (e) => {
+      const blobData = e.data;
+      const currentRecordedChunks =
+        recordedChunksRef.current;
+      recordedChunksRef.current = [
+        ...currentRecordedChunks,
+        blobData,
+      ];
+    };
+  }, [mediaRecorder]);
+
+  React.useEffect(() => {
+    if (mediaRecorder === null) return;
+    mediaRecorder.onstop = () => {
+      const recordedChunks = recordedChunksRef.current;
+      if (
+        recordedChunks.length === 0 ||
+        downloadFileName === undefined
+      )
+        return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(
+        new Blob(recordedChunks),
+      );
+      a.download = downloadFileName;
+      a.click();
+      recordedChunksRef.current = [];
+    };
+  }, [mediaRecorder, downloadFileName]);
+
+  const startRecordCallback = React.useCallback(() => {
+    if (mediaRecorder === null) return;
+    mediaRecorder.start();
+  }, [mediaRecorder]);
+
+  const stopRecordCallback = React.useCallback(() => {
+    if (mediaRecorder === null) return;
+    mediaRecorder.stop();
+  }, [mediaRecorder]);
 
   const [resampleProcessor, setResampleProcessor] =
     React.useState<AudioWorkletNode | null>(null);
@@ -359,23 +420,53 @@ export const PracticeAudioVisualizer = <
     setGoalSamplingPoints(_goalSamplingPoints);
   }, [practiceConfig, delaunayEstimator, annotationCount]);
 
+  const { minutes, seconds, startTimer, finishTimer } =
+    useTimer();
+
+  const stopPracticeCallback = React.useCallback(() => {
+    suspendContext();
+    if (isTrial) {
+      stopRecordCallback();
+    }
+  }, [suspendContext, isTrial, stopRecordCallback]);
+
+  const stopCallback = React.useCallback(() => {
+    if (duration > 0) {
+      finishTimer();
+      return;
+    }
+    stopPracticeCallback();
+  }, [duration, finishTimer, stopPracticeCallback]);
+
+  const startCallback = React.useCallback(() => {
+    resumeContext();
+    if (isTrial) {
+      startRecordCallback();
+    }
+    if (duration > 0) {
+      startTimer(duration, stopPracticeCallback);
+    }
+  }, [
+    resumeContext,
+    isTrial,
+    startRecordCallback,
+    duration,
+    startTimer,
+    stopPracticeCallback,
+  ]);
+
   return (
     <div className={`${styles.container} ${className}`}>
       {practiceConfig.mode === 'SOUND' && (
         <div className={styles.sound__only}>
-          <p>目標音</p>
-          <audio
-            src={url(practiceConfig.goalInfo.audioFilePath)}
-            controls
-            loop
-            preload="metadata"
-          />
-        </div>
-      )}
-      {practiceConfig.mode === 'SHAPE' && (
-        <>
-          <div className={styles.ref__section}>
-            <div className={styles.top__section}>
+          {isRunning && !(minutes === 0 && seconds === 0) && (
+            <p>
+              残り時間：{minutes}:
+              {seconds < 10 ? `0${seconds}` : seconds}
+            </p>
+          )}
+          {!(isTrial && isRunning) && (
+            <div className={styles.sound__part}>
               <p>目標音</p>
               <audio
                 src={url(
@@ -385,6 +476,41 @@ export const PracticeAudioVisualizer = <
                 loop
                 preload="metadata"
               />
+            </div>
+          )}
+
+          <div className={styles.button__part}>
+            {isRunning ? (
+              <Button
+                text={isTrial ? '録音終了' : '練習終了'}
+                onClick={stopCallback}
+              />
+            ) : (
+              <Button
+                text={isTrial ? '録音開始' : '練習開始'}
+                onClick={startCallback}
+              />
+            )}
+          </div>
+        </div>
+      )}
+      {practiceConfig.mode === 'SHAPE' && (
+        <>
+          <div className={styles.ref__section}>
+            <div className={styles.top__section}>
+              {!(isTrial && isRunning) && (
+                <>
+                  <p>目標音</p>
+                  <audio
+                    src={url(
+                      practiceConfig.goalInfo.audioFilePath,
+                    )}
+                    controls
+                    loop
+                    preload="metadata"
+                  />
+                </>
+              )}
             </div>
             <div className={styles.middle__section}>
               <p>目標図形</p>
@@ -399,7 +525,14 @@ export const PracticeAudioVisualizer = <
             <div className={styles.bottom__section}></div>
           </div>
           <div className={styles.feedback__section}>
-            <div className={styles.top__section}></div>
+            <div className={styles.top__section}>
+              {!(minutes === 0 && seconds === 0) && (
+                <p>
+                  残り時間：{minutes}:
+                  {seconds < 10 ? `0${seconds}` : seconds}
+                </p>
+              )}
+            </div>
             <div className={styles.middle__section}>
               <p>現状の図形(赤線)</p>
               <div className={styles.practice__sketch}>
@@ -413,8 +546,8 @@ export const PracticeAudioVisualizer = <
                   </>
                 ) : (
                   <Button
-                    text={'練習開始'}
-                    onClick={resumeContext}
+                    text={isTrial ? '録音開始' : '練習開始'}
+                    onClick={startCallback}
                   />
                 )}
 
@@ -423,15 +556,15 @@ export const PracticeAudioVisualizer = <
                   canvasHeight={sketchWidth}
                   samplingPoints={estimatedSamplingPoints}
                   goalSamplingPoints={goalSamplingPoints}
-                  hidePoints={isSilence}
+                  hidePoints={!isRunning || isSilence}
                 />
               </div>
             </div>
             <div className={styles.bottom__section}>
               {isRunning && (
                 <Button
-                  text={'練習終了'}
-                  onClick={suspendContext}
+                  text={isTrial ? '録音終了' : '練習終了'}
+                  onClick={stopCallback}
                 />
               )}
             </div>

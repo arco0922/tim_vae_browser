@@ -1,7 +1,22 @@
 .container {
-  margin: 15px 30px;
+  margin: 20px 30px;
   width: 1500px;
   display: flex;
+}
+
+.sound__only {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & > .button__part {
+    margin-top: 20px;
+    & > button {
+      padding: 10px;
+      font-size: 20px;
+    }
+  }
 }
 
 .ref__section {
