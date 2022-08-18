@@ -361,8 +361,8 @@ export const PracticeAudioVisualizer = <
 
   return (
     <div className={`${styles.container} ${className}`}>
-      <div className={styles.ref__section}>
-        <div className={styles.top__section}>
+      {practiceConfig.mode === 'SOUND' && (
+        <div className={styles.sound__only}>
           <p>目標音</p>
           <audio
             src={url(practiceConfig.goalInfo.audioFilePath)}
@@ -371,56 +371,73 @@ export const PracticeAudioVisualizer = <
             preload="metadata"
           />
         </div>
-        <div className={styles.middle__section}>
-          <p>目標図形</p>
-          <div className={styles.ref__sketch}>
-            <DrawSamplingPointsSketch
-              canvasWidth={sketchWidth}
-              canvasHeight={sketchWidth}
-              samplingPoints={goalSamplingPoints}
-            />
-          </div>
-        </div>
-        <div className={styles.bottom__section}></div>
-      </div>
-      <div className={styles.feedback__section}>
-        <div className={styles.top__section}></div>
-        <div className={styles.middle__section}>
-          <p>現状の図形(赤線)</p>
-          <div className={styles.practice__sketch}>
-            {isRunning ? (
-              <>
-                {isSilence && (
-                  <p className={styles.silence__text}>
-                    No sound detected
-                  </p>
+      )}
+      {practiceConfig.mode === 'SHAPE' && (
+        <>
+          <div className={styles.ref__section}>
+            <div className={styles.top__section}>
+              <p>目標音</p>
+              <audio
+                src={url(
+                  practiceConfig.goalInfo.audioFilePath,
                 )}
-              </>
-            ) : (
-              <Button
-                text={'練習開始'}
-                onClick={resumeContext}
+                controls
+                loop
+                preload="metadata"
               />
-            )}
-
-            <DrawPracticeFeedbackSketch
-              canvasWidth={sketchWidth}
-              canvasHeight={sketchWidth}
-              samplingPoints={estimatedSamplingPoints}
-              goalSamplingPoints={goalSamplingPoints}
-              hidePoints={isSilence}
-            />
+            </div>
+            <div className={styles.middle__section}>
+              <p>目標図形</p>
+              <div className={styles.ref__sketch}>
+                <DrawSamplingPointsSketch
+                  canvasWidth={sketchWidth}
+                  canvasHeight={sketchWidth}
+                  samplingPoints={goalSamplingPoints}
+                />
+              </div>
+            </div>
+            <div className={styles.bottom__section}></div>
           </div>
-        </div>
-        <div className={styles.bottom__section}>
-          {isRunning && (
-            <Button
-              text={'練習終了'}
-              onClick={suspendContext}
-            />
-          )}
-        </div>
-      </div>
+          <div className={styles.feedback__section}>
+            <div className={styles.top__section}></div>
+            <div className={styles.middle__section}>
+              <p>現状の図形(赤線)</p>
+              <div className={styles.practice__sketch}>
+                {isRunning ? (
+                  <>
+                    {isSilence && (
+                      <p className={styles.silence__text}>
+                        No sound detected
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <Button
+                    text={'練習開始'}
+                    onClick={resumeContext}
+                  />
+                )}
+
+                <DrawPracticeFeedbackSketch
+                  canvasWidth={sketchWidth}
+                  canvasHeight={sketchWidth}
+                  samplingPoints={estimatedSamplingPoints}
+                  goalSamplingPoints={goalSamplingPoints}
+                  hidePoints={isSilence}
+                />
+              </div>
+            </div>
+            <div className={styles.bottom__section}>
+              {isRunning && (
+                <Button
+                  text={'練習終了'}
+                  onClick={suspendContext}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

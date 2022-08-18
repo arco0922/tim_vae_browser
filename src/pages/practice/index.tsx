@@ -49,7 +49,7 @@ const PracticePage: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1>TimMorph</h1>
+      <h1>TimMorph-Practice</h1>
       <h3 className={styles.caution}>
         Only Chrome is supported. Other browsers are not
         recommended.
