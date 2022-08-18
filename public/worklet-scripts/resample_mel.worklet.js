@@ -833,7 +833,7 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
       Math.max(
         Math.max(...lastBufferArr),
         -Math.min(...lastBufferArr),
-      ) < 0.01;
+      ) < 0.005;
     if (isSilence || this._lastSilenceIdx === null) {
       this._lastSilenceIdx = parameters['frameNum'][0] - 1;
     } else {

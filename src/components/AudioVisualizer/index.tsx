@@ -27,7 +27,7 @@ import { Button } from '@app/components/Button';
 
 const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
   () =>
-    import('../../sketches/PlotLatentSketch').then(
+    import('@app/sketches/PlotLatentSketch').then(
       (module) => module.PlotLatentSketch,
     ) as any,
   { ssr: false },
@@ -36,9 +36,7 @@ const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
 const DrawSamplingPointsSketch =
   dynamic<DrawSamplingPointsSketchProps>(
     () =>
-      import(
-        '../../sketches/DrawSamplingPointsSketch'
-      ).then(
+      import('@app/sketches/DrawSamplingPointsSketch').then(
         (module) => module.DrawSamplingPointsSketch,
       ) as any,
     { ssr: false },
@@ -85,14 +83,6 @@ export const AudioVisualizer = <P extends WorkletMessage>({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  /** Close Audio Context */
-  React.useEffect(() => {
-    return () => {
-      if (audioContext === null) return;
-      audioContext.close();
-    };
-  }, [audioContext]);
 
   const audioRef = React.useRef<HTMLAudioElement>(null);
 

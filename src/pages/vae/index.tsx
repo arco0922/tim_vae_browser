@@ -81,7 +81,15 @@ const VAE: NextPage = () => {
                 Encoder02LongVisualizerConfig
               }
               visualizeMode={'LATENT'}
-              title="expert"
+              title="expert1"
+            />
+            <LongFastAudioVisualizer
+              audioFilePath="/audios/kidokoro.wav"
+              visualizerConfig={
+                Encoder02LongVisualizerConfig
+              }
+              visualizeMode={'LATENT'}
+              title="expert2"
             />
           </>
         )}
@@ -103,7 +111,13 @@ const VAE: NextPage = () => {
               audioFilePath="/audios/expert.wav"
               visualizerConfig={Encoder01VisualizerConfig}
               visualizeMode={'LATENT'}
-              title="expert"
+              title="expert1"
+            />
+            <ShortAudioVisualizer
+              audioFilePath="/audios/kidokoro.wav"
+              visualizerConfig={Encoder01VisualizerConfig}
+              visualizeMode={'LATENT'}
+              title="expert2"
             />
           </>
         )}
