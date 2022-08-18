@@ -69,7 +69,10 @@ const expSoundIds = [
 
 const routes = {
   '/': { page: '/' },
-  '/practice': { page: '/practice' },
+  '/practice/shape': { page: '/practice/shape' },
+  '/practice/sound': { page: '/practice/sound' },
+  '/trial/shape': { page: '/trial/shape' },
+  '/trial/sound': { page: '/trial/sound' },
   '/microphone': { page: '/microphone' },
   '/vae': { page: '/vae' },
   '/random': { page: '/random' },

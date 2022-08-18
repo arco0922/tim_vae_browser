@@ -1,0 +1,19 @@
+.container {
+  margin: 10px;
+}
+
+.caution {
+  color: red;
+}
+
+.main__content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.button__section {
+  display: flex;
+  & > button {
+    margin-right: 10px;
+  }
+}

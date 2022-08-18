@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
-import styles from './practice.module.scss';
+import styles from './../practice.module.scss';
 import { practiceGoal01 } from '@app/constants/practiceConfig';
 import { Encoder02LongVisualizerConfig } from '@app/constants/visualizerConfig';
 
@@ -25,7 +25,7 @@ const LongFastPracticeAudioVisualizer = dynamic<
   { ssr: false },
 );
 
-const PracticePage: NextPage = () => {
+const PracticeShapePage: NextPage = () => {
   const router = useRouter();
 
   const [annotations] = useLocalStorage<Annotations>(
@@ -73,6 +73,7 @@ const PracticePage: NextPage = () => {
                 Encoder02LongVisualizerConfig
               }
               annotations={annotations}
+              duration={60 * 15}
             />
           </div>
         </>
@@ -91,4 +92,4 @@ const PracticePage: NextPage = () => {
   );
 };
 
-export default PracticePage;
+export default PracticeShapePage;
