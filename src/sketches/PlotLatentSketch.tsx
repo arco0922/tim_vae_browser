@@ -1,4 +1,4 @@
-import { P5WithProps } from '@app/@types';
+import { NumVector, P5WithProps } from '@app/@types';
 import { P5Wrapper } from '@app/components/P5Wrapper';
 import { LatentImgInfo } from '@app/constants/visualizerConfig';
 import { EncodeResult } from '@app/utils/TimbreVAE';
@@ -10,6 +10,8 @@ interface SketchProps {
   canvasHeight: number;
   encodeResult: EncodeResult | null;
   latentImgInfo: LatentImgInfo;
+  goalCoord?: NumVector;
+  hidePoints?: boolean;
 }
 
 export type PlotLatentSketchProps = SketchProps & {
@@ -43,7 +45,19 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
 
     p.image(img, 0, 0, p.width, p.height);
 
-    if (p.props.encodeResult === null) return;
+    if (p.props.goalCoord !== undefined) {
+      const gx = p.props.goalCoord[0];
+      const gy = p.props.goalCoord[1];
+
+      const x = (p.width * (gx - xmin)) / (xmax - xmin);
+      const y = (p.height * (ymax - gy)) / (ymax - ymin);
+
+      p.fill('orange');
+      p.ellipse(x, y, 15, 15);
+    }
+
+    if (p.props.encodeResult === null || p.props.hidePoints)
+      return;
 
     const cx = p.props.encodeResult.coord[0];
     const cy = p.props.encodeResult.coord[1];
@@ -61,6 +75,8 @@ export const PlotLatentSketch = ({
   canvasHeight,
   encodeResult,
   latentImgInfo,
+  goalCoord,
+  hidePoints = false,
   className,
 }: PlotLatentSketchProps) => {
   return (
@@ -71,6 +87,8 @@ export const PlotLatentSketch = ({
         canvasHeight,
         encodeResult,
         latentImgInfo,
+        goalCoord,
+        hidePoints,
       }}
       className={className}
     />

@@ -7,7 +7,7 @@ export interface PracticeGoalInfo {
 
 export interface PracticeConfig {
   goalInfo: PracticeGoalInfo;
-  mode: 'SOUND' | 'SHAPE';
+  mode: 'SOUND' | 'SHAPE' | 'LATENT';
 }
 
 export const practiceGoal01: PracticeGoalInfo = {

@@ -24,6 +24,7 @@ import { PracticeConfig } from '@app/constants/practiceConfig';
 import { DrawPracticeFeedbackSketchProps } from '@app/sketches/DrawPracticeFeedbackSketch';
 import { DrawSamplingPointsSketchProps } from '@app/sketches/DrawSamplingPointsSketch';
 import { useTimer } from '@app/hooks/useTimer';
+import { PlotLatentSketchProps } from '@app/sketches/PlotLatentSketch';
 
 const DrawSamplingPointsSketch =
   dynamic<DrawSamplingPointsSketchProps>(
@@ -44,6 +45,14 @@ const DrawPracticeFeedbackSketch =
       ) as any,
     { ssr: false },
   );
+
+const PlotLatentSketch = dynamic<PlotLatentSketchProps>(
+  () =>
+    import('@app/sketches/PlotLatentSketch').then(
+      (module) => module.PlotLatentSketch,
+    ) as any,
+  { ssr: false },
+);
 
 const HIST_LENGTH = 20;
 const EMA_ALPHA = 2 / (HIST_LENGTH + 1);
@@ -494,7 +503,8 @@ export const PracticeAudioVisualizer = <
           </div>
         </div>
       )}
-      {practiceConfig.mode === 'SHAPE' && (
+      {(practiceConfig.mode === 'SHAPE' ||
+        practiceConfig.mode === 'LATENT') && (
         <>
           <div className={styles.ref__section}>
             <div className={styles.top__section}>
@@ -513,14 +523,21 @@ export const PracticeAudioVisualizer = <
               )}
             </div>
             <div className={styles.middle__section}>
-              <p>目標図形</p>
-              <div className={styles.ref__sketch}>
-                <DrawSamplingPointsSketch
-                  canvasWidth={sketchWidth}
-                  canvasHeight={sketchWidth}
-                  samplingPoints={goalSamplingPoints}
-                />
-              </div>
+              {practiceConfig.mode === 'SHAPE' && (
+                <>
+                  <p>目標図形</p>
+                  <div className={styles.ref__sketch}>
+                    <DrawSamplingPointsSketch
+                      canvasWidth={sketchWidth}
+                      canvasHeight={sketchWidth}
+                      samplingPoints={goalSamplingPoints}
+                    />
+                  </div>
+                </>
+              )}
+              {practiceConfig.mode === 'LATENT' && (
+                <div className={styles.ref__margin} />
+              )}
             </div>
             <div className={styles.bottom__section}></div>
           </div>
@@ -534,7 +551,13 @@ export const PracticeAudioVisualizer = <
               )}
             </div>
             <div className={styles.middle__section}>
-              <p>現状の図形(赤線)</p>
+              <p>
+                {practiceConfig.mode === 'SHAPE'
+                  ? '現状の図形(赤線)'
+                  : practiceConfig.mode === 'LATENT'
+                  ? '現状：赤丸、目標：黄丸'
+                  : ''}
+              </p>
               <div className={styles.practice__sketch}>
                 {isRunning ? (
                   <>
@@ -551,13 +574,31 @@ export const PracticeAudioVisualizer = <
                   />
                 )}
 
-                <DrawPracticeFeedbackSketch
-                  canvasWidth={sketchWidth}
-                  canvasHeight={sketchWidth}
-                  samplingPoints={estimatedSamplingPoints}
-                  goalSamplingPoints={goalSamplingPoints}
-                  hidePoints={!isRunning || isSilence}
-                />
+                {practiceConfig.mode === 'SHAPE' && (
+                  <DrawPracticeFeedbackSketch
+                    canvasWidth={sketchWidth}
+                    canvasHeight={sketchWidth}
+                    samplingPoints={estimatedSamplingPoints}
+                    goalSamplingPoints={goalSamplingPoints}
+                    hidePoints={!isRunning || isSilence}
+                  />
+                )}
+
+                {practiceConfig.mode === 'LATENT' && (
+                  <PlotLatentSketch
+                    canvasWidth={sketchWidth}
+                    canvasHeight={sketchWidth}
+                    encodeResult={coordEMA}
+                    latentImgInfo={
+                      visualizerConfig.latentImgInfo
+                    }
+                    goalCoord={
+                      practiceConfig.goalInfo.coord
+                    }
+                    hidePoints={!isRunning || isSilence}
+                    className={styles.sketch__container}
+                  />
+                )}
               </div>
             </div>
             <div className={styles.bottom__section}>
