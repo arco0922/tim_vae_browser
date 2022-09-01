@@ -116,3 +116,23 @@ export const Encoder03LongVisualizerConfig: VisualizerConfig<
     ymax: 8,
   },
 };
+
+export const Encoder01NewVisualizerConfig: VisualizerConfig<
+  Float32Array[]
+> = {
+  encoderMode: 'LONG_FAST',
+  isFlipped: false,
+  encoderJSONPath: '/models/encoder01_new/model.json',
+  samplingRate: 44100,
+  frameLength: 2048,
+  encoderPreprocessor: createEncoder02LongPreprocessor([
+    1, 128, 64, 1,
+  ]),
+  latentImgInfo: {
+    imgSrc: '/imgs/latentImgs/encoder01_new.png',
+    xmin: -4.587998390197754,
+    xmax: 3.106440544128418,
+    ymin: -3.313951015472412,
+    ymax: 3.5624425411224365,
+  },
+};

@@ -92,11 +92,13 @@ export const PracticeAudioVisualizer = <
     if (audioContext !== null) return;
     window.AudioContext =
       window.AudioContext || window.webkitAudioContext;
-    const _audioCtx = new AudioContext();
+    const _audioCtx = new AudioContext({
+      sampleRate: visualizerConfig.samplingRate,
+    });
     setAudioContext(_audioCtx);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visualizerConfig.samplingRate]);
 
   const [audioSource, setAudioSource] =
     React.useState<MediaStreamAudioSourceNode | null>(null);

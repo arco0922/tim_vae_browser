@@ -47,11 +47,18 @@ export const createEncoder01LongPreprocessor =
       Array.from(spec),
     );
     const melSpecTensor = tf.tensor2d(melSpecArr);
-    const minVal = tf.min(melSpecTensor);
     const maxVal = tf.max(melSpecTensor);
+
+    const thresMelSpecTensor = tf.maximum(
+      melSpecTensor,
+      tf.sub(maxVal, tf.scalar(80.0)),
+    );
+
+    const minVal = tf.min(thresMelSpecTensor);
+
     const normalizedMelSpec = tf.div(
-      tf.sub(melSpecTensor, minVal),
-      tf.sub(maxVal, minVal),
+      tf.sub(thresMelSpecTensor, minVal),
+      tf.add(tf.sub(maxVal, minVal), tf.scalar(0.000001)),
     );
     const normalizedMelSpecTransposed = tf.transpose(
       normalizedMelSpec,
@@ -70,15 +77,23 @@ export const createEncoder02LongPreprocessor =
       Array.from(spec),
     );
     const melSpecTensor = tf.tensor2d(melSpecArr);
-    const minVal = tf.min(melSpecTensor);
     const maxVal = tf.max(melSpecTensor);
+
+    const thresMelSpecTensor = tf.maximum(
+      melSpecTensor,
+      tf.sub(maxVal, tf.scalar(80.0)),
+    );
+
+    const minVal = tf.min(thresMelSpecTensor);
+
     const normalizedMelSpec = tf.div(
-      tf.sub(melSpecTensor, minVal),
-      tf.sub(maxVal, minVal),
+      tf.sub(thresMelSpecTensor, minVal),
+      tf.add(tf.sub(maxVal, minVal), tf.scalar(0.000001)),
     );
     const normalizedMelSpecTransposed = tf.transpose(
       normalizedMelSpec,
     );
+
     const input = tf.reshape(
       normalizedMelSpecTransposed,
       inputShape,

@@ -78,11 +78,13 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     if (audioContext !== null) return;
     window.AudioContext =
       window.AudioContext || window.webkitAudioContext;
-    const _audioCtx = new AudioContext();
+    const _audioCtx = new AudioContext({
+      sampleRate: visualizerConfig.samplingRate,
+    });
     setAudioContext(_audioCtx);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visualizerConfig.samplingRate]);
 
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
