@@ -12,8 +12,14 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
 import styles from './../trial.module.scss';
-import { practiceGoal01 } from '@app/constants/practiceConfig';
-import { Encoder02LongVisualizerConfig } from '@app/constants/visualizerConfig';
+import {
+  practiceGoal01,
+  practiceGoal02,
+} from '@app/constants/practiceConfig';
+import {
+  Encoder01NewVisualizerConfig,
+  Encoder02LongVisualizerConfig,
+} from '@app/constants/visualizerConfig';
 
 const LongFastPracticeAudioVisualizer = dynamic<
   PracticeAudioVisualizerProps<Float32Array[]>
@@ -66,11 +72,12 @@ const TrialLatentPage: NextPage = () => {
           <div className={styles.main__content}>
             <LongFastPracticeAudioVisualizer
               practiceConfig={{
-                goalInfo: practiceGoal01,
+                encoderId: 'encoder01_new',
+                goalInfo: practiceGoal02,
                 mode: 'LATENT',
               }}
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               annotations={annotations}
               isTrial={true}
