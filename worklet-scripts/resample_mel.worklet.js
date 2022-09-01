@@ -451,24 +451,12 @@ const melSpecVec = (y, sr, nFft) => {
 /**
  * Convert a power spectrogram (amplitude squared) to decibel (dB) units
  */
-const powerToDb = (specVec, amin = 1e-10, topDb = 80.0) => {
+const powerToDb = (specVec, amin = 1e-10) => {
   const l = specVec.length;
   const logSpecVec = new Float32Array(l);
   for (let i = 0; i < l; i++) {
     logSpecVec[i] =
       10.0 * Math.log10(Math.max(amin, specVec[i]));
-  }
-  if (topDb) {
-    if (topDb < 0) {
-      throw new Error(`topDb must be non-negative.`);
-    }
-    const maxVal = max(logSpecVec);
-    for (let i = 0; i < l; i++) {
-      logSpecVec[i] = Math.max(
-        logSpecVec[i],
-        maxVal - topDb,
-      );
-    }
   }
   return logSpecVec;
 };
