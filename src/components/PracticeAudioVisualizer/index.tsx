@@ -425,12 +425,17 @@ export const PracticeAudioVisualizer = <
     if (
       practiceConfig.mode !== 'SHAPE' ||
       delaunayEstimator === null ||
-      annotationCount === 0
+      annotationCount === 0 ||
+      practiceConfig.goalInfo.coord[
+        practiceConfig.encoderId
+      ] === undefined
     )
       return;
 
     const _goalF = delaunayEstimator.estimate(
-      practiceConfig.goalInfo.coord,
+      practiceConfig.goalInfo.coord[
+        practiceConfig.encoderId
+      ] as any as NumVector,
     );
     const _goalSamplingPoints =
       calcSamplingPointsFromFreq(_goalF);
@@ -602,7 +607,9 @@ export const PracticeAudioVisualizer = <
                       visualizerConfig.latentImgInfo
                     }
                     goalCoord={
-                      practiceConfig.goalInfo.coord
+                      practiceConfig.goalInfo.coord[
+                        practiceConfig.encoderId
+                      ]
                     }
                     hidePoints={!isRunning || isSilence}
                     className={styles.sketch__container}
