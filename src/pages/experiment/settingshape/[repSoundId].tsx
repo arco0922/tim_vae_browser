@@ -67,6 +67,7 @@ const SettingId: NextPage = () => {
   return (
     <div className={styles.container}>
       <Annotator
+        encoderId={'encoder02_long'}
         repSoundId={repSoundId as RepSoundId}
         annotations={annotations}
         setAnnotations={setAnnotations}

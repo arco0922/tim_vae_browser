@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import React from 'react';
 import styles from './settingshape[repSoundId].module.scss';
 import dynamic from 'next/dynamic';
-import { AnnotatorProps } from '../../components/Annotator';
+import { AnnotatorProps } from '@app/components/Annotator';
 import { useRouter } from 'next/router';
 import {
   RepSoundId,
@@ -18,7 +18,7 @@ import { deleteDemoStorages } from '@app/utils/localStorageUtils';
 
 const Annotator = dynamic<AnnotatorProps>(
   () =>
-    import('../../components/Annotator').then(
+    import('@app/components/Annotator').then(
       (module) => module.Annotator,
     ) as any,
   { ssr: false },
@@ -66,6 +66,7 @@ const SettingId: NextPage = () => {
   return (
     <div className={styles.container}>
       <Annotator
+        encoderId={'encoder01_new'}
         repSoundId={repSoundId as RepSoundId}
         annotations={annotations}
         setAnnotations={setAnnotations}

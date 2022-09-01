@@ -6,7 +6,7 @@ import React from 'react';
 import * as tf from '@tensorflow/tfjs';
 import styles from './AudioVisualizer.module.scss';
 import dynamic from 'next/dynamic';
-import { PlotLatentSketchProps } from '../../sketches/PlotLatentSketch';
+import { PlotLatentSketchProps } from '@app/sketches/PlotLatentSketch';
 import { url } from '@app/utils/urlConfig';
 import {
   VisualizeMode,
@@ -17,7 +17,7 @@ import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
 import { Annotations, NumVector } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
-  repSoundCoords,
+  repSoundCoordsCollection,
   RepSoundId,
 } from '@app/constants/repSounds';
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
@@ -78,11 +78,13 @@ export const AudioVisualizer = <P extends WorkletMessage>({
     if (audioContext !== null) return;
     window.AudioContext =
       window.AudioContext || window.webkitAudioContext;
-    const _audioCtx = new AudioContext();
+    const _audioCtx = new AudioContext({
+      sampleRate: visualizerConfig.samplingRate,
+    });
     setAudioContext(_audioCtx);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visualizerConfig.samplingRate]);
 
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
@@ -340,6 +342,9 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       annotations === undefined
     )
       return;
+    const repSoundCoords =
+      repSoundCoordsCollection[visualizerConfig.encoderId];
+    if (repSoundCoords === undefined) return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
       annotations,
@@ -350,7 +355,11 @@ export const AudioVisualizer = <P extends WorkletMessage>({
       _annotationCount += 1;
     }
     setAnnotationCount(_annotationCount);
-  }, [annotations, delaunayEstimator]);
+  }, [
+    visualizerConfig.encoderId,
+    annotations,
+    delaunayEstimator,
+  ]);
 
   /** Update Estimation of delaunay estimator */
   React.useEffect(() => {

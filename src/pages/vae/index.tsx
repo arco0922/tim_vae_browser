@@ -5,6 +5,7 @@ import {
   Encoder01VisualizerConfig,
   Encoder02LongVisualizerConfig,
   Encoder03LongVisualizerConfig,
+  Encoder01NewVisualizerConfig,
 } from '@app/constants/visualizerConfig';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
@@ -15,7 +16,7 @@ const ShortAudioVisualizer = dynamic<
   AudioVisualizerProps<Float32Array>
 >(
   () =>
-    import('../../components/AudioVisualizer').then(
+    import('@app/components/AudioVisualizer').then(
       (module) => module.AudioVisualizer,
     ) as any,
   { ssr: false },
@@ -25,7 +26,7 @@ const LongFastAudioVisualizer = dynamic<
   AudioVisualizerProps<Float32Array[]>
 >(
   () =>
-    import('../../components/AudioVisualizer').then(
+    import('@app/components/AudioVisualizer').then(
       (module) => module.AudioVisualizer,
     ) as any,
   { ssr: false },
@@ -62,7 +63,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/beginner.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="beginner"
@@ -70,7 +71,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/intermediate.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="intermediate"
@@ -78,7 +79,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/expert.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="expert1"
@@ -86,10 +87,18 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/kidokoro.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="expert2"
+            />
+            <LongFastAudioVisualizer
+              audioFilePath="/audios/kidokoro2.wav"
+              visualizerConfig={
+                Encoder01NewVisualizerConfig
+              }
+              visualizeMode={'LATENT'}
+              title="expert3"
             />
           </>
         )}

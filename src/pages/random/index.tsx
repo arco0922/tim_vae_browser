@@ -14,7 +14,7 @@ const LongFastAudioVisualizer = dynamic<
   AudioVisualizerProps<Float32Array[]>
 >(
   () =>
-    import('../../components/AudioVisualizer').then(
+    import('@app/components/AudioVisualizer').then(
       (module) => module.AudioVisualizer,
     ) as any,
   { ssr: false },

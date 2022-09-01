@@ -7,7 +7,7 @@ import {
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
-  repSoundCoords,
+  repSoundCoordsCollection,
   RepSoundId,
 } from '@app/constants/repSounds';
 import {
@@ -31,10 +31,12 @@ import { ShapeEditor } from './ShapeEditor';
 import styles from './Annotator.module.scss';
 import { CorrectEstimationJudger } from './CorrectEstimationJudger';
 import { ShapeSearcher } from './ShapeSearcher';
+import { EncoderId } from '@app/constants/encoders';
 
 const sketchWidth = 150;
 
 export interface AnnotatorProps {
+  encoderId: EncoderId;
   repSoundId: RepSoundId;
   annotations: Annotations;
   setAnnotations: (annotations: Annotations) => void;
@@ -56,6 +58,7 @@ type AnnotatingState =
 
 /** This component must be imported dynamically */
 export const ExpAnnotator = ({
+  encoderId,
   repSoundId,
   annotations,
   setAnnotations,
@@ -131,6 +134,9 @@ export const ExpAnnotator = ({
 
   React.useEffect(() => {
     if (delaunayEstimator === null) return;
+    const repSoundCoords =
+      repSoundCoordsCollection[encoderId];
+    if (repSoundCoords === undefined) return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
       annotations,
@@ -159,7 +165,12 @@ export const ExpAnnotator = ({
       setSuggestionVectorsInfo(_suggestionVectorsInfo);
     }
     setAnnotationCount(_annotationCount);
-  }, [repSoundId, annotations, delaunayEstimator]);
+  }, [
+    encoderId,
+    repSoundId,
+    annotations,
+    delaunayEstimator,
+  ]);
 
   const startCallback = React.useCallback(() => {
     if (annotationCount <= delaunayConfig.inputDim) {
@@ -236,7 +247,9 @@ export const ExpAnnotator = ({
           : annotationCount + 1}
       </h2>
       <audio
-        src={url(`/audios/repSounds/${repSoundId}.wav`)}
+        src={url(
+          `/audios/repSounds/${encoderId}/${repSoundId}.wav`,
+        )}
         controls
         loop
         onPlay={() => setIsPlayedOnce(true)}

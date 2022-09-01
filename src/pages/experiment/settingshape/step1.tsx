@@ -47,6 +47,7 @@ const SettingId: NextPage = () => {
   return (
     <div className={styles.container}>
       <StepOneAnnotator
+        encoderId={'encoder02_long'}
         annotations={annotations}
         setAnnotations={setAnnotations}
         goNextCallback={goNextCallback}

@@ -7,6 +7,7 @@ import { Button } from '@app/components/Button';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import {
   Encoder01LongVisualizerConfig,
+  Encoder01NewVisualizerConfig,
   Encoder01VisualizerConfig,
   Encoder02LongVisualizerConfig,
   Encoder03LongVisualizerConfig,
@@ -23,7 +24,7 @@ const LongFastAudioVisualizer = dynamic<
   AudioVisualizerProps<Float32Array[]>
 >(
   () =>
-    import('../components/AudioVisualizer').then(
+    import('@app/components/AudioVisualizer').then(
       (module) => module.AudioVisualizer,
     ) as any,
   { ssr: false },
@@ -80,7 +81,7 @@ const Top: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/beginner.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode="SHAPE"
               annotations={annotations}
@@ -89,7 +90,7 @@ const Top: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/intermediate.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode="SHAPE"
               annotations={annotations}
@@ -98,7 +99,7 @@ const Top: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/expert.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode="SHAPE"
               annotations={annotations}
@@ -107,11 +108,20 @@ const Top: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/kidokoro.wav"
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder01NewVisualizerConfig
               }
               visualizeMode="SHAPE"
               annotations={annotations}
               title="expert2"
+            />
+            <LongFastAudioVisualizer
+              audioFilePath="/audios/kidokoro2.wav"
+              visualizerConfig={
+                Encoder01NewVisualizerConfig
+              }
+              visualizeMode="SHAPE"
+              annotations={annotations}
+              title="expert3"
             />
           </div>
         </>

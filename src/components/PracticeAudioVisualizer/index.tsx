@@ -15,7 +15,7 @@ import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
 import { Annotations, NumVector } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
-  repSoundCoords,
+  repSoundCoordsCollection,
   RepSoundId,
 } from '@app/constants/repSounds';
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
@@ -92,11 +92,13 @@ export const PracticeAudioVisualizer = <
     if (audioContext !== null) return;
     window.AudioContext =
       window.AudioContext || window.webkitAudioContext;
-    const _audioCtx = new AudioContext();
+    const _audioCtx = new AudioContext({
+      sampleRate: visualizerConfig.samplingRate,
+    });
     setAudioContext(_audioCtx);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visualizerConfig.samplingRate]);
 
   const [audioSource, setAudioSource] =
     React.useState<MediaStreamAudioSourceNode | null>(null);
@@ -373,6 +375,9 @@ export const PracticeAudioVisualizer = <
       annotations === undefined
     )
       return;
+    const repSoundCoords =
+      repSoundCoordsCollection[visualizerConfig.encoderId];
+    if (repSoundCoords === undefined) return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
       annotations,
@@ -383,7 +388,11 @@ export const PracticeAudioVisualizer = <
       _annotationCount += 1;
     }
     setAnnotationCount(_annotationCount);
-  }, [annotations, delaunayEstimator]);
+  }, [
+    visualizerConfig.encoderId,
+    annotations,
+    delaunayEstimator,
+  ]);
 
   /** Update Estimation of delaunay estimator */
   React.useEffect(() => {

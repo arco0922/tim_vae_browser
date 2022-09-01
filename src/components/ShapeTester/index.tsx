@@ -7,7 +7,7 @@ import {
 } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
-  repSoundCoords,
+  repSoundCoordsCollection,
   RepSoundId,
 } from '@app/constants/repSounds';
 import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
@@ -22,10 +22,10 @@ import { calcRandomShapeParams } from '@app/utils/sliderUtils';
 import { calcFreqFromParams } from '@app/utils/shapeUtils';
 import { CongruencyRator } from './CongruencyRator';
 import styles from './ShapeTester.module.scss';
-
-const sketchWidth = 150;
+import { EncoderId } from '@app/constants/encoders';
 
 export interface ShapeTesterProps {
+  encoderId: EncoderId;
   expSoundId: ExpSoundId;
   testMode: TestMode;
   expResults: ExpResults;
@@ -36,6 +36,7 @@ export interface ShapeTesterProps {
 
 /** This component must be imported dynamically */
 export const ShapeTester = ({
+  encoderId,
   expSoundId,
   testMode,
   expResults,
@@ -77,6 +78,9 @@ export const ShapeTester = ({
 
   React.useEffect(() => {
     if (delaunayEstimator === null) return;
+    const repSoundCoords =
+      repSoundCoordsCollection[encoderId];
+    if (repSoundCoords === undefined) return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
       annotations,
@@ -93,7 +97,12 @@ export const ShapeTester = ({
         );
       setEstimatedShapeVector(_estimatedShapeVector);
     }
-  }, [expSoundId, annotations, delaunayEstimator]);
+  }, [
+    encoderId,
+    expSoundId,
+    annotations,
+    delaunayEstimator,
+  ]);
 
   const [randomShapeVector, setRandomShapeVector] =
     React.useState<NumVector | null>(null);

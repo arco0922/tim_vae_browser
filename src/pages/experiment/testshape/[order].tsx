@@ -107,6 +107,7 @@ export const TestShapeId: NextPage = () => {
     <div className={styles.container}>
       <h2 className={styles.title}>ステップ2-{orderIdx}</h2>
       <ShapeTester
+        encoderId={'encoder02_long'}
         expSoundId={expOrder[orderIdx - 1].expSoundId}
         testMode={expOrder[orderIdx - 1].testMode}
         expResults={expResults}
