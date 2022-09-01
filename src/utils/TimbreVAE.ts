@@ -1,8 +1,7 @@
 import {
-  EncoderMode,
   EncoderPreProcessor,
   WorkletMessage,
-} from './../constants/visualizerConfig';
+} from '@app/constants/visualizerConfig';
 import * as tf from '@tensorflow/tfjs';
 
 const THRESHOLD = 0.01;

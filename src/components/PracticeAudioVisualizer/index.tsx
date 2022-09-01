@@ -15,7 +15,7 @@ import { DelaunayEstimator } from '@app/utils/DelaunayEstimator';
 import { Annotations, NumVector } from '@app/@types';
 import { delaunayConfig } from '@app/constants/delaunayConfig';
 import {
-  repSoundCoords,
+  repSoundCoordsCollection,
   RepSoundId,
 } from '@app/constants/repSounds';
 import { calcSamplingPointsFromFreq } from '@app/utils/shapeUtils';
@@ -375,6 +375,9 @@ export const PracticeAudioVisualizer = <
       annotations === undefined
     )
       return;
+    const repSoundCoords =
+      repSoundCoordsCollection[visualizerConfig.encoderId];
+    if (repSoundCoords === undefined) return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
       annotations,
@@ -385,7 +388,11 @@ export const PracticeAudioVisualizer = <
       _annotationCount += 1;
     }
     setAnnotationCount(_annotationCount);
-  }, [annotations, delaunayEstimator]);
+  }, [
+    visualizerConfig.encoderId,
+    annotations,
+    delaunayEstimator,
+  ]);
 
   /** Update Estimation of delaunay estimator */
   React.useEffect(() => {

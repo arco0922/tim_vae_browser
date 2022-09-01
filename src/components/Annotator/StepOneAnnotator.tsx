@@ -3,6 +3,7 @@ import {
   NumVector,
   ShapeParams,
 } from '@app/@types';
+import { EncoderId } from '@app/constants/encoders';
 import {
   StepOneRepSoundId,
   stepOneRepSoundIds,
@@ -24,6 +25,7 @@ import { ShapeEditor } from './ShapeEditor';
 import styles from './StepOneAnnotator.module.scss';
 
 export interface StepOneAnnotatorProps {
+  encoderId: EncoderId;
   annotations: Annotations;
   setAnnotations: (annotations: Annotations) => void;
   goNextCallback: () => void;
@@ -36,6 +38,7 @@ type SamplingPointsCollection = {
 const sketchWidth = 150;
 
 export const StepOneAnnotator = ({
+  encoderId,
   annotations,
   setAnnotations,
   goNextCallback,
@@ -213,7 +216,9 @@ export const StepOneAnnotator = ({
               className={styles.item__container}
             >
               <audio
-                src={url(`/audios/repSounds/${rsId}.wav`)}
+                src={url(
+                  `/audios/repSounds/${encoderId}/${rsId}.wav`,
+                )}
                 controls
                 loop
                 onPlay={() => playCallback(rsId)}

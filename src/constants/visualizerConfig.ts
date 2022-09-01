@@ -1,8 +1,9 @@
+import { EncoderId } from './encoders';
 import {
   createEncoder01Preprocessor,
   createEncoder01LongPreprocessor,
   createEncoder02LongPreprocessor,
-} from './../utils/preprocessors';
+} from '@app/utils/preprocessors';
 import * as tf from '@tensorflow/tfjs';
 
 export type VisualizeMode =
@@ -26,6 +27,7 @@ export interface LatentImgInfo {
 export interface VisualizerConfig<
   P extends WorkletMessage,
 > {
+  encoderId: EncoderId;
   encoderMode: EncoderMode;
   isFlipped: boolean;
   encoderJSONPath: string;
@@ -37,6 +39,7 @@ export interface VisualizerConfig<
 
 export const Encoder01VisualizerConfig: VisualizerConfig<Float32Array> =
   {
+    encoderId: 'encoder01',
     encoderMode: 'SHORT',
     isFlipped: true,
     encoderJSONPath: '/models/encoder01/model.json',
@@ -57,6 +60,7 @@ export const Encoder01VisualizerConfig: VisualizerConfig<Float32Array> =
 
 export const Encoder01LongVisualizerConfig: VisualizerConfig<Float32Array> =
   {
+    encoderId: 'encoder01_long',
     encoderMode: 'LONG',
     isFlipped: false,
     encoderJSONPath: '/models/encoder01_long/model.json',
@@ -80,6 +84,7 @@ export const Encoder01LongVisualizerConfig: VisualizerConfig<Float32Array> =
 export const Encoder02LongVisualizerConfig: VisualizerConfig<
   Float32Array[]
 > = {
+  encoderId: 'encoder02_long',
   encoderMode: 'LONG_FAST',
   isFlipped: true,
   encoderJSONPath: '/models/encoder02_long/model.json',
@@ -100,6 +105,7 @@ export const Encoder02LongVisualizerConfig: VisualizerConfig<
 export const Encoder03LongVisualizerConfig: VisualizerConfig<
   Float32Array[]
 > = {
+  encoderId: 'encoder03_long',
   encoderMode: 'LONG_FAST',
   isFlipped: false,
   encoderJSONPath: '/models/encoder03_long/model.json',
@@ -120,6 +126,7 @@ export const Encoder03LongVisualizerConfig: VisualizerConfig<
 export const Encoder01NewVisualizerConfig: VisualizerConfig<
   Float32Array[]
 > = {
+  encoderId: 'encoder01_new',
   encoderMode: 'LONG_FAST',
   isFlipped: false,
   encoderJSONPath: '/models/encoder01_new/model.json',

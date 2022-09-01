@@ -2,7 +2,7 @@ import {
   ShapeParameterKey,
   ShapeParams,
 } from '@app/@types';
-import { sliderInfo } from './../constants/sliderInfo';
+import { sliderInfo } from '@app/constants/sliderInfo';
 
 export const calcRandomValueInSlider = ({
   min,

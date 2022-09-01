@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 const DrawFromParamSketch =
   dynamic<DrawFromParamSketchProps>(
     () =>
-      import('../../../sketches/DrawFromParamSketch').then(
+      import('@app/sketches/DrawFromParamSketch').then(
         (module) => module.DrawFromParamSketch,
       ) as any,
     { ssr: false },

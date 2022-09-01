@@ -12,9 +12,7 @@ import { Button } from '@app/components/Button';
 const DrawSamplingPointsSketch =
   dynamic<DrawSamplingPointsSketchProps>(
     () =>
-      import(
-        '../../../sketches/DrawSamplingPointsSketch'
-      ).then(
+      import('@app/sketches/DrawSamplingPointsSketch').then(
         (module) => module.DrawSamplingPointsSketch,
       ) as any,
     { ssr: false },
