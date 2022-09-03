@@ -1,0 +1,11 @@
+.container {
+  margin: 0px;
+}
+
+.sketch__section {
+  display: flex;
+
+  & > * {
+    margin-right: 20px;
+  }
+}
