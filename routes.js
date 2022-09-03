@@ -77,6 +77,7 @@ const routes = {
   '/trial/latent': { page: '/trial/latent' },
   '/microphone': { page: '/microphone' },
   '/vae': { page: '/vae' },
+  '/relation': { page: '/relation' },
   '/random': { page: '/random' },
   '/delaunay': { page: '/delaunay' },
   '/settingshape': { page: '/settingshape' },
