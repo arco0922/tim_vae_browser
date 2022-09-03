@@ -137,9 +137,9 @@ export const Encoder01NewVisualizerConfig: VisualizerConfig<
   ]),
   latentImgInfo: {
     imgSrc: '/imgs/latentImgs/encoder01_new.png',
-    xmin: -4.587998390197754,
-    xmax: 3.106440544128418,
-    ymin: -3.313951015472412,
-    ymax: 3.5624425411224365,
+    xmin: -4.338333368301392,
+    xmax: 3.107632875442505,
+    ymin: -3.3266372680664062,
+    ymax: 3.557241439819336,
   },
 };
