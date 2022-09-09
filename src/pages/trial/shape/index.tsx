@@ -15,10 +15,12 @@ import styles from './../trial.module.scss';
 import {
   practiceGoal01,
   practiceGoal02,
+  practiceGoal03,
 } from '@app/constants/practiceConfig';
 import {
   Encoder01NewVisualizerConfig,
   Encoder02LongVisualizerConfig,
+  Encoder03AraiIphoneVisualizerConfig,
 } from '@app/constants/visualizerConfig';
 
 const LongFastPracticeAudioVisualizer = dynamic<
@@ -72,12 +74,12 @@ const TrialShapePage: NextPage = () => {
           <div className={styles.main__content}>
             <LongFastPracticeAudioVisualizer
               practiceConfig={{
-                encoderId: 'encoder01_new',
-                goalInfo: practiceGoal02,
+                encoderId: 'encoder03_arai_iphone',
+                goalInfo: practiceGoal03,
                 mode: 'SHAPE',
               }}
               visualizerConfig={
-                Encoder01NewVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               annotations={annotations}
               isTrial={true}

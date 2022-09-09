@@ -10,6 +10,7 @@ import {
   Encoder01VisualizerConfig,
   Encoder02LongVisualizerConfig,
   Encoder03LongVisualizerConfig,
+  Encoder03AraiIphoneVisualizerConfig,
 } from '@app/constants/visualizerConfig';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
 import type { NextPage } from 'next';
@@ -80,7 +81,7 @@ const Top: NextPage = () => {
             <LongFastAudioVisualizer
               useMicrophone={true}
               visualizerConfig={
-                Encoder02LongVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               visualizeMode={'SHAPE'}
               annotations={annotations}
