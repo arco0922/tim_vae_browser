@@ -24,3 +24,10 @@ export const practiceGoal02: PracticeGoalInfo = {
   audioFilePath: '/audios/goalSounds/gs_02.wav',
   coord: { encoder01_new: [-3.118562, -0.25676975] },
 };
+
+export const practiceGoal03: PracticeGoalInfo = {
+  audioFilePath: '/audios/goalSounds/gs_03.wav',
+  coord: {
+    encoder03_arai_iphone: [-1.6408138, -0.2598094],
+  },
+};
