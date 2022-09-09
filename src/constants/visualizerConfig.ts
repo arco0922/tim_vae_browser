@@ -22,6 +22,7 @@ export interface LatentImgInfo {
   xmax: number;
   ymin: number;
   ymax: number;
+  aspectRatio?: number;
 }
 
 export interface VisualizerConfig<
@@ -141,5 +142,28 @@ export const Encoder01NewVisualizerConfig: VisualizerConfig<
     xmax: 3.107632875442505,
     ymin: -3.3266372680664062,
     ymax: 3.557241439819336,
+  },
+};
+
+export const Encoder03AraiIphoneVisualizerConfig: VisualizerConfig<
+  Float32Array[]
+> = {
+  encoderId: 'encoder03_arai_iphone',
+  encoderMode: 'LONG_FAST',
+  isFlipped: false,
+  encoderJSONPath:
+    '/models/encoder03_arai_iphone/model.json',
+  samplingRate: 44100,
+  frameLength: 2048,
+  encoderPreprocessor: createEncoder02LongPreprocessor([
+    1, 128, 64, 1,
+  ]),
+  latentImgInfo: {
+    imgSrc: '/imgs/latentImgs/encoder03_arai_iphone.png',
+    xmin: -4.314516544342041,
+    xmax: 2.3160040378570557,
+    ymin: -2.2613269090652466,
+    ymax: 3.136868715286255,
+    aspectRatio: 607 / 623,
   },
 };

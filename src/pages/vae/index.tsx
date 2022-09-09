@@ -6,6 +6,7 @@ import {
   Encoder02LongVisualizerConfig,
   Encoder03LongVisualizerConfig,
   Encoder01NewVisualizerConfig,
+  Encoder03AraiIphoneVisualizerConfig,
 } from '@app/constants/visualizerConfig';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
@@ -63,7 +64,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/beginner.wav"
               visualizerConfig={
-                Encoder01NewVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="beginner"
@@ -71,7 +72,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/intermediate.wav"
               visualizerConfig={
-                Encoder01NewVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="intermediate"
@@ -79,7 +80,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/expert.wav"
               visualizerConfig={
-                Encoder01NewVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="expert1"
@@ -87,7 +88,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/kidokoro.wav"
               visualizerConfig={
-                Encoder01NewVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="expert2"
@@ -95,7 +96,7 @@ const VAE: NextPage = () => {
             <LongFastAudioVisualizer
               audioFilePath="/audios/kidokoro2.wav"
               visualizerConfig={
-                Encoder01NewVisualizerConfig
+                Encoder03AraiIphoneVisualizerConfig
               }
               visualizeMode={'LATENT'}
               title="expert3"

@@ -53,7 +53,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
       const y = (p.height * (ymax - gy)) / (ymax - ymin);
 
       p.fill('orange');
-      p.ellipse(x, y, 15, 15);
+      p.ellipse(x, y, 10, 10);
     }
 
     if (p.props.encodeResult === null || p.props.hidePoints)
@@ -66,7 +66,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
     const y = (p.height * (ymax - cy)) / (ymax - ymin);
 
     p.fill('red');
-    p.ellipse(x, y, 15, 15);
+    p.ellipse(x, y, 10, 10);
   };
 };
 
