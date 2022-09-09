@@ -601,7 +601,14 @@ export const PracticeAudioVisualizer = <
                 {practiceConfig.mode === 'LATENT' && (
                   <PlotLatentSketch
                     canvasWidth={sketchWidth}
-                    canvasHeight={sketchWidth}
+                    canvasHeight={
+                      visualizerConfig.latentImgInfo
+                        .aspectRatio
+                        ? sketchWidth *
+                          visualizerConfig.latentImgInfo
+                            .aspectRatio
+                        : sketchWidth
+                    }
                     encodeResult={coordEMA}
                     latentImgInfo={
                       visualizerConfig.latentImgInfo

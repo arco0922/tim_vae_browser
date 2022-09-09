@@ -482,7 +482,12 @@ export const AudioVisualizer = <P extends WorkletMessage>({
           )}
           <DrawSamplingPointsSketch
             canvasWidth={sketchWidth}
-            canvasHeight={sketchWidth}
+            canvasHeight={
+              visualizerConfig.latentImgInfo.aspectRatio
+                ? sketchWidth *
+                  visualizerConfig.latentImgInfo.aspectRatio
+                : sketchWidth
+            }
             samplingPoints={estimatedSamplingPoints}
           />
         </div>
