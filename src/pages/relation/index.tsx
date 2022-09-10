@@ -5,7 +5,10 @@ import {
 import { Button } from '@app/components/Button';
 import { RelationVisualizerProps } from '@app/components/RelationVisualizer';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
-import { Encoder01NewVisualizerConfig } from '@app/constants/visualizerConfig';
+import {
+  latestVisualizerConfig,
+  LatestVisualizerWorkletMessage,
+} from '@app/constants/visualizerConfig';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
@@ -15,7 +18,7 @@ import useLocalStorage from 'use-local-storage';
 import styles from './relation.module.scss';
 
 const RelationVisualizer = dynamic<
-  RelationVisualizerProps<Float32Array[]>
+  RelationVisualizerProps<LatestVisualizerWorkletMessage>
 >(
   () =>
     import('@app/components/RelationVisualizer').then(
@@ -51,7 +54,7 @@ const RelationPage: NextPage = () => {
       {hasFinishedAnnotation ? (
         <RelationVisualizer
           annotations={annotations}
-          visualizerConfig={Encoder01NewVisualizerConfig}
+          visualizerConfig={latestVisualizerConfig}
           className={styles.relation__visualizer}
         />
       ) : (

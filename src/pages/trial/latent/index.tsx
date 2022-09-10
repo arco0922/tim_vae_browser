@@ -5,6 +5,11 @@ import {
 import { Button } from '@app/components/Button';
 import { PracticeAudioVisualizerProps } from '@app/components/PracticeAudioVisualizer';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
+import { latestPracticeGoal } from '@app/constants/practiceConfig';
+import {
+  latestVisualizerConfig,
+  LatestVisualizerWorkletMessage,
+} from '@app/constants/visualizerConfig';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
@@ -12,19 +17,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
 import styles from './../trial.module.scss';
-import {
-  practiceGoal01,
-  practiceGoal02,
-  practiceGoal03,
-} from '@app/constants/practiceConfig';
-import {
-  Encoder01NewVisualizerConfig,
-  Encoder02LongVisualizerConfig,
-  Encoder03AraiIphoneVisualizerConfig,
-} from '@app/constants/visualizerConfig';
 
-const LongFastPracticeAudioVisualizer = dynamic<
-  PracticeAudioVisualizerProps<Float32Array[]>
+const PracticeAudioVisualizer = dynamic<
+  PracticeAudioVisualizerProps<LatestVisualizerWorkletMessage>
 >(
   () =>
     import('@app/components/PracticeAudioVisualizer').then(
@@ -72,15 +67,12 @@ const TrialLatentPage: NextPage = () => {
           </div>
 
           <div className={styles.main__content}>
-            <LongFastPracticeAudioVisualizer
+            <PracticeAudioVisualizer
               practiceConfig={{
-                encoderId: 'encoder03_arai_iphone',
-                goalInfo: practiceGoal03,
+                goalInfo: latestPracticeGoal,
                 mode: 'LATENT',
               }}
-              visualizerConfig={
-                Encoder03AraiIphoneVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               annotations={annotations}
               isTrial={true}
               duration={60 * 1}

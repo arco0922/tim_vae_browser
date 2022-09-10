@@ -6,11 +6,8 @@ import { AudioVisualizerProps } from '@app/components/AudioVisualizer';
 import { Button } from '@app/components/Button';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import {
-  Encoder01LongVisualizerConfig,
-  Encoder01VisualizerConfig,
-  Encoder02LongVisualizerConfig,
-  Encoder03LongVisualizerConfig,
-  Encoder03AraiIphoneVisualizerConfig,
+  latestVisualizerConfig,
+  LatestVisualizerWorkletMessage,
 } from '@app/constants/visualizerConfig';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
 import type { NextPage } from 'next';
@@ -20,8 +17,8 @@ import React from 'react';
 import useLocalStorage from 'use-local-storage';
 import styles from './microphone.module.scss';
 
-const LongFastAudioVisualizer = dynamic<
-  AudioVisualizerProps<Float32Array[]>
+const AudioVisualizer = dynamic<
+  AudioVisualizerProps<LatestVisualizerWorkletMessage>
 >(
   () =>
     import('@app/components/AudioVisualizer').then(
@@ -78,11 +75,9 @@ const Top: NextPage = () => {
           </div>
 
           <div className={styles.main__content}>
-            <LongFastAudioVisualizer
+            <AudioVisualizer
               useMicrophone={true}
-              visualizerConfig={
-                Encoder03AraiIphoneVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               visualizeMode={'SHAPE'}
               annotations={annotations}
             />

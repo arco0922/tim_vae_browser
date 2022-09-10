@@ -167,3 +167,8 @@ export const Encoder03AraiIphoneVisualizerConfig: VisualizerConfig<
     aspectRatio: 607 / 623,
   },
 };
+
+export const latestVisualizerConfig =
+  Encoder03AraiIphoneVisualizerConfig;
+
+export type LatestVisualizerWorkletMessage = Float32Array[];
