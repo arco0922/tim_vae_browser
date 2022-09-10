@@ -6,6 +6,7 @@ export const encoderIds = [
   'encoder03_long',
   'encoder03_arai_iphone',
   'encoder04_arai_mac',
+  'encoder05_arai_mac',
 ] as const;
 
 export type EncoderId = typeof encoderIds[number];
