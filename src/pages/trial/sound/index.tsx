@@ -68,7 +68,6 @@ const TrialPage: NextPage = () => {
             annotations={annotations}
             isTrial={true}
             duration={60 * 1}
-            downloadFileName={'trial_sound.webm'}
           />
         </div>
       ) : (

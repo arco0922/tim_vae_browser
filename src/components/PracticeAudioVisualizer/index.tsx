@@ -66,7 +66,7 @@ export interface PracticeAudioVisualizerProps<
   visualizerConfig: VisualizerConfig<P>;
   annotations: Annotations;
   isTrial?: boolean;
-  downloadFileName?: string;
+  recordFileName?: string;
   duration?: number;
   className?: string;
 }
@@ -78,7 +78,7 @@ export const PracticeAudioVisualizer = <
   visualizerConfig,
   annotations,
   isTrial = false,
-  downloadFileName,
+  recordFileName,
   duration = 0,
   className,
 }: PracticeAudioVisualizerProps<P>) => {
@@ -126,7 +126,7 @@ export const PracticeAudioVisualizer = <
           audioContext.createMediaStreamSource(stream);
         setAudioSource(_source);
 
-        if (isTrial) {
+        if (recordFileName !== undefined) {
           const _mediaRecorder = new MediaRecorder(stream, {
             mimeType: 'audio/webm',
           });
@@ -159,18 +159,18 @@ export const PracticeAudioVisualizer = <
       const recordedChunks = recordedChunksRef.current;
       if (
         recordedChunks.length === 0 ||
-        downloadFileName === undefined
+        recordFileName === undefined
       )
         return;
       const a = document.createElement('a');
       a.href = URL.createObjectURL(
         new Blob(recordedChunks),
       );
-      a.download = downloadFileName;
+      a.download = recordFileName;
       a.click();
       recordedChunksRef.current = [];
     };
-  }, [mediaRecorder, downloadFileName]);
+  }, [mediaRecorder, recordFileName]);
 
   const startRecordCallback = React.useCallback(() => {
     if (mediaRecorder === null) return;
@@ -506,12 +506,16 @@ export const PracticeAudioVisualizer = <
           <div className={styles.button__part}>
             {isRunning ? (
               <Button
-                text={isTrial ? '録音終了' : '練習終了'}
+                text={
+                  isTrial ? 'トライアル終了' : '練習終了'
+                }
                 onClick={stopCallback}
               />
             ) : (
               <Button
-                text={isTrial ? '録音開始' : '練習開始'}
+                text={
+                  isTrial ? 'トライアル開始' : '練習開始'
+                }
                 onClick={startCallback}
               />
             )}
@@ -584,7 +588,11 @@ export const PracticeAudioVisualizer = <
                   </>
                 ) : (
                   <Button
-                    text={isTrial ? '録音開始' : '練習開始'}
+                    text={
+                      isTrial
+                        ? 'トライアル開始'
+                        : '練習開始'
+                    }
                     onClick={startCallback}
                   />
                 )}
@@ -628,7 +636,9 @@ export const PracticeAudioVisualizer = <
             <div className={styles.bottom__section}>
               {isRunning && (
                 <Button
-                  text={isTrial ? '録音終了' : '練習終了'}
+                  text={
+                    isTrial ? 'トライアル終了' : '練習終了'
+                  }
                   onClick={stopCallback}
                 />
               )}
