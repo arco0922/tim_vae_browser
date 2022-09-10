@@ -15,6 +15,7 @@ import {
 import useLocalStorage from 'use-local-storage';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import { deleteDemoStorages } from '@app/utils/localStorageUtils';
+import { latestVisualizerConfig } from '@app/constants/visualizerConfig';
 
 const Annotator = dynamic<AnnotatorProps>(
   () =>
@@ -66,7 +67,7 @@ const SettingId: NextPage = () => {
   return (
     <div className={styles.container}>
       <Annotator
-        encoderId={'encoder03_arai_iphone'}
+        encoderId={latestVisualizerConfig.encoderId}
         repSoundId={repSoundId as RepSoundId}
         annotations={annotations}
         setAnnotations={setAnnotations}

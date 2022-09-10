@@ -9,7 +9,6 @@ export interface PracticeGoalInfo {
 export interface PracticeConfig {
   goalInfo: PracticeGoalInfo;
   mode: 'SOUND' | 'SHAPE' | 'LATENT';
-  encoderId: EncoderId;
 }
 
 export const practiceGoal01: PracticeGoalInfo = {
@@ -31,3 +30,5 @@ export const practiceGoal03: PracticeGoalInfo = {
     encoder03_arai_iphone: [-1.6408138, -0.2598094],
   },
 };
+
+export const latestPracticeGoal = practiceGoal03;

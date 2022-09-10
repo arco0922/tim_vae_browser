@@ -369,6 +369,8 @@ export const PracticeAudioVisualizer = <
     setDelaunayEstimator(_delaunayEstimator);
   }, [practiceConfig.mode]);
 
+  const encoderId = visualizerConfig.encoderId;
+
   React.useEffect(() => {
     if (
       delaunayEstimator === null ||
@@ -376,7 +378,7 @@ export const PracticeAudioVisualizer = <
     )
       return;
     const repSoundCoords =
-      repSoundCoordsCollection[visualizerConfig.encoderId];
+      repSoundCoordsCollection[encoderId];
     if (repSoundCoords === undefined) return;
     let _annotationCount = 0;
     for (const [_rsId, vector] of Object.entries(
@@ -388,11 +390,7 @@ export const PracticeAudioVisualizer = <
       _annotationCount += 1;
     }
     setAnnotationCount(_annotationCount);
-  }, [
-    visualizerConfig.encoderId,
-    annotations,
-    delaunayEstimator,
-  ]);
+  }, [encoderId, annotations, delaunayEstimator]);
 
   /** Update Estimation of delaunay estimator */
   React.useEffect(() => {
@@ -426,22 +424,25 @@ export const PracticeAudioVisualizer = <
       practiceConfig.mode !== 'SHAPE' ||
       delaunayEstimator === null ||
       annotationCount === 0 ||
-      practiceConfig.goalInfo.coord[
-        practiceConfig.encoderId
-      ] === undefined
+      practiceConfig.goalInfo.coord[encoderId] === undefined
     )
       return;
 
     const _goalF = delaunayEstimator.estimate(
       practiceConfig.goalInfo.coord[
-        practiceConfig.encoderId
+        encoderId
       ] as any as NumVector,
     );
     const _goalSamplingPoints =
       calcSamplingPointsFromFreq(_goalF);
 
     setGoalSamplingPoints(_goalSamplingPoints);
-  }, [practiceConfig, delaunayEstimator, annotationCount]);
+  }, [
+    encoderId,
+    practiceConfig,
+    delaunayEstimator,
+    annotationCount,
+  ]);
 
   const { minutes, seconds, startTimer, finishTimer } =
     useTimer();
@@ -615,7 +616,7 @@ export const PracticeAudioVisualizer = <
                     }
                     goalCoord={
                       practiceConfig.goalInfo.coord[
-                        practiceConfig.encoderId
+                        encoderId
                       ]
                     }
                     hidePoints={!isRunning || isSilence}

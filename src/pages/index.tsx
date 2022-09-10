@@ -6,11 +6,8 @@ import { AudioVisualizerProps } from '@app/components/AudioVisualizer';
 import { Button } from '@app/components/Button';
 import { localStorageKeys } from '@app/constants/localStorageKeys';
 import {
-  Encoder01LongVisualizerConfig,
-  Encoder01NewVisualizerConfig,
-  Encoder01VisualizerConfig,
-  Encoder02LongVisualizerConfig,
-  Encoder03LongVisualizerConfig,
+  latestVisualizerConfig,
+  LatestVisualizerWorkletMessage,
 } from '@app/constants/visualizerConfig';
 import { judgeHasEndAnnotation } from '@app/utils/annotatorUtils';
 import type { NextPage } from 'next';
@@ -20,8 +17,8 @@ import React from 'react';
 import useLocalStorage from 'use-local-storage';
 import styles from './TopPage.module.scss';
 
-const LongFastAudioVisualizer = dynamic<
-  AudioVisualizerProps<Float32Array[]>
+const AudioVisualizer = dynamic<
+  AudioVisualizerProps<LatestVisualizerWorkletMessage>
 >(
   () =>
     import('@app/components/AudioVisualizer').then(
@@ -78,47 +75,37 @@ const Top: NextPage = () => {
           </div>
 
           <div className={styles.main__content}>
-            <LongFastAudioVisualizer
+            <AudioVisualizer
               audioFilePath="/audios/beginner.wav"
-              visualizerConfig={
-                Encoder01NewVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               visualizeMode="SHAPE"
               annotations={annotations}
               title="beginner"
             />
-            <LongFastAudioVisualizer
+            <AudioVisualizer
               audioFilePath="/audios/intermediate.wav"
-              visualizerConfig={
-                Encoder01NewVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               visualizeMode="SHAPE"
               annotations={annotations}
               title="intermediate"
             />
-            <LongFastAudioVisualizer
+            <AudioVisualizer
               audioFilePath="/audios/expert.wav"
-              visualizerConfig={
-                Encoder01NewVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               visualizeMode="SHAPE"
               annotations={annotations}
               title="expert1"
             />
-            <LongFastAudioVisualizer
+            <AudioVisualizer
               audioFilePath="/audios/kidokoro.wav"
-              visualizerConfig={
-                Encoder01NewVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               visualizeMode="SHAPE"
               annotations={annotations}
               title="expert2"
             />
-            <LongFastAudioVisualizer
+            <AudioVisualizer
               audioFilePath="/audios/kidokoro2.wav"
-              visualizerConfig={
-                Encoder01NewVisualizerConfig
-              }
+              visualizerConfig={latestVisualizerConfig}
               visualizeMode="SHAPE"
               annotations={annotations}
               title="expert3"
