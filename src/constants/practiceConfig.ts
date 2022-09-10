@@ -31,4 +31,11 @@ export const practiceGoal03: PracticeGoalInfo = {
   },
 };
 
-export const latestPracticeGoal = practiceGoal03;
+export const practiceGoal04: PracticeGoalInfo = {
+  audioFilePath: '/audios/goalSounds/gs_04.wav',
+  coord: {
+    encoder04_arai_mac: [1.4737622, 0.6487303],
+  },
+};
+
+export const latestPracticeGoal = practiceGoal04;
