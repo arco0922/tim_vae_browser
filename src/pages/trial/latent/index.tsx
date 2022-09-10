@@ -76,7 +76,6 @@ const TrialLatentPage: NextPage = () => {
               annotations={annotations}
               isTrial={true}
               duration={60 * 1}
-              downloadFileName={'trial_latent.webm'}
             />
           </div>
         </>

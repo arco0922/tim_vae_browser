@@ -76,7 +76,6 @@ const TrialShapePage: NextPage = () => {
               annotations={annotations}
               isTrial={true}
               duration={60 * 1}
-              downloadFileName={'trial_shape.webm'}
             />
           </div>
         </>
