@@ -168,7 +168,29 @@ export const Encoder03AraiIphoneVisualizerConfig: VisualizerConfig<
   },
 };
 
+export const Encoder04AraiMacVisualizerConfig: VisualizerConfig<
+  Float32Array[]
+> = {
+  encoderId: 'encoder04_arai_mac',
+  encoderMode: 'LONG_FAST',
+  isFlipped: true,
+  encoderJSONPath: '/models/encoder04_arai_mac/model.json',
+  samplingRate: 44100,
+  frameLength: 2048,
+  encoderPreprocessor: createEncoder02LongPreprocessor([
+    1, 128, 64, 1,
+  ]),
+  latentImgInfo: {
+    imgSrc: '/imgs/latentImgs/encoder04_arai_mac.png',
+    xmin: -4.098137378692627,
+    xmax: 2.5161726474761963,
+    ymin: -3.2377891540527344,
+    ymax: 4.495275497436523,
+    aspectRatio: 607 / 623,
+  },
+};
+
 export const latestVisualizerConfig =
-  Encoder03AraiIphoneVisualizerConfig;
+  Encoder04AraiMacVisualizerConfig;
 
 export type LatestVisualizerWorkletMessage = Float32Array[];
