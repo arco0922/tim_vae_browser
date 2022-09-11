@@ -94,21 +94,7 @@ const Top: NextPage = () => {
               visualizerConfig={latestVisualizerConfig}
               visualizeMode="SHAPE"
               annotations={annotations}
-              title="expert1"
-            />
-            <AudioVisualizer
-              audioFilePath="/audios/kidokoro.wav"
-              visualizerConfig={latestVisualizerConfig}
-              visualizeMode="SHAPE"
-              annotations={annotations}
-              title="expert2"
-            />
-            <AudioVisualizer
-              audioFilePath="/audios/kidokoro2.wav"
-              visualizerConfig={latestVisualizerConfig}
-              visualizeMode="SHAPE"
-              annotations={annotations}
-              title="expert3"
+              title="expert"
             />
           </div>
         </>

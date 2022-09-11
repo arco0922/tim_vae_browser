@@ -43,19 +43,7 @@ const VAE: NextPage = () => {
           audioFilePath="/audios/expert.wav"
           visualizerConfig={latestVisualizerConfig}
           visualizeMode={'LATENT'}
-          title="expert1"
-        />
-        <AudioVisualizer
-          audioFilePath="/audios/kidokoro.wav"
-          visualizerConfig={latestVisualizerConfig}
-          visualizeMode={'LATENT'}
-          title="expert2"
-        />
-        <AudioVisualizer
-          audioFilePath="/audios/kidokoro2.wav"
-          visualizerConfig={latestVisualizerConfig}
-          visualizeMode={'LATENT'}
-          title="expert3"
+          title="expert"
         />
       </div>
     </div>
