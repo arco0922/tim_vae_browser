@@ -212,7 +212,31 @@ export const Encoder05AraiMacVisualizerConfig: VisualizerConfig<
   },
 };
 
+export const Encoder06AraiKidokoroMacVisualizerConfig: VisualizerConfig<
+  Float32Array[]
+> = {
+  encoderId: 'encoder06_arai_kidokoro_mac',
+  encoderMode: 'LONG_FAST',
+  isFlipped: false,
+  encoderJSONPath:
+    '/models/encoder06_arai_kidokoro_mac/model.json',
+  samplingRate: 44100,
+  frameLength: 2048,
+  encoderPreprocessor: createEncoder02LongPreprocessor([
+    1, 128, 64, 1,
+  ]),
+  latentImgInfo: {
+    imgSrc:
+      '/imgs/latentImgs/encoder06_arai_kidokoro_mac.png',
+    xmin: -4.467989206314087,
+    xmax: 4.0386598110198975,
+    ymin: -4.374500751495361,
+    ymax: 3.882669687271118,
+    aspectRatio: 607 / 623,
+  },
+};
+
 export const latestVisualizerConfig =
-  Encoder05AraiMacVisualizerConfig;
+  Encoder06AraiKidokoroMacVisualizerConfig;
 
 export type LatestVisualizerWorkletMessage = Float32Array[];
