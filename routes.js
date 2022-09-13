@@ -87,6 +87,7 @@ const routes = {
   '/settingshape/step1': {
     page: '/settingshape/step1',
   },
+  '/savedata': { page: '/savedata' },
   '/experiment': { page: '/experiment' },
   '/experiment/check': { page: '/experiment/check' },
   '/experiment/settingshape': {
