@@ -237,6 +237,6 @@ export const Encoder06AraiKidokoroMacVisualizerConfig: VisualizerConfig<
 };
 
 export const latestVisualizerConfig =
-  Encoder06AraiKidokoroMacVisualizerConfig;
+  Encoder05AraiMacVisualizerConfig;
 
 export type LatestVisualizerWorkletMessage = Float32Array[];
