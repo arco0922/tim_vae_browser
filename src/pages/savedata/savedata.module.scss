@@ -1,0 +1,11 @@
+.container {
+  margin: 30px;
+  & > div {
+    margin: 20px;
+  }
+}
+
+.caution {
+  color: red;
+  font-size: 13px;
+}
