@@ -9,11 +9,11 @@ type SliderInfo = {
 
 export const sliderInfo: SliderInfo = {
   cornNum: {
-    label: 'ツノの本数',
+    label: 'Number of Spikes',
     params: { min: 5, max: 30, step: 1 },
   },
   cornAmp: {
-    label: 'ツノの長さ',
+    label: 'Length of Spikes',
     params: {
       min: 0,
       max: 0.5,
@@ -21,19 +21,19 @@ export const sliderInfo: SliderInfo = {
     },
   },
   randomness: {
-    label: 'ランダムの度合い',
+    label: 'Randomness',
     params: { min: 0, max: 1, step: 0.01 },
   },
   randomSeed: {
-    label: 'ランダムのさせ方',
+    label: 'Random Seed',
     params: { min: 1, max: 20, step: 1 },
   },
   innerCurve: {
-    label: 'ツノの根元の丸さ',
+    label: 'Roundness of the Base of Spikes',
     params: { min: 0, max: 1, step: 0.01 },
   },
   outerCurve: {
-    label: 'ツノの先端の丸さ',
+    label: 'Roundness of the Tip of Spikes',
     params: { min: 0, max: 1, step: 0.01 },
   },
 };
