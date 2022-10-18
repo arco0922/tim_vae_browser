@@ -65,6 +65,7 @@ export class DelaunayEstimator {
   }
 
   estimate(coord: NumVector) {
+    const startTime = new Date().getTime();
     const { iSimplex, barycentricCoordInSimplex } =
       this._findSimplex(coord);
     if (iSimplex >= 0) {
@@ -72,6 +73,12 @@ export class DelaunayEstimator {
         barycentricCoordInSimplex,
         this.simplexVectors[iSimplex],
       );
+      const interpolateEndTime = new Date().getTime();
+      // console.log(
+      //   `Interpolate Duration: ${
+      //     (interpolateEndTime - startTime) / 1000
+      //   }s`,
+      // );
       return res;
     }
 
@@ -97,6 +104,13 @@ export class DelaunayEstimator {
       jacobianAtFacet,
       dr,
     );
+
+    const extrapolateEndTime = new Date().getTime();
+    // console.log(
+    //   `Extrapolate Duration: ${
+    //     (extrapolateEndTime - startTime) / 1000
+    //   }s`,
+    // );
     return res;
   }
 

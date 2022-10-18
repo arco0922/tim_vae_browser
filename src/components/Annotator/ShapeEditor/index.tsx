@@ -160,7 +160,7 @@ export const ShapeEditor = ({
         <div className={styles.button__section}>
           {confirmCallback !== undefined && (
             <Button
-              text={'決定'}
+              text={'Confirm'}
               className={styles.confirm__button}
               onClick={() =>
                 confirmCallback({
@@ -176,7 +176,7 @@ export const ShapeEditor = ({
           )}
           {cancelCallback && (
             <Button
-              text={'図形の選択に戻る'}
+              text={'Cancel'}
               className={styles.cancel__button}
               onClick={cancelCallback}
             />

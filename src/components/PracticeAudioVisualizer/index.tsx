@@ -405,9 +405,15 @@ export const PracticeAudioVisualizer = <
     const _estimatedF = delaunayEstimator.estimate(
       coordEMA.coord,
     );
+    const startTime = new Date().getTime();
     const _estimatedSamplingPoints =
       calcSamplingPointsFromFreq(_estimatedF);
-
+    const endTime = new Date().getTime();
+    // console.log(
+    //   `Shape IFFT Duration: ${
+    //     (endTime - startTime) / 1000
+    //   }s`,
+    // );
     setEstimatedSamplingPoints(_estimatedSamplingPoints);
   }, [
     practiceConfig.mode,

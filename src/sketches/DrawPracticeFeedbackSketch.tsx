@@ -52,6 +52,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
   };
 
   p.draw = () => {
+    const startTime = new Date().getTime();
     p.background(255);
     p.translate(p.width / 2, p.height / 2);
     p.fill(255);
@@ -59,11 +60,11 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
     p.strokeWeight(1);
     p.rect(-p.width / 2, -p.height / 2, p.width, p.height);
     const goalSamplingPoints = p.props.goalSamplingPoints;
-    drawSamplingPoints({
-      radius: p.width / 4,
-      samplingPoints: goalSamplingPoints,
-      strokecolor: '#acacac',
-    });
+    // drawSamplingPoints({
+    //   radius: p.width / 4,
+    //   samplingPoints: goalSamplingPoints,
+    //   strokecolor: '#acacac',
+    // });
     if (p.props.hidePoints) return;
     const samplingPoints = p.props.samplingPoints;
     drawSamplingPoints({
@@ -74,6 +75,10 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
     });
 
     p.translate(-p.width / 2, -p.height / 2);
+    const endTime = new Date().getTime();
+    // console.log(
+    //   `Draw Duration: ${(endTime - startTime) / 1000}s`,
+    // );
   };
 };
 

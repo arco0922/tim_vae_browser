@@ -32,9 +32,15 @@ export class TimbreVAE<P extends WorkletMessage> {
   }
 
   async encodeAudio(data: P | null) {
-    if (this.isEncoding || data === null) return;
+    if (this.isEncoding || data === null) {
+      // if (this.isEncoding) {
+      //   console.log('Encoding rejected');
+      // }
+      return;
+    }
 
     this.isEncoding = true;
+    const startTime = new Date().getTime();
     await tf.nextFrame();
 
     tf.tidy(() => {
@@ -48,6 +54,12 @@ export class TimbreVAE<P extends WorkletMessage> {
       this.result = { coord };
       if (this.callback) this.callback({ coord });
     });
+
+    const endTime = new Date().getTime();
+
+    // console.log(
+    //   `VAE Duration: ${(endTime - startTime) / 1000}s`,
+    // );
 
     this.isEncoding = false;
     await tf.nextFrame();

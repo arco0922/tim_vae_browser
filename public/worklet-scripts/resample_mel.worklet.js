@@ -684,6 +684,10 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
   _idx = 0;
   _lastSilenceIdx = null;
 
+  _lastSendTime = 0;
+  _sendCount = 0;
+  _sendAve = 0;
+
   static get parameterDescriptors() {
     return [
       {
@@ -808,6 +812,7 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
       }
     }
 
+    const startTime = new Date().getTime();
     const lastMelSpecVec = powerToDb(
       melSpecVec(
         this._buffer,
@@ -815,6 +820,13 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
         parameters['bufferSize'][0],
       ),
     );
+    const endTime = new Date().getTime();
+
+    // console.log(
+    //   `UpdateMel Duration: ${
+    //     (endTime - startTime) / 1000
+    //   }s`,
+    // );
 
     const lastBufferArr = Array.from(this._buffer);
     const isSilence =
@@ -837,6 +849,17 @@ class ResampleMelProcessor extends AudioWorkletProcessor {
       this.port.postMessage(null);
     } else {
       this.port.postMessage(this._melbuffer);
+      const sendTime = new Date().getTime();
+      // console.log(`Send Message at ${sendTime}`);
+
+      if (sendTime - this._lastSendTime < 40) {
+        const d = sendTime - this._lastSendTime;
+        const s = this._sendAve * this._sendCount + d;
+        this._sendCount += 1;
+        this._sendAve = s / this._sendCount;
+      }
+      this._lastSendTime = sendTime;
+      // console.log(this._sendAve);
     }
   }
 }

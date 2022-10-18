@@ -1,5 +1,5 @@
 .container {
-  width: 400px;
+  width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,12 +14,12 @@
 }
 
 .confirm__button {
-  width: 200px;
+  width: 300px;
 }
 
 .cancel__button {
   margin-left: 20px;
-  width: 200px;
+  width: 300px;
   background-color: #ff4848;
   &:hover {
     background-color: #b73434;

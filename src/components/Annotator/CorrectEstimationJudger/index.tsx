@@ -30,13 +30,13 @@ export const CorrectEstimationJudger = ({
       </div>
       <div className={styles.button__section}>
         <Button
-          text={'この図形で問題ない'}
+          text={'No need to modify from this shape'}
           className={styles.confirm__button}
           onClick={isCorrectCallback}
         />
 
         <Button
-          text={'図形を修正する'}
+          text={'Modify the shape'}
           className={styles.cancel__button}
           onClick={isNotCorrectCallback}
         />

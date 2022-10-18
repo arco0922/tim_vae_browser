@@ -294,9 +294,13 @@ export const ExpAnnotator = ({
             selectedShapeId !== null && (
               <>
                 <p className={styles.guide}>
-                  パラメータを微調節し、自分にとって最も音に対応すると感じるように図形を変形させてください。
+                  Adjust the parameters and transform the
+                  shape as you feel it best corresponds to
+                  this sound.
                   <br />
-                  既に対応していると感じる場合はそのままでも構いません。
+                  If you feel that the shape you selected
+                  from the samples already corresponds to
+                  the sound, you may leave it as it is.
                 </p>
                 <ShapeEditor
                   defaultShapeParams={
@@ -311,11 +315,18 @@ export const ExpAnnotator = ({
             estimatedShapeVector !== null && (
               <>
                 <p className={styles.guide}>
-                  これまでのあなたの回答から、この音に対しては以下の図形が対応していると感じるのではないかと推定されました。
+                  The system has inferred from your
+                  responses so far that you may feel the
+                  following figure corresponds to this
+                  sound.
                   <br />
-                  この図形が確かに音に対応していると感じる場合、「この図形で問題ない」を選択してください。
+                  If you feel that this figure does indeed
+                  correspond to the sound, please select
+                  ``No need to modify from this shape``.
                   <br />
-                  この図形では音に対応していないと感じる場合、「図形を修正する」を選択してください。
+                  If you feel that this shape does not
+                  correspond to the sound, please select ``
+                  Modify the shape``.
                 </p>
                 <CorrectEstimationJudger
                   estimatedShapeVector={
@@ -333,11 +344,16 @@ export const ExpAnnotator = ({
             suggestionVectorsInfo !== null && (
               <>
                 <p className={styles.guide}>
-                  パラメータを調節して、図形が音に対応すると感じるように変形させてください。
+                  Adjust the parameters and transform the
+                  shape as you feel it best corresponds to
+                  this sound.
                   <br />
-                  このパラメータでは対応すると感じる図形を作れない場合は、
+                  If you cannot create a shape that you feel
+                  corresponds to the sound with these
+                  parameters,
                   <br />
-                  「このパラメータでは対応すると感じる図形を作れない」を選択して下さい。
+                  select ``Cannot create the shape with
+                  these parameters``.
                 </p>
                 <ShapeSearcher
                   defaultShapeVector={estimatedShapeVector}

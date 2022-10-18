@@ -230,7 +230,9 @@ export const StepOneAnnotator = ({
                 samplingPointsCollection[rsId] ===
                   undefined && (
                   <Button
-                    text={'この音に対する図形の回答を開始'}
+                    text={
+                      'Start answering the shape for this sound'
+                    }
                     onClick={() =>
                       startAnnotateCallback(rsId)
                     }
@@ -246,10 +248,12 @@ export const StepOneAnnotator = ({
               {selectingId === rsId && (
                 <>
                   <p className={styles.guide}>
-                    右の図形の一覧の中から、この音に最も対応していると感じる図形を一つ選んでクリックしてください。
+                    From the list of shapes on the right,
+                    select and click on the one shape that
+                    you feel best corresponds to this sound.
                   </p>
                   <Button
-                    text={'図形の選択をキャンセル'}
+                    text={'Cancel'}
                     onClick={() =>
                       selectCancelCallback(rsId)
                     }
@@ -260,9 +264,12 @@ export const StepOneAnnotator = ({
               {editingId === rsId && (
                 <>
                   <p className={styles.guide}>
-                    パラメータを微調節し、自分にとって最もこの音に対応すると感じるように図形を変形させてください。
-                    <br />
-                    既に対応していると感じる場合はそのままでも構いません。
+                    Adjust the parameters and transform the
+                    shape as you feel it best corresponds to
+                    this sound. If you feel that the shape
+                    you selected from the samples already
+                    corresponds to the sound, you may leave
+                    it as it is.
                   </p>
                   <ShapeEditor
                     defaultShapeParams={
@@ -285,7 +292,8 @@ export const StepOneAnnotator = ({
                 editingId !== rsId && (
                   <>
                     <p className={styles.guide}>
-                      あなたがこの音に対応すると回答した図形は以下の通りです。
+                      The shape you answered to this this
+                      sound is below.
                     </p>
                     <DrawSamplingPointsSketch
                       canvasWidth={sketchWidth}
@@ -296,9 +304,7 @@ export const StepOneAnnotator = ({
                       }
                     />
                     <Button
-                      text={
-                        'この音に対する図形の回答をやり直す'
-                      }
+                      text={'Answer again'}
                       onClick={() =>
                         annotateAgainCallback(rsId)
                       }

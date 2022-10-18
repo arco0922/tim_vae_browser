@@ -153,7 +153,9 @@ export const ShapeTester = ({
       ) : (
         <>
           <p className={styles.guide}>
-            この図形が音に対してどの程度対応していると感じるか、下の線分上で該当する場所をクリックしてください。
+            On the line segment below, click to indicate how
+            well you feel this figure corresponds to the
+            sound.
           </p>
           {testMode === 'SUGGEST' &&
             estimatedShapeVector !== null && (

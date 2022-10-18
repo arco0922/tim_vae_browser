@@ -131,7 +131,7 @@ export const ShapeSearcher = ({
       <div className={styles.button__section}>
         {foundCallback !== undefined && (
           <Button
-            text={'この図形で決定'}
+            text={'Confirm'}
             className={styles.confirm__button}
             onClick={() => foundCallback(shapeVector)}
           />
@@ -139,7 +139,7 @@ export const ShapeSearcher = ({
         {notFoundCallback && (
           <Button
             text={
-              'このパラメータでは対応すると感じる図形を作れない'
+              'Cannot create the shape with these parameters'
             }
             className={styles.cancel__button}
             onClick={notFoundCallback}

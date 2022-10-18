@@ -66,7 +66,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
     const y = (p.height * (ymax - cy)) / (ymax - ymin);
 
     p.fill('red');
-    p.ellipse(x, y, 10, 10);
+    p.ellipse(x, y, 20, 20);
   };
 };
 
