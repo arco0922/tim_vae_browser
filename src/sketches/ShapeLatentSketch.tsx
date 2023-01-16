@@ -10,6 +10,7 @@ export type SamplingPointsCollection = {
 }[];
 
 interface SketchProps {
+  canvasId?: string;
   canvasWidth: number;
   canvasHeight: number;
   latentImgInfo: LatentImgInfo;
@@ -31,16 +32,22 @@ export type ShapeLatentSketchProps = SketchProps & {
 const sketch = (p: P5WithProps<SketchProps>): void => {
   let img: p5.Image;
   let prevImgSrc = p.props.latentImgInfo.imgSrc;
+  let prevSamplingPointsCollection =
+    p.props.samplingPointsCollection;
+  let drewOnce = false;
 
   p.preload = () => {
     img = p.loadImage(url(prevImgSrc));
   };
 
   p.setup = () => {
-    p.createCanvas(
+    let cnv = p.createCanvas(
       p.props.canvasWidth,
       p.props.canvasHeight,
     );
+    if (p.props.canvasId) {
+      cnv.id(p.props.canvasId);
+    }
   };
 
   const drawSamplingPoints = ({
@@ -65,19 +72,34 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
   };
 
   p.draw = () => {
-    p.background(255);
+    let needsUpdate = false;
+
     const { imgSrc, xmin, xmax, ymin, ymax } =
       p.props.latentImgInfo;
 
     if (imgSrc !== prevImgSrc) {
       img = p.loadImage(url(imgSrc));
       prevImgSrc = imgSrc;
+      needsUpdate = true;
     }
 
+    if (
+      p.props.samplingPointsCollection !==
+      prevSamplingPointsCollection
+    ) {
+      prevSamplingPointsCollection =
+        p.props.samplingPointsCollection;
+      needsUpdate = true;
+    }
+
+    if (!needsUpdate && drewOnce) return;
+
+    drewOnce = true;
+    p.background(255);
     p.tint(255, 200);
     p.image(img, 0, 0, p.width, p.height);
 
-    p.props.samplingPointsCollection.forEach(
+    prevSamplingPointsCollection.forEach(
       ({ coord, samplingPoints }) => {
         const vPointX =
           p.width * ((coord[0] - xmin) / (xmax - xmin));
@@ -96,6 +118,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
 };
 
 export const ShapeLatentSketch = ({
+  canvasId,
   canvasWidth,
   canvasHeight,
   latentImgInfo,
@@ -107,6 +130,7 @@ export const ShapeLatentSketch = ({
     <P5Wrapper<SketchProps>
       sketch={sketch}
       sketchProps={{
+        canvasId,
         canvasWidth,
         canvasHeight,
         latentImgInfo,

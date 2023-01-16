@@ -34,6 +34,7 @@ const splitY = 15;
 export interface ShapeLatentVisualizerProps<
   P extends WorkletMessage,
 > {
+  canvasId?: string;
   annotations: Annotations;
   visualizerConfig: VisualizerConfig<P>;
   className?: string;
@@ -42,6 +43,7 @@ export interface ShapeLatentVisualizerProps<
 export const ShapeLatentVisualizer = <
   P extends WorkletMessage,
 >({
+  canvasId,
   annotations,
   visualizerConfig,
   className,
@@ -155,6 +157,7 @@ export const ShapeLatentVisualizer = <
       className={`${styles.container} ${className || ''}`}
     >
       <ShapeLatentSketch
+        canvasId={canvasId}
         canvasWidth={canvasWidth}
         canvasHeight={canvasHeight}
         latentImgInfo={visualizerConfig.latentImgInfo}

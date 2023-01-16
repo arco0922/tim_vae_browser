@@ -73,7 +73,7 @@ export const RelationVisualizer = <
       delaunayConfig.outputDim,
     );
     setDelaunayEstimator(_delaunayEstimator);
-  }, []);
+  }, [annotations]);
 
   React.useEffect(() => {
     if (
