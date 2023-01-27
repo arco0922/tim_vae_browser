@@ -96,7 +96,7 @@ const sketch = (p: P5WithProps<SketchProps>): void => {
 
     drewOnce = true;
     p.background(255);
-    p.tint(255, 125);
+    p.tint(255, 70);
     p.image(img, 0, 0, p.width, p.height);
 
     prevSamplingPointsCollection.forEach(
