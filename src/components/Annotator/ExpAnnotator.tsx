@@ -283,7 +283,9 @@ export const ExpAnnotator = ({
           {annotatingState === 'SELECT' && (
             <>
               <p className={styles.guide}>
-                下の図形の中から、音に最も対応していると感じる図形を一つ選んでください。
+                From the list of shapes, select and click on
+                the one shape that you feel best corresponds
+                to this sound.
               </p>
               <SampleShapeSelector
                 selectCallback={selectCallback}
