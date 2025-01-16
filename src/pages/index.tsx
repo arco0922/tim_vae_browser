@@ -55,7 +55,7 @@ const Top: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1>TimMorph</h1>
+      <h1>TimToShape</h1>
       <h3 className={styles.caution}>
         Only Chrome is supported. Other browsers are not
         recommended.
@@ -64,12 +64,12 @@ const Top: NextPage = () => {
         <>
           <div className={styles.button__section}>
             <Button
-              text={'マイクを使って体験する'}
+              text={'Visualize sound from your microphone'}
               onClick={gotoMicCallback}
               className={styles.confirm__button}
             />
             <Button
-              text={'図形を設定を変更する'}
+              text={'Change shape setting'}
               onClick={gotoSettingCallback}
             />
           </div>
@@ -104,7 +104,7 @@ const Top: NextPage = () => {
             It seems you have not finished shape setting.
           </p>
           <Button
-            text={'図形を設定する'}
+            text={'Go to shape setting'}
             onClick={gotoSettingCallback}
           />
         </>

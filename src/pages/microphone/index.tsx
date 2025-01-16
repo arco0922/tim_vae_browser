@@ -55,7 +55,7 @@ const Top: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1>TimMorph - Microphone Demo</h1>
+      <h1>TimToShape - Microphone Demo</h1>
       <h3 className={styles.caution}>
         Please allow microphone usage in this page. <br />
         Only Chrome is supported. Other browsers are not

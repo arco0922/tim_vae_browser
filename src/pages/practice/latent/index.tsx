@@ -22,7 +22,7 @@ const PracticeAudioVisualizer = dynamic<
 const PracticeLatentPage: NextPage = () => {
   return (
     <div className={styles.container}>
-      <h1>TimMorph-Practice</h1>
+      <h1>TimToShape-Practice</h1>
       <h3 className={styles.caution}>
         Only Chrome is supported. Other browsers are not
         recommended.

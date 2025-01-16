@@ -1,9 +1,9 @@
 export enum localStorageKeys {
-  ANNOTATIONS = 'timmorph__annotations',
-  CORRECT_ESTIMATION_HISTORY = 'timmorph__correctEstimationHistory',
-  EXP_ANNOTATIONS = 'timmorph__exp__annotations',
-  EXP_CORRECT_ESTIMATION_HISTORY = 'timmorph__exp__correctEstimationHistory',
-  EXP_RESULTS = 'timmorph__exp__results',
-  EXP_ORDER = 'timmorph__exp__order',
-  EXP_TIMESTAMPS = 'timmorph__exp__timestamps',
+  ANNOTATIONS = 'timtoshape__annotations',
+  CORRECT_ESTIMATION_HISTORY = 'timtoshape__correctEstimationHistory',
+  EXP_ANNOTATIONS = 'timtoshape__exp__annotations',
+  EXP_CORRECT_ESTIMATION_HISTORY = 'timtoshape__exp__correctEstimationHistory',
+  EXP_RESULTS = 'timtoshape__exp__results',
+  EXP_ORDER = 'timtoshape__exp__order',
+  EXP_TIMESTAMPS = 'timtoshape__exp__timestamps',
 }
