@@ -78,6 +78,7 @@ const routes = {
   '/microphone': { page: '/microphone' },
   '/vae': { page: '/vae' },
   '/relation': { page: '/relation' },
+  '/shapelatent': { page: '/shapelatent' },
   '/random': { page: '/random' },
   '/delaunay': { page: '/delaunay' },
   '/settingshape': { page: '/settingshape' },
