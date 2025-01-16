@@ -4,8 +4,6 @@ import {
 } from '@app/constants/visualizerConfig';
 import * as tf from '@tensorflow/tfjs';
 
-const THRESHOLD = 0.01;
-
 export interface EncodeResult {
   coord: number[];
 }
